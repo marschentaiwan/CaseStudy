@@ -1,0 +1,57 @@
+rules_version = '2';
+
+// ============================================================
+// SKODA Human Touch · Firestore 安全規則
+// ============================================================
+// 適用情境：
+//   - 學員端不需登入,直接寫入測驗成績
+//   - 管理端用密碼進入(僅前端,實際讀取由規則放行)
+//
+// 部署方式:
+//   1. 進入 Firebase Console → Build → Firestore Database
+//   2. 切到「Rules」分頁,將下方內容貼上 → 發布
+//
+// 安全考量:
+//   - 限制單筆 record 必須包含必要欄位,避免被當免費資料庫
+//   - 限制字串長度,避免被塞垃圾
+//   - 公開可讀,以便管理後台直接列表(若擔心個資外洩,可改為僅特定 IP 或加 Firebase Auth)
+// ============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /records/{recordId} {
+
+      // 任何人都可讀取(包含管理後台列表)
+      allow read: if true;
+
+      // 寫入時必須符合資料格式
+      allow create: if isValidRecord(request.resource.data);
+
+      // 不允許修改或刪除已寫入的成績(避免造假)
+      allow update, delete: if false;
+    }
+
+    // 預設拒絕所有其他路徑的存取
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+// ---------- 驗證 helper ----------
+function isValidRecord(data) {
+  return
+    // 必要欄位存在
+    data.keys().hasAll(['name', 'dealer', 'score', 'correct', 'total', 'pass', 'completedAt'])
+    // 字串型別與長度限制
+    && data.name is string && data.name.size() > 0 && data.name.size() <= 50
+    && data.dealer is string && data.dealer.size() > 0 && data.dealer.size() <= 80
+    // 分數合理範圍
+    && data.score is number && data.score >= 0 && data.score <= 100
+    && data.correct is number && data.correct >= 0 && data.correct <= 50
+    && data.total is number && data.total > 0 && data.total <= 50
+    && data.pass is bool
+    // 時間欄位
+    && data.completedAt is string;
+}
