@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Human Touch 最佳案例研討系統 | SKODA</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&family=Inter:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --skoda-green: #78FAAE;
+    --skoda-dark: #0E3A2F;
+    --skoda-deep: #042B1F;
+    --ink: #0A1F18;
+    --paper: #F4F8F5;
+    --warm: #FFF8E7;
+    --accent: #E8B14F;
+    --soft: rgba(120, 250, 174, 0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    font-family: 'Inter', 'Noto Serif TC', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(120, 250, 174, 0.18) 0%, transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(232, 177, 79, 0.08) 0%, transparent 40%);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    opacity: 0.04; pointer-events: none; z-index: 1; mix-blend-mode: multiply;
+  }
+  .stage { position: relative; z-index: 2; min-height: 100vh; }
+  .screen { display: none; animation: fadeUp 0.6s ease forwards; }
+  .screen.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* LANDING */
+  .landing { min-height: 100vh; display: grid; grid-template-columns: 1.1fr 1fr; }
+  .landing-left {
+    background: var(--skoda-deep); color: var(--skoda-green);
+    padding: 56px 64px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; overflow: hidden;
+  }
+  .landing-left::before {
+    content: ''; position: absolute; top: -20%; right: -30%;
+    width: 80%; height: 80%;
+    background: radial-gradient(circle, rgba(120, 250, 174, 0.15) 0%, transparent 70%);
+  }
+  .brand-mark {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.4em; font-size: 14px;
+    color: var(--skoda-green); position: relative;
+  }
+  .brand-mark::after {
+    content: ''; display: inline-block;
+    width: 40px; height: 1px; background: var(--skoda-green);
+    vertical-align: middle; margin-left: 16px;
+  }
+  .hero-title {
+    font-family: 'Noto Serif TC', serif; font-weight: 900;
+    font-size: clamp(44px, 6vw, 92px); line-height: 0.95;
+    margin: 32px 0 24px; position: relative;
+  }
+  .hero-title .en {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.55em; letter-spacing: 0.02em;
+    display: block; color: rgba(120, 250, 174, 0.6);
+    margin-bottom: 8px; font-weight: 400;
+  }
+  .hero-title em { font-style: normal; color: white; position: relative; }
+  .hero-sub {
+    font-size: 16px; line-height: 1.8;
+    color: rgba(244, 248, 245, 0.75);
+    max-width: 480px; font-weight: 300; margin-bottom: 40px;
+  }
+  .hero-meta {
+    display: flex; gap: 32px; padding-top: 32px;
+    border-top: 1px solid rgba(120, 250, 174, 0.2); position: relative;
+  }
+  .meta-item .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px; color: var(--skoda-green); line-height: 1;
+  }
+  .meta-item .lbl {
+    font-size: 11px; letter-spacing: 0.2em;
+    color: rgba(244, 248, 245, 0.5); margin-top: 4px; text-transform: uppercase;
+  }
+  .landing-right {
+    background: var(--paper); padding: 56px 64px;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative;
+  }
+  .landing-right::before {
+    content: ''; position: absolute; top: 56px; left: 64px;
+    width: 60px; height: 4px; background: var(--skoda-deep);
+  }
+  .form-eyebrow {
+    margin-top: 32px; font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.3em; font-size: 13px; color: var(--skoda-deep);
+  }
+  .form-title {
+    font-family: 'Noto Serif TC', serif; font-weight: 700;
+    font-size: 32px; margin: 12px 0 8px; color: var(--ink);
+  }
+  .form-hint { color: rgba(10, 31, 24, 0.6); font-size: 14px; margin-bottom: 36px; }
+  .field { margin-bottom: 24px; }
+  .field label {
+    display: block; font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: rgba(10, 31, 24, 0.55);
+    margin-bottom: 8px; font-weight: 600;
+  }
+  .field input, .field select {
+    width: 100%; border: none;
+    border-bottom: 1.5px solid rgba(10, 31, 24, 0.2);
+    padding: 12px 0; font-size: 17px; background: transparent;
+    color: var(--ink); font-family: inherit; transition: border-color 0.3s; outline: none;
+  }
+  .field input:focus, .field select:focus { border-bottom-color: var(--skoda-deep); }
+  .field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230E3A2F' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 4px center; cursor: pointer;
+  }
+  .btn-primary {
+    margin-top: 16px; background: var(--skoda-deep); color: var(--skoda-green);
+    border: none; padding: 18px 40px; font-size: 14px; letter-spacing: 0.25em;
+    font-family: 'Bebas Neue', sans-serif; cursor: pointer; text-transform: uppercase;
+    position: relative; transition: all 0.3s; overflow: hidden; width: 100%;
+  }
+  .btn-primary::before {
+    content: ''; position: absolute; top: 0; left: -100%;
+    width: 100%; height: 100%; background: var(--skoda-green);
+    transition: left 0.4s; z-index: 0;
+  }
+  .btn-primary span { position: relative; z-index: 1; transition: color 0.4s; }
+  .btn-primary:hover::before { left: 0; }
+  .btn-primary:hover span { color: var(--skoda-deep); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .qr-block {
+    margin-top: 48px; padding: 24px; background: white;
+    border: 1px solid rgba(10, 31, 24, 0.08);
+    display: flex; align-items: center; gap: 20px;
+  }
+  .qr-block svg { flex-shrink: 0; }
+  .qr-block .qr-text { font-size: 12px; color: rgba(10, 31, 24, 0.6); line-height: 1.6; }
+  .qr-block .qr-text strong { color: var(--ink); font-size: 13px; display: block; margin-bottom: 4px; }
+
+  /* QUIZ */
+  .quiz-wrap { max-width: 920px; margin: 0 auto; padding: 40px 32px 80px; }
+  .quiz-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 24px; margin-bottom: 32px;
+    border-bottom: 1px solid rgba(10, 31, 24, 0.1);
+  }
+  .quiz-id { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.3em; font-size: 13px; color: var(--skoda-deep); }
+  .quiz-user { font-size: 13px; color: rgba(10, 31, 24, 0.6); }
+  .quiz-user strong { color: var(--ink); }
+  .progress-track { height: 3px; background: rgba(10, 31, 24, 0.08); margin-bottom: 8px; position: relative; }
+  .progress-fill {
+    position: absolute; top: 0; left: 0; height: 100%;
+    background: var(--skoda-deep); transition: width 0.4s ease;
+  }
+  .progress-meta {
+    display: flex; justify-content: space-between;
+    font-size: 11px; letter-spacing: 0.15em;
+    color: rgba(10, 31, 24, 0.5); margin-bottom: 32px; text-transform: uppercase;
+  }
+  .case-card {
+    background: white; padding: 40px 44px; margin-bottom: 32px;
+    border: 1px solid rgba(10, 31, 24, 0.06);
+    box-shadow: 0 2px 24px rgba(10, 31, 24, 0.04); position: relative;
+  }
+  .case-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 4px; height: 56px; background: var(--skoda-green);
+  }
+  .case-tag {
+    display: inline-block; font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.2em; font-size: 11px;
+    background: var(--skoda-deep); color: var(--skoda-green);
+    padding: 6px 12px; margin-bottom: 16px;
+  }
+  .case-title {
+    font-family: 'Noto Serif TC', serif; font-weight: 700;
+    font-size: 22px; color: var(--ink); margin-bottom: 16px; line-height: 1.4;
+  }
+  .case-body { font-size: 15px; line-height: 1.85; color: rgba(10, 31, 24, 0.78); text-align: justify; }
+  .case-body p { margin-bottom: 12px; }
+  .question-block {
+    background: white; padding: 36px 44px;
+    border: 1px solid rgba(10, 31, 24, 0.06); margin-bottom: 24px;
+  }
+  .question-num {
+    font-family: 'Bebas Neue', sans-serif; font-size: 48px;
+    color: var(--skoda-green); line-height: 1;
+    -webkit-text-stroke: 1px var(--skoda-deep); color: transparent; margin-bottom: 8px;
+  }
+  .question-text {
+    font-size: 17px; line-height: 1.6; color: var(--ink);
+    margin-bottom: 24px; font-weight: 500;
+  }
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .option {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 16px 20px; border: 1.5px solid rgba(10, 31, 24, 0.1);
+    cursor: pointer; transition: all 0.2s; background: white; user-select: none;
+  }
+  .option:hover { border-color: var(--skoda-deep); background: rgba(120, 250, 174, 0.05); }
+  .option input { display: none; }
+  .option .marker {
+    width: 22px; height: 22px;
+    border: 1.5px solid rgba(10, 31, 24, 0.3);
+    border-radius: 50%; flex-shrink: 0; margin-top: 2px;
+    position: relative; transition: all 0.2s;
+  }
+  .option.selected { border-color: var(--skoda-deep); background: rgba(120, 250, 174, 0.1); }
+  .option.selected .marker { border-color: var(--skoda-deep); background: var(--skoda-deep); }
+  .option.selected .marker::after {
+    content: ''; position: absolute; inset: 4px;
+    background: var(--skoda-green); border-radius: 50%;
+  }
+  .option .opt-letter {
+    font-family: 'Bebas Neue', sans-serif; font-size: 14px;
+    color: var(--skoda-deep); margin-right: 8px; letter-spacing: 0.1em;
+  }
+  .option .opt-text { font-size: 15px; line-height: 1.6; color: var(--ink); flex: 1; }
+  .nav-row { display: flex; justify-content: space-between; gap: 16px; margin-top: 32px; }
+  .btn-secondary {
+    flex: 1; padding: 16px 24px; background: transparent;
+    border: 1.5px solid var(--skoda-deep); color: var(--skoda-deep);
+    font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.2em;
+    font-size: 13px; cursor: pointer; transition: all 0.3s;
+  }
+  .btn-secondary:hover { background: var(--skoda-deep); color: var(--skoda-green); }
+  .btn-secondary:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn-go {
+    flex: 1; padding: 16px 24px; background: var(--skoda-deep);
+    color: var(--skoda-green); border: none;
+    font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.2em;
+    font-size: 13px; cursor: pointer; transition: all 0.3s;
+  }
+  .btn-go:hover { background: var(--ink); }
+  .btn-go:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* RESULT */
+  .result-wrap { max-width: 880px; margin: 0 auto; padding: 60px 32px 80px; }
+  .result-hero {
+    background: var(--skoda-deep); color: white;
+    padding: 56px 56px 48px; position: relative; overflow: hidden;
+  }
+  .result-hero::before {
+    content: ''; position: absolute; top: -40%; right: -10%;
+    width: 70%; height: 180%;
+    background: radial-gradient(ellipse, rgba(120, 250, 174, 0.2) 0%, transparent 60%);
+  }
+  .result-tag {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.4em; font-size: 13px;
+    color: var(--skoda-green); position: relative;
+  }
+  .result-score-row {
+    display: flex; align-items: flex-end; gap: 24px;
+    margin: 24px 0 8px; position: relative;
+  }
+  .score-big {
+    font-family: 'Bebas Neue', sans-serif; font-size: 140px;
+    line-height: 0.85; color: var(--skoda-green);
+  }
+  .score-detail { padding-bottom: 18px; }
+  .score-detail .pct {
+    font-size: 48px; font-family: 'Bebas Neue', sans-serif;
+    color: white; line-height: 1;
+  }
+  .score-detail .right {
+    font-size: 13px; color: rgba(255,255,255,0.6);
+    letter-spacing: 0.15em; margin-top: 4px;
+  }
+  .result-status {
+    display: inline-block; padding: 8px 16px;
+    background: var(--skoda-green); color: var(--skoda-deep);
+    font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.2em;
+    font-size: 12px; margin-top: 12px; position: relative;
+  }
+  .result-status.fail { background: #E8B14F; }
+  .result-summary {
+    background: white; padding: 40px 56px;
+    border: 1px solid rgba(10, 31, 24, 0.08); border-top: none;
+  }
+  .summary-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; padding-bottom: 24px; margin-bottom: 24px;
+    border-bottom: 1px solid rgba(10, 31, 24, 0.08);
+  }
+  .summary-cell .lbl {
+    font-size: 11px; letter-spacing: 0.15em;
+    color: rgba(10, 31, 24, 0.5); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .summary-cell .val { font-size: 16px; color: var(--ink); font-weight: 500; }
+  .review-list { margin-top: 24px; }
+  .review-item { padding: 20px 0; border-bottom: 1px solid rgba(10, 31, 24, 0.06); }
+  .review-item:last-child { border-bottom: none; }
+  .review-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .review-mark {
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif; font-size: 14px;
+  }
+  .review-mark.correct { background: var(--skoda-green); color: var(--skoda-deep); }
+  .review-mark.wrong { background: #FFE0E0; color: #B33; }
+  .review-q { font-weight: 500; color: var(--ink); font-size: 14px; flex: 1; }
+  .review-detail { padding-left: 40px; font-size: 13px; line-height: 1.6; color: rgba(10, 31, 24, 0.65); }
+  .review-detail .yours { margin-bottom: 4px; }
+  .review-detail .ans { color: var(--skoda-deep); font-weight: 500; }
+  .actions-row { display: flex; gap: 12px; margin-top: 32px; }
+
+  /* SAVE BANNER */
+  .save-banner {
+    background: rgba(120, 250, 174, 0.12);
+    border: 1px solid rgba(120, 250, 174, 0.4);
+    padding: 12px 20px; margin-bottom: 24px;
+    font-size: 13px; color: var(--skoda-deep);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .save-banner.error {
+    background: rgba(232, 177, 79, 0.12);
+    border-color: rgba(232, 177, 79, 0.5); color: #8B5A1E;
+  }
+  .save-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--skoda-deep); flex-shrink: 0;
+  }
+  .save-banner.error .save-dot { background: #E8B14F; }
+
+  /* ADMIN */
+  .admin-wrap { max-width: 1320px; margin: 0 auto; padding: 32px 32px 80px; }
+  .admin-head {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 32px; padding-bottom: 24px;
+    border-bottom: 2px solid var(--skoda-deep);
+  }
+  .admin-title { font-family: 'Noto Serif TC', serif; font-size: 32px; font-weight: 700; color: var(--ink); }
+  .admin-title .en {
+    display: block; font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px; letter-spacing: 0.3em;
+    color: var(--skoda-deep); font-weight: 400; margin-bottom: 4px;
+  }
+  .admin-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .admin-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 16px; margin-bottom: 32px;
+  }
+  .stat-card {
+    background: white; padding: 24px;
+    border: 1px solid rgba(10, 31, 24, 0.06); position: relative;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 32px; height: 3px; background: var(--skoda-green);
+  }
+  .stat-card.dark { background: var(--skoda-deep); color: white; }
+  .stat-card.dark::before { background: var(--skoda-green); }
+  .stat-lbl { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.6; margin-bottom: 12px; }
+  .stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 42px; line-height: 1; }
+  .stat-card.dark .stat-val { color: var(--skoda-green); }
+  .stat-sub { font-size: 12px; margin-top: 6px; opacity: 0.5; }
+  .filter-bar {
+    background: white; padding: 16px 20px;
+    border: 1px solid rgba(10, 31, 24, 0.06);
+    margin-bottom: 16px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+  }
+  .filter-bar input, .filter-bar select {
+    border: 1px solid rgba(10, 31, 24, 0.15); padding: 8px 12px;
+    font-family: inherit; font-size: 13px; background: white; outline: none;
+  }
+  .filter-bar input:focus, .filter-bar select:focus { border-color: var(--skoda-deep); }
+  .filter-bar input { flex: 1; min-width: 200px; }
+  .records-table { background: white; border: 1px solid rgba(10, 31, 24, 0.06); overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: var(--skoda-deep); color: var(--skoda-green); }
+  th {
+    padding: 14px 16px; text-align: left;
+    font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.15em;
+    font-size: 12px; font-weight: 400;
+  }
+  td { padding: 14px 16px; border-bottom: 1px solid rgba(10, 31, 24, 0.05); font-size: 13px; color: var(--ink); }
+  tr:hover td { background: rgba(120, 250, 174, 0.06); }
+  .badge-pass {
+    display: inline-block; padding: 3px 10px;
+    background: var(--skoda-green); color: var(--skoda-deep);
+    font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 0.1em;
+  }
+  .badge-fail {
+    display: inline-block; padding: 3px 10px;
+    background: #FFE0E0; color: #B33;
+    font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 0.1em;
+  }
+  .empty-state { text-align: center; padding: 60px 20px; color: rgba(10, 31, 24, 0.4); font-size: 14px; }
+  .btn-mini {
+    background: white; border: 1px solid rgba(10, 31, 24, 0.15);
+    padding: 8px 16px; font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.15em; font-size: 12px; cursor: pointer;
+    color: var(--ink); transition: all 0.2s;
+  }
+  .btn-mini:hover { background: var(--skoda-deep); color: var(--skoda-green); border-color: var(--skoda-deep); }
+  .btn-mini.primary { background: var(--skoda-deep); color: var(--skoda-green); border-color: var(--skoda-deep); }
+  .btn-mini.primary:hover { background: var(--ink); }
+
+  /* connection state */
+  .conn-state {
+    position: fixed; top: 16px; right: 16px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 11px;
+    letter-spacing: 0.2em; padding: 6px 12px;
+    background: white; border: 1px solid rgba(10, 31, 24, 0.1);
+    color: rgba(10, 31, 24, 0.6); z-index: 50;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .conn-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--skoda-green); animation: pulse 2s infinite;
+  }
+  .conn-state.offline .conn-dot { background: #E8B14F; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .admin-entry {
+    position: fixed; bottom: 16px; right: 16px;
+    font-size: 10px; color: rgba(10, 31, 24, 0.3);
+    cursor: pointer; letter-spacing: 0.2em; z-index: 100;
+    background: white; padding: 6px 10px;
+    border: 1px solid rgba(10, 31, 24, 0.1); text-decoration: none;
+  }
+  .admin-entry:hover { color: var(--skoda-deep); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .landing { grid-template-columns: 1fr; }
+    .landing-left, .landing-right { padding: 40px 24px; }
+    .summary-grid { grid-template-columns: 1fr 1fr; }
+    .admin-stats { grid-template-columns: 1fr 1fr; }
+    .quiz-wrap, .result-wrap { padding: 24px 16px 60px; }
+    .case-card, .question-block { padding: 28px 24px; }
+    .result-hero { padding: 36px 24px; }
+    .score-big { font-size: 96px; }
+    .result-summary { padding: 28px 24px; }
+    .admin-head { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .conn-state { top: 8px; right: 8px; font-size: 10px; padding: 4px 8px; }
+  }
+  @media (max-width: 540px) {
+    .admin-stats { grid-template-columns: 1fr; }
+    .summary-grid { grid-template-columns: 1fr; }
+    .nav-row { flex-direction: column; }
+    th, td { padding: 10px 8px; font-size: 12px; }
+  }
+  @media print {
+    body::before, body::after { display: none; }
+    .admin-entry, .admin-actions, .filter-bar, .actions-row, .conn-state { display: none !important; }
+    body { background: white; }
+    .stat-card { break-inside: avoid; }
+    table { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="conn-state" id="connState"><span class="conn-dot"></span><span id="connText">CLOUD · CONNECTING</span></div>
+
+<div class="stage">
+
+  <!-- LANDING -->
+  <section class="screen active" id="screen-landing">
+    <div class="landing">
+      <div class="landing-left">
+        <div class="brand-mark">SKODA · INTERNAL TRAINING</div>
+        <div>
+          <h1 class="hero-title">
+            <span class="en">HUMAN TOUCH</span>
+            <em>最佳案例</em><br>研討系統
+          </h1>
+          <p class="hero-sub">
+            真誠的服務能感動客戶，細心的觀察照亮每一段關係。<br>
+            從 2023 至 2025 年的真實案例中，學習銷售與服務的溫度，
+            讓 Human Touch 成為品牌與每位夥伴最深的承諾。
+          </p>
+          <div class="hero-meta">
+            <div class="meta-item">
+              <div class="num">11</div>
+              <div class="lbl">Real Cases</div>
+            </div>
+            <div class="meta-item">
+              <div class="num">10</div>
+              <div class="lbl">Per Session</div>
+            </div>
+            <div class="meta-item">
+              <div class="num">80%</div>
+              <div class="lbl">Pass Score</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="landing-right">
+        <div class="form-eyebrow">REGISTRATION · 學員報到</div>
+        <h2 class="form-title">開始今天的學習旅程</h2>
+        <p class="form-hint">請填寫以下資訊以開始本次案例研討。每次將從 11 個真實案例中隨機抽選 10 例，搭配深度題目進行測驗。</p>
+
+        <form id="registerForm">
+          <div class="field">
+            <label>經銷商據點</label>
+            <select id="dealer" required>
+              <option value="">— 請選擇 —</option>
+              <!-- outlets injected by JS -->
+            </select>
+          </div>
+          <div class="field">
+            <label>姓名</label>
+            <input type="text" id="userName" placeholder="請輸入您的姓名" required>
+          </div>
+          <div class="field">
+            <label>職務 / 部門</label>
+            <input type="text" id="userRole" placeholder="例：銷售顧問 / 服務顧問 / 技師">
+          </div>
+
+          <button type="submit" class="btn-primary" id="btnStart"><span>開始作答 START</span></button>
+        </form>
+
+        <div class="qr-block">
+          <svg width="68" height="68" viewBox="0 0 68 68">
+            <rect width="68" height="68" fill="#0E3A2F"/>
+            <g fill="#78FAAE">
+              <rect x="6" y="6" width="16" height="16"/><rect x="9" y="9" width="10" height="10" fill="#0E3A2F"/><rect x="12" y="12" width="4" height="4"/>
+              <rect x="46" y="6" width="16" height="16"/><rect x="49" y="9" width="10" height="10" fill="#0E3A2F"/><rect x="52" y="12" width="4" height="4"/>
+              <rect x="6" y="46" width="16" height="16"/><rect x="9" y="49" width="10" height="10" fill="#0E3A2F"/><rect x="12" y="52" width="4" height="4"/>
+              <rect x="26" y="8" width="3" height="3"/><rect x="32" y="8" width="3" height="3"/><rect x="38" y="8" width="3" height="3"/>
+              <rect x="26" y="14" width="3" height="3"/><rect x="32" y="14" width="3" height="3"/><rect x="38" y="14" width="3" height="3"/>
+              <rect x="8" y="26" width="3" height="3"/><rect x="14" y="26" width="3" height="3"/><rect x="26" y="26" width="3" height="3"/>
+              <rect x="32" y="26" width="3" height="3"/><rect x="38" y="26" width="3" height="3"/><rect x="44" y="26" width="3" height="3"/>
+              <rect x="50" y="26" width="3" height="3"/><rect x="56" y="26" width="3" height="3"/>
+              <rect x="8" y="32" width="3" height="3"/><rect x="20" y="32" width="3" height="3"/><rect x="26" y="32" width="3" height="3"/>
+              <rect x="38" y="32" width="3" height="3"/><rect x="50" y="32" width="3" height="3"/><rect x="56" y="32" width="3" height="3"/>
+              <rect x="8" y="38" width="3" height="3"/><rect x="14" y="38" width="3" height="3"/><rect x="26" y="38" width="3" height="3"/>
+              <rect x="32" y="38" width="3" height="3"/><rect x="44" y="38" width="3" height="3"/><rect x="50" y="38" width="3" height="3"/>
+              <rect x="26" y="44" width="3" height="3"/><rect x="32" y="44" width="3" height="3"/><rect x="38" y="44" width="3" height="3"/>
+              <rect x="44" y="44" width="3" height="3"/><rect x="50" y="44" width="3" height="3"/><rect x="56" y="44" width="3" height="3"/>
+              <rect x="26" y="50" width="3" height="3"/><rect x="38" y="50" width="3" height="3"/><rect x="44" y="50" width="3" height="3"/>
+              <rect x="56" y="50" width="3" height="3"/>
+              <rect x="26" y="56" width="3" height="3"/><rect x="32" y="56" width="3" height="3"/><rect x="38" y="56" width="3" height="3"/>
+              <rect x="50" y="56" width="3" height="3"/>
+            </g>
+          </svg>
+          <div class="qr-text">
+            <strong>掃碼進入研討系統</strong>
+            QR Code 可印製於店頭海報或培訓教材，員工以手機掃碼即可作答。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="screen" id="screen-quiz">
+    <div class="quiz-wrap">
+      <div class="quiz-header">
+        <div class="quiz-id">HT · CASE STUDY</div>
+        <div class="quiz-user">學員：<strong id="hdrName">—</strong> ｜ 據點：<strong id="hdrDealer">—</strong></div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+      <div class="progress-meta">
+        <span id="progText">QUESTION 1 OF 10</span>
+        <span id="progTime">00:00</span>
+      </div>
+
+      <div id="caseContainer"></div>
+      <div id="questionContainer"></div>
+
+      <div class="nav-row">
+        <button class="btn-secondary" id="btnPrev" disabled>← 上一題</button>
+        <button class="btn-go" id="btnNext">下一題 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="screen" id="screen-result">
+    <div class="result-wrap">
+      <div id="saveBanner"></div>
+
+      <div class="result-hero">
+        <div class="result-tag">HUMAN TOUCH · COMPLETION REPORT</div>
+        <div class="result-score-row">
+          <div class="score-big" id="scoreBig">0</div>
+          <div class="score-detail">
+            <div class="pct" id="scorePct">0%</div>
+            <div class="right" id="scoreRight">0 / 10 CORRECT</div>
+          </div>
+        </div>
+        <div class="result-status" id="resultStatus">PASS</div>
+      </div>
+
+      <div class="result-summary">
+        <div class="summary-grid">
+          <div class="summary-cell">
+            <div class="lbl">學員姓名</div>
+            <div class="val" id="sumName">—</div>
+          </div>
+          <div class="summary-cell">
+            <div class="lbl">經銷據點</div>
+            <div class="val" id="sumDealer">—</div>
+          </div>
+          <div class="summary-cell">
+            <div class="lbl">完成時間</div>
+            <div class="val" id="sumTime">—</div>
+          </div>
+        </div>
+
+        <h3 style="font-family:'Noto Serif TC',serif; font-size:20px; margin-bottom:8px;">作答檢視</h3>
+        <p style="font-size:13px; color:rgba(10,31,24,0.55); margin-bottom:8px;">下方列出每題您的答案與正確答案，請仔細回顧以加深學習。</p>
+
+        <div class="review-list" id="reviewList"></div>
+
+        <div class="actions-row">
+          <button class="btn-secondary" onclick="window.print()" style="flex:1;">列印成績單</button>
+          <button class="btn-go" onclick="restart()" style="flex:1;">完成 / 返回首頁</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADMIN -->
+  <section class="screen" id="screen-admin">
+    <div class="admin-wrap">
+      <div class="admin-head">
+        <div class="admin-title">
+          <span class="en">ADMIN DASHBOARD</span>
+          研討記錄管理
+        </div>
+        <div class="admin-actions">
+          <button class="btn-mini" onclick="showScreen('screen-landing')">← 返回首頁</button>
+          <button class="btn-mini" onclick="refreshRecords()">重新整理</button>
+          <button class="btn-mini" onclick="exportCSV()">匯出 CSV</button>
+          <button class="btn-mini primary" onclick="window.print()">列印報告</button>
+        </div>
+      </div>
+
+      <div class="admin-stats">
+        <div class="stat-card dark">
+          <div class="stat-lbl">總參加人數</div>
+          <div class="stat-val" id="adTotal">0</div>
+          <div class="stat-sub">Total Participants</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">通過人數</div>
+          <div class="stat-val" id="adPass">0</div>
+          <div class="stat-sub">≥ 80 分</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">平均成績</div>
+          <div class="stat-val" id="adAvg">0</div>
+          <div class="stat-sub">Average Score</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">參與據點數</div>
+          <div class="stat-val" id="adDealers">0</div>
+          <div class="stat-sub">Dealer Coverage</div>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <input type="text" id="filterText" placeholder="搜尋姓名或據點..." oninput="renderTable()">
+        <select id="filterDealer" onchange="renderTable()">
+          <option value="">所有據點</option>
+        </select>
+        <select id="filterStatus" onchange="renderTable()">
+          <option value="">所有狀態</option>
+          <option value="pass">通過</option>
+          <option value="fail">未通過</option>
+        </select>
+      </div>
+
+      <div class="records-table">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>姓名</th>
+              <th>據點</th>
+              <th>職務</th>
+              <th>分數</th>
+              <th>答對 / 總題</th>
+              <th>用時</th>
+              <th>狀態</th>
+              <th>完成時間</th>
+            </tr>
+          </thead>
+          <tbody id="adminTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <a href="#" class="admin-entry" onclick="event.preventDefault(); openAdmin();">ADMIN</a>
+
+</div>
+
+<!-- =========== FIREBASE + APP =========== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBRZRWud_BWZueZrLDR6dO3uhlulhbuhSM",
+  authDomain: "casestudy-2c515.firebaseapp.com",
+  projectId: "casestudy-2c515",
+  storageBucket: "casestudy-2c515.firebasestorage.app",
+  messagingSenderId: "710519652843",
+  appId: "1:710519652843:web:1559378f83940ff52c59ae",
+  measurementId: "G-9R4YR7R5WT"
+};
+
+let firebaseApp = null;
+let db = null;
+try {
+  firebaseApp = initializeApp(firebaseConfig);
+  db = getFirestore(firebaseApp);
+  setConnState(true, 'CLOUD · CONNECTED');
+} catch (e) {
+  console.error('Firebase init failed', e);
+  setConnState(false, 'OFFLINE MODE');
+}
+
+window.__fb = {
+  // save record to firestore
+  saveRecord: async (record) => {
+    if (!db) throw new Error('No DB');
+    const recForCloud = { ...record };
+    delete recForCloud.id; // let firestore assign
+    recForCloud.createdAt = serverTimestamp();
+    const ref = await addDoc(collection(db, 'records'), recForCloud);
+    return ref.id;
+  },
+  // load all records
+  loadRecords: async () => {
+    if (!db) throw new Error('No DB');
+    const q = query(collection(db, 'records'), orderBy('completedAt', 'desc'));
+    const snap = await getDocs(q);
+    const out = [];
+    snap.forEach(doc => {
+      const data = doc.data();
+      out.push({ id: doc.id, ...data });
+    });
+    return out;
+  }
+};
+
+function setConnState(online, text) {
+  const el = document.getElementById('connState');
+  const t = document.getElementById('connText');
+  if (!el) return;
+  if (online) el.classList.remove('offline'); else el.classList.add('offline');
+  if (t) t.textContent = text;
+}
+window.__setConnState = setConnState;
+</script>
+
+<script>
+/* ================== OUTLET LIST (新版) ================== */
+const OUTLETS = [
+  '鈞銓文心服務廠','鈞銓文心展間','鈞銓彰化服務廠','鈞銓彰化展間','鈞銓南屯服務廠','鈞銓五權展間',
+  '金元三新莊服務廠','金元三新莊展間','金元三中和服務廠','金元三中和展間',
+  '永驊鳳山服務廠','永驊鳳山展間','永驊永康服務廠','永驊永康展間','永驊民族服務廠','永驊民族展間','永驊台南展間',
+  '永昇平鎮服務廠','永昇中山服務廠',
+  '榮陞桃園展間','榮陞平鎮展間',
+  '晉暘服務廠','思科達北區服務廠','思科達北區展間',
+  '喬順民生展間','喬順承德展間',
+  '吉揚竹北服務廠','吉揚竹北展間','吉揚新竹服務廠','吉揚新竹展間',
+  '原莊服務廠','原莊展間',
+  '偕聖豐原服務廠','偕聖豐原展間','偕聖沙鹿服務廠','偕聖沙鹿展間'
+];
+
+/* ================== 11 個案例 ================== */
+const CASES = [
+  {
+    id: 'sales2025_lin',
+    year: 2025, type: '銷售',
+    branch: '榮陞平鎮', hero: '林昭博',
+    title: '四年的等待——當客戶迎接新生命時的那通電話',
+    body: `傅先生與林昭博已經有四年的購車情誼。當初夫妻倆心裡一直希望有個小朋友，因此選擇了 SKODA KODIAQ——他們相信，將來若有了孩子，一部空間充裕、安全性能良好的七人座休旅車，能夠陪伴新的家庭旅程。\n\n然而這些年來，始終未等來小寶寶的消息。林昭博始終記在心裡，每次見面或聊天時，總會以關懷的語氣關心他們，卻從未給過壓力。\n\n直到去年 12 月，傅先生開心地分享好消息——夫妻倆即將迎來小生命。林昭博除了真誠祝福，更告訴傅先生：「如果有任何需要我幫忙的地方，請一定要告訴我。」這句話並非客套。\n\n今年 9 月 15 日，正是太太的預產期。傅先生因心情緊張加上臨時狀況，傳訊息希望林昭博能協助載他和太太前往醫院迎接新生命。四年來的等待與牽掛，終於在這一天迎來圓滿。\n\n林昭博體會到：服務的真正價值不是成交那一刻，而是多年後仍能被想起、被信任，並在關鍵時刻提供支持。`
+  },
+  {
+    id: 'sales2025_chou',
+    year: 2025, type: '銷售',
+    branch: '偕聖豐原', hero: '周玲安',
+    title: '一個不期而遇的善意——換來一台車的承諾',
+    body: `去年年底，周玲安休假搭公車時，遇見一位懷孕母親推著嬰兒推車。突如其來的緊急剎車，推車翻倒，孩子額頭撞傷流血。她立刻起身協助按住傷口、安撫孕婦，陪同搭計程車前往醫院，協助掛號直到先生趕到才離開，並留下名片。\n\n大約兩星期後，孕婦主動來電——全家因為這次意外，意識到「買車的錢都不及一個生命的重要」，決定購車。儘管由長輩決定品牌，最終仍指名向周玲安購車。交車當天，她特別準備從宮廟求來的平安符放在車上。\n\n媽媽感動地說：「這是他們第一台車，從沒求過平安符，你真的好溫暖，讓我知道選擇一個信賴的人比選一台車都重要。」周玲安體會到：現今的銷售不是只有金錢的交易，而是一種責任的買賣，這個責任是一個永久的服務。`
+  },
+  {
+    id: 'service2025_chen',
+    year: 2025, type: '服務',
+    branch: '喬順北投', hero: '陳曉雯',
+    title: '寶貝的回憶——當保養變成一份溫柔的告別',
+    body: `陳小姐是一位獸醫，與先生因狗結緣。這隻狗陪伴他們十多年，是他們的孩子。陳曉雯每次保養時，都會用吸塵器幫陳小姐清潔車內。\n\n這次保養，當她詢問「寶貝今天怎麼沒一起來」時，陳小姐紅著眼眶說，狗一個月前去當小天使了。在清理車內時，陳曉雯發現後座還留著狗毛，便將吸塵器中的毛取出，用一個寫著「寶貝的回憶」的紅包袋仔細收好。\n\n交車時，她遞給陳小姐這個紅包袋說：「我知道你很愛牠不想整理車子，今天我幫你清理後座，但我把你對牠的回憶裝在這裡，你收藏著就好。」當天晚上，陳小姐的先生特地來電致謝。`
+  },
+  {
+    id: 'service2025_meiyuan',
+    year: 2025, type: '服務',
+    branch: '喬順北投廠', hero: '陳渼媛',
+    title: '小旋風的吐司——把過動症變成最專注的半小時',
+    body: `李小姐是職業婦女，難得排假帶 8 歲的女兒小妞妞回廠保養。小妞妞一進客休室就像一陣「小旋風」，跑來跑去、觸摸每件擺設。李小姐輕聲喝止，臉上滿是無奈，並對其他客人致歉：「不好意思，這孩子有過動症狀…」\n\n陳渼媛靜靜觀察後，發現小妞妞被遏止後絕對不到 3 分鐘又開始活動。她沒有上前指責，而是走到李小姐桌邊說：「小妞妞放心交給我嗎？」李小姐還一臉疑惑，渼媛已經回吧檯準備熱壓吐司材料。\n\n她對小妞妞說：「阿姨教你做吐司好不好？」接下來半小時，小妞妞專注地塗醬、製作吐司，原本喧鬧的客休室恢復了安靜。最後渼媛還教她用手機貼圖自拍，並約定「下次再來，阿姨再教你做不一樣的」。\n\n李小姐摸著她的手臂道謝，那一聲謝謝讓渼媛體會到：服務的價值往往就在這些微不足道的小細節中。`
+  },
+  {
+    id: 'sales2024_chen',
+    year: 2024, type: '銷售',
+    branch: '偕聖豐原', hero: '陳奕帆',
+    title: '從擦汗的雙手讀懂客戶——左駕的勇氣',
+    body: `偉倫是來自馬來西亞的牙醫師。試乘 Kamiq 那天，陳奕帆看到他緊張地擦汗，雙手微微顫抖握著方向盤——這才意識到馬來西亞是右駕，與台灣完全相反，這也是他排斥購車的真正原因。\n\n陳奕帆碰運氣打去駕訓班詢問，意外發現有適合外國人從靠左行駛轉換的課程。她不經意地以「台灣交通複雜」為由，鼓勵偉倫參加駕訓，並陪同報名。一個多月後再安排試乘，偉倫已能自在地與她聊車輛功能。\n\n交車時偉倫表示，若不是她細心察覺他的不安並積極尋找解決方案，他原本已決定聘用司機。這份用心遠超出他對業務的想像。`
+  },
+  {
+    id: 'service2024_meiyuan',
+    year: 2024, type: '服務',
+    branch: '喬順民生', hero: '陳渼媛',
+    title: '一條毯子的溫度——客休室是車主的客廳',
+    body: `4 月 30 日炎熱的上班日，陳渼媛巡視時看到客休室外的畫面：助理美湲正輕輕為睡著的車主蓋上一條毯子。\n\n事後她問美湲為何如此貼心，美湲回答：「經理，因為我是客休室最貼心的小管家！我穿著薄外套都覺得需要保暖，更何況他在沙發上睡著了，這樣容易感冒。經理你不是說客休室就像車主回家後的客廳嗎？」\n\n半小時後車主交車離開，將毯子交還美湲，只說了句「謝謝妳，有暖到我」。陳渼媛將此案例帶上會議宣揚：「Human Touch 不是狹隘到車子上的專業維修服務，而是廣泛到超出車主預期的任何一個服務行為。」`
+  },
+  {
+    id: 'sales2023_xie',
+    year: 2023, type: '銷售',
+    branch: '北投民生', hero: '謝維遠',
+    title: '十幾年前的靠腰組與 0121 心願牌——一次最後的交車',
+    body: `秦先生五年前向謝維遠購買 Rapid，後來秦媽媽要換 Superb 來載輪椅上的秦奶奶。聊天中得知奶奶舊車的「人體工學靠腰組」用了十幾年破損，但換過五六種款式奶奶都不舒服。謝維遠拍下款式四處打聽，找了將近一個月，最後透過前輩的親戚朋友，找到屏東當初製造的工廠最後一組庫存——花了近 3000 元運回，準備當神秘禮物。\n\n領牌前夕，秦媽媽低沉來電：秦爸爸昨天走了，無法一同來交車，希望能把車牌改成秦爸爸的生日。謝維遠安慰她「錢是小事，我處理」。為了找到 0121 這個全省都缺貨的號碼，他延後交車，最後在苗栗才標到——出發領牌前一天他腸胃炎，仍咬牙完成。\n\n交車當天剛好是母親節，他準備母親節蛋糕和兩束康乃馨。秦奶奶一看到靠腰組所有人都嚇了一跳，以為是舊車翻新——竟然能找到 10 幾年前的款式。`
+  },
+  {
+    id: 'sales2023_huang',
+    year: 2023, type: '銷售',
+    branch: '鈞銓文心', hero: '黃鎧霆',
+    title: '雨夜的鋼珠筆——一場意外延伸的承諾',
+    body: `凌晨 2 點多的中投公路，下著大雨。黃鎧霆目擊一台 Skoda Kamiq 蛇行後撞上護欄。駕駛是亞洲大學附屬醫院夜班急診醫師廖偉智。他撥打救護車並陪同到院，認識了同樣是該院護理長的廖太太。\n\n半年後廖太太來電，廖醫師因肋骨斷裂內出血未能搶救。她希望黃鎧霆協助重新安排一場交車儀式：「這台車是我跟先生最後留下來的信物。」黃鎧霆自費準備：交車室預約、交車禮、隔熱紙重貼、行車紀錄器、洗車美容。同事問為何要做這些不屬於責任的事，他說：「一個小小的舉動或許能給對方帶來從未感受過的溫暖。」\n\n交車後，廖太太從包包拿出一支鋼珠筆——那是她當年送給先生慶祝成為醫師的禮物，轉送給黃鎧霆，祝福他事業順利。`
+  },
+  {
+    id: 'service2023_meiyuan',
+    year: 2023, type: '服務',
+    branch: '北投', hero: '陳渼媛 / 張育碩',
+    title: '腳踏車烙鏈的小事——非車主換來的一句謝謝',
+    body: `11 月 13 日傍晚 17:45，陳渼媛打完卡正要回家，聽到門口外腳踏車摔倒聲。一位石牌國中的女生跌坐在地，腳踏車烙鏈，她邊哭邊說要趕著買晚餐給阿嬤吃還要去補習。\n\n陳渼媛安撫她不用擔心，請技師張育碩幫忙修理腳踏車，自己拿出藥箱幫她擦藥包紮。妹妹禮貌道謝後騎車離開。\n\n幾天後的星期六中午，那位妹妹竟帶著媽媽來服務廠致謝，還拎著一大袋飲料。媽媽說：「你們很棒，一件腳踏車烙鏈的小事且不是 Skoda 的車主都這麼熱心，當你們的車主一定很安心，我們如果要換車會考慮 Skoda 的。」陳渼媛體會到：無私就是 Human Touch。`
+  },
+  {
+    id: 'service2023_hong',
+    year: 2023, type: '服務',
+    branch: '北投晉暘', hero: '洪志明 / 周明皓 / 顏子翔',
+    title: '大年初一的即時救援——從台北開到屏東換車',
+    body: `郭先生除夕從桃園回屏東老家，剛停好車，副水箱冷卻液就沸騰冒煙。鎮上所有保修廠不是沒接電話就是過年休息。他抱著僥倖心理打了原廠（晉暘）電話——過年期間有設定來電轉接專人值班。\n\n服務廠洪廠長除夕圍爐期間即時協調，提出三個方案：(1) 拖車回北投；(2) 一家四口高鐵票北返；(3) 北返後 Superb 待修期間提供同級代步車。最後拍板：大年初一由維修技師顏子翔和服務專員周明皓帶著工具料件，從台北開一台 KODIAQ 七人座 SUV「大熊」南下屏東，現場檢修並與郭先生換車——把 Superb 開回台北維修，大熊留給客戶過年代步。\n\n初步診斷是副水箱蓋瑕疵。技師詳細解釋可能原因，並沿途定點檢測補水把車開回台北（後來嘉義雲林還是讓拖吊接手），當晚 12 點多平安抵達北投。後續維修時還主動拆公司車的水箱風扇先給客戶用，加快交車。郭先生事後特別感謝：「小弟我真的服了！」`
+  },
+  {
+    id: 'extra_humantouch',
+    year: 2023, type: '思考',
+    branch: '通案', hero: 'Human Touch 精神',
+    title: '當「責任」遇上「選擇」——Human Touch 的三個層次',
+    body: `綜觀 2023-2025 年所有最佳案例，Human Touch 的展現有三個層次：\n\n第一層【責任內的服務】——把分內事做好。例如保養完車輛清潔乾淨、客休室提供飲品、按 SOP 接待客戶。這是最基本的職業要求。\n\n第二層【責任邊緣的觀察】——細心察覺客戶說不出口的需求。例如陳奕帆觀察到外籍客戶試乘時擦汗顫抖、美湲注意到睡著的車主可能著涼、陳渼媛察覺李小姐被女兒過動行為困擾的尷尬。這需要同理心與專業敏感度。\n\n第三層【責任之外的選擇】——在沒有人要求的時候主動付出。例如黃鎧霆自費為非客戶重辦交車儀式、謝維遠花一個月找十幾年前停產的靠腰組、洪廠長除夕協調團隊大年初一南下屏東換車。這已經跨越「業務」進入「人對人」。\n\n這三個層次累積起來，便是品牌口中的 Human Touch——它不是一條規定，而是一種看待人的方式。`
+  }
+];
+
+/* ================== 深度題目 ================== */
+/* 每個案例配 2 題深度題,共 22 題;每次測驗從 11 案例中抽 10 個,
+   每個被抽中的案例隨機抽 1 題,湊成 10 題。 */
+const QUESTIONS_BY_CASE = {
+  'sales2025_lin': [
+    {
+      text: '四年來，林昭博每次與傅先生互動，總會關心他們夫妻何時能迎接寶寶，但始終「未給過壓力」。從這個細節判斷，他真正展現的銷售功夫是？',
+      options: [
+        '懂得記住客戶的私事，作為下次推銷的話題切入點',
+        '辨識出哪些是「該記住的關懷」、哪些是「不能踩的痛點」，並用恰當分寸維繫關係',
+        '透過頻繁問候提高客戶的回購意願',
+        '主動提供育兒產品的推薦以建立額外業績'
+      ],
+      answer: 1,
+      explain: '真正的高階關係經營，是知道哪些話該說、哪些不該追問——記住但不打擾，關心但不施壓，這才是長線信任的根基。'
+    },
+    {
+      text: '傅先生在太太預產期當天傳訊請林昭博協助載他們去醫院。如果你是林昭博的同事，從這個請託最值得學習的服務心法是什麼？',
+      options: [
+        '客戶有要求都要照做，因為這代表業績可能性',
+        '在客戶最緊張、最脆弱的時刻，平日累積的信任會自然「兌現」——這份信任不是當下做出來的，是四年累積的',
+        '應該婉拒避免影響工作，再介紹其他服務',
+        '應該收取交通費以示專業界線'
+      ],
+      answer: 1,
+      explain: '客戶不會在最重要的時刻找一個剛認識的業務——能被想起的，是長期累積的「人」的價值。這正是「服務不是成交那一刻，而是多年後仍被信任」的真義。'
+    }
+  ],
+  'sales2025_chou': [
+    {
+      text: '周玲安在公車意外當下做了多個動作：起身協助、按住傷口、陪去醫院、處理掛號。如果你是新進業務看到這樣的故事，最該汲取的核心觀念是？',
+      options: [
+        '隨時準備名片，意外往往是商機',
+        '在無業務目的的場合做正確的事——當下不為成交而做，反而成就了未來的成交',
+        '購車意願高的客戶通常出現在公共場所',
+        '銷售要主動出擊，不放過任何潛在客戶'
+      ],
+      answer: 1,
+      explain: '如果周玲安當下心裡想著「這可能是個客戶」，行為會變得功利——而正是她「不為什麼」的協助，才打動長輩決定指名向她買車。Human Touch 的弔詭在此：愈不求回報，回報愈自然到來。'
+    },
+    {
+      text: '案例中孕婦提到「畢竟是長輩出錢買車，所以先由長輩決定」，比較完所有品牌「沒有滿意的」才提出周玲安的名片。從這個過程，可以看出 Human Touch 對銷售的真正價值是？',
+      options: [
+        '可以省下廣告預算',
+        '在客戶比較產品時提供決勝關鍵——當理性比較分不出高下時，「人」就成為決定因素',
+        '可以縮短銷售週期',
+        '可以提高客單價'
+      ],
+      answer: 1,
+      explain: '車輛規格、價格在同級競爭下差異有限。當客戶「比較完都沒滿意的」，背後其實是在尋找一個「我願意把信任交給誰」的答案——這正是 Human Touch 的議價力。'
+    }
+  ],
+  'service2025_chen': [
+    {
+      text: '陳曉雯沒有「假裝沒看到」狗毛，也沒有「直接清掉了事」，而是用紅包袋裝起來給陳小姐。這個選擇背後最深的服務洞察是？',
+      options: [
+        '車主可能會檢查清潔結果，所以要保留證據',
+        '看見客戶當下「說要放下卻其實放不下」的真實情緒——服務不是給客戶他「說」想要的，而是給他「真正需要」的',
+        '紅包袋成本低，是 CP 值高的服務工具',
+        '保留毛髮可作為下次溝通的話題'
+      ],
+      answer: 1,
+      explain: '陳小姐進廠時嘴上說「要放下不要再想牠」，但行為（沒整理車子、車內滿是狗毛）洩漏了真實——她其實還沒準備好。陳曉雯讀懂了這個矛盾，把「清潔」轉化為「保留回憶」。'
+    },
+    {
+      text: '陳曉雯在故事最後寫：「我沒有多花一點時間跟錢來安慰陳小姐，我只是感受到她的心情給她一個回憶。」這句話對基層服務人員最大的啟示是？',
+      options: [
+        'Human Touch 必須要有公司預算支持才能執行',
+        '感動客戶不需要靠額外資源——靠的是「在原本就要做的事情上多想一步」',
+        '只有在主管在場時才需要展現特別服務',
+        '紅包袋是必備的服務道具'
+      ],
+      answer: 1,
+      explain: '一個本來就要拿吸塵器清車的動作 + 一個紅包袋 = 一份回憶。Human Touch 不是另外加上去的「服務套餐」，而是把日常動作做出心意——這個觀念解放了「沒資源就做不到 Human Touch」的迷思。'
+    }
+  ],
+  'service2025_meiyuan': [
+    {
+      text: '當小妞妞在客休室跑來跑去時，陳渼媛沒有：(A) 上前指責孩子；(B) 暗示李小姐管教好；(C) 假裝沒看見。她選擇邀請孩子做吐司。從問題解決角度，這個選擇最聰明的地方是？',
+      options: [
+        '直接處理「行為問題」（管教），會傷害母親自尊；轉換為「興趣轉移」，讓孩子的能量找到出口，問題自然消失',
+        '可以順便推銷烘焙課程',
+        '吐司成本低不會虧損',
+        '可以拍照上傳社群媒體做品牌宣傳'
+      ],
+      answer: 0,
+      explain: '面對「困擾性行為」，責備或要求「不要做」往往無效——因為孩子（或客戶）的本質需求沒被滿足。提供一個建設性出口，讓本來的困擾能量轉成正向參與，是更高層次的解決方式。同樣道理也適用於各種客訴情境。'
+    },
+    {
+      text: '李小姐起身時的歉意是「對其他客人」，而不是「對陳渼媛」。陳渼媛的處理方式真正解放了李小姐什麼？',
+      options: [
+        '解放了停車的麻煩',
+        '解放了「身為母親在公共場所必須不斷道歉」的羞愧——讓她在保養等待的這段時間，可以「只當一個人」而不只是「過動兒的媽媽」',
+        '解放了她要付保養費的負擔',
+        '解放了她的工作壓力'
+      ],
+      answer: 1,
+      explain: '李小姐當下最沉重的不是孩子吵鬧，而是「我又造成別人困擾」的歉疚感。陳渼媛接手照顧小妞妞，等於對她說「妳不用一直道歉，可以放鬆一下」——這份「被理解」比任何免費飲品都珍貴。'
+    }
+  ],
+  'sales2024_chen': [
+    {
+      text: '陳奕帆原本以為偉倫是「三師職業，會在意品牌形象、希望豪華進口車」。試乘時看到他擦汗顫抖才恍然大悟。這個誤判過程對銷售最大的教訓是？',
+      options: [
+        '不應該帶客戶試乘，避免出狀況',
+        '對客戶的「身份標籤推測」常常是誤導——真正的需求要靠觀察身體語言，而不是套用對職業的刻板印象',
+        '外籍客戶不適合台灣車款',
+        '應該先問清楚購車預算再推薦'
+      ],
+      answer: 1,
+      explain: '「醫師=愛豪車」「年輕人=要省油」「女性=要好停車」這類標籤推測，往往讓業務看不見眼前真正的人。陳奕帆學到的是：放下假設，用眼睛看當下的客戶在告訴你什麼。'
+    },
+    {
+      text: '陳奕帆在重新聯絡偉倫時，「為顧及他的面子，不經意的提到了台灣複雜的交通情形」，而不是直接說「你右駕不熟所以害怕對吧？」。這個「不直接說破」的選擇展現的功夫是？',
+      options: [
+        '故意拖延以便提高成交價',
+        '為客戶「保留尊嚴」——讓他能優雅地接受幫助，而不是被迫承認自己的弱點',
+        '避免承擔診斷錯誤的責任',
+        '製造神秘感增加客戶好奇'
+      ],
+      answer: 1,
+      explain: '直接點破對方的不安，會讓對方「丟面子」而抗拒。把問題包裝成「外部環境因素」，讓客戶可以無壓力地接受解方——這是高情商銷售的關鍵：給人台階下，比指出問題更重要。'
+    }
+  ],
+  'service2024_meiyuan': [
+    {
+      text: '美湲蓋毯子時，並不是被告知「要這樣做」，而是出於「我穿薄外套都覺得需要保暖，更何況他在沙發上睡著」的同理推論。這對 SOP 制定者最重要的啟示是？',
+      options: [
+        '應該把蓋毯子寫進 SOP，每位睡著的車主都要蓋',
+        '真正的優質服務無法靠 SOP 窮盡——需要培養員工「以己度人」的同理心，讓他們有判斷情境的能力',
+        'SOP 越多越好，可以避免疏漏',
+        '應該只服務男性車主，避免誤會'
+      ],
+      answer: 1,
+      explain: 'SOP 規範的是「最低標準」，但 Human Touch 是「最高標準」。把所有可能性寫進 SOP 不切實際——更有效的做法是培養員工的同理心，讓他們在沒被告知的情境下也能做出溫暖判斷。'
+    },
+    {
+      text: '陳渼媛從這個案例提煉出：「Human Touch，不是狹隘到車子上的專業維修服務，而是廣泛到超出車主預期的任何一個服務行為。」這個定義的革命性在於？',
+      options: [
+        '把「服務範圍」從「車輛本身」擴展到「車主的整體體驗」——技師、客休、銷售都是同一張網的一部分',
+        '它把客休室升格為主要部門',
+        '它要求所有員工會修車',
+        '它降低了維修品質的標準'
+      ],
+      answer: 0,
+      explain: '傳統思維把汽車服務切割：「這是技師的事/那是業務的事」。陳渼媛的定義打破了這個切割——車主不會分「我現在被技師服務還是被業務服務」，他只會記得「我在這家店有沒有被好好對待」。'
+    }
+  ],
+  'sales2023_xie': [
+    {
+      text: '謝維遠花了將近一個月、近 3000 元，去找十幾年前停產的「人體工學靠腰組」。這個動作中最容易被忽略、卻最值得學習的是？',
+      options: [
+        '應該收取此項費用以反映時間成本',
+        '他能「記住一個閒聊細節（奶奶舊靠腰組壞了但不滿意新款式）」——把客戶不經意說的話聽進去，並把它當成自己的待辦事項',
+        '應該推薦客戶換新車而不是修舊配件',
+        '靠腰組的成本應該由客戶承擔'
+      ],
+      answer: 1,
+      explain: '一般業務聽到「奶奶換過五六種靠腰組都不舒服」會當成閒聊過去；謝維遠把它當成一個待解問題收下。Human Touch 的起點，往往是「把客戶的閒話當正事聽」這個能力。'
+    },
+    {
+      text: '當秦媽媽因秦爸爸過世希望換成爸爸生日的車牌，謝維遠回答「錢是小事，我處理」並延後交車去苗栗標牌。從風險與成本角度，這個決定有什麼深層的智慧？',
+      options: [
+        '他知道車牌費用其實很便宜',
+        '他選擇了「短期成本（自費、延期、生病出差）」換取「長期意義（陪客戶完成最後一個願望）」——這不是業務決策，是人的決策',
+        '他在賭客戶會給更多介紹',
+        '他純粹是衝動沒有考慮成本'
+      ],
+      answer: 1,
+      explain: '理性業務會算：標牌成本 + 延後交車的時間損失 vs. 客戶介紹的期望值。但謝維遠的計算是另一個維度——「這台車對客戶而言代表什麼」。當你把客戶當人，計算方式就會改變。'
+    }
+  ],
+  'sales2023_huang': [
+    {
+      text: '同事問黃鎧霆「你幹嘛自己自費貼錢處理？也不是你的客人簡單就好不是嗎？」這個問題反映出職場常見的什麼思維陷阱？',
+      options: [
+        '「KPI 思維」——把所有付出都換算成業績或回報，看不見職務之外的人性價值',
+        '黃鎧霆同事是好心提醒他不要被利用',
+        '公司應該明確規定哪些是業務責任',
+        '客戶應該自己負擔所有費用'
+      ],
+      answer: 0,
+      explain: '同事的問題沒有惡意，反映的是組織常見的「划算思維」——但這種思維會把所有員工訓練成精算師，失去做人的本能。黃鎧霆的回應「一個小小的舉動或許能給對方帶來從未感受過的溫暖」是另一種選擇。'
+    },
+    {
+      text: '黃鎧霆說：「做這些不是求什麼回報，而是如果我今天有能力去幫助別人，那個人在他也有能量能力的時候也會去幫助下一個人，一直傳達下去。」這個觀念對企業文化的真正意義是？',
+      options: [
+        '可以節省員工訓練費用',
+        '把 Human Touch 從「個人善行」升格為「文化複利」——當每個人都這樣做，整個社會的善意流動量就會增加，而品牌成為這個循環的一部分',
+        '讓員工心甘情願加班',
+        '可以拍成廣告吸引客戶'
+      ],
+      answer: 1,
+      explain: '單次善行有限，但「傳遞善行」會形成複利。當 Skoda 的員工都這樣思考，品牌不再只是賣車的公司，而是「讓世界多一份溫暖的節點」。這是品牌資產裡最難複製的一部分。'
+    }
+  ],
+  'service2023_meiyuan': [
+    {
+      text: '腳踏車事件發生在「下班打卡之後」。如果換成另一位員工，可能會想：「我已經下班了，這不是工作時間。」陳渼媛的選擇展現了什麼樣的職場觀？',
+      options: [
+        '陳渼媛應該記錄加班時數請求補休',
+        '「下班與否」是一種制度上的劃分，但「我是誰」不會打卡——一個人在制服外仍是同一個人，這是 Human Touch 真正內化的證據',
+        '只有上班時間才有義務助人',
+        '下班後應該忽視工作場所周圍的事'
+      ],
+      answer: 1,
+      explain: 'Human Touch 如果只在打卡期間出現，那是「演出」；如果下班後還是同樣選擇，那才是「成為」。陳渼媛家裡媽媽教她「隨時隨地做好事結善緣」——這個「隨時隨地」就是關鍵。'
+    },
+    {
+      text: '妹妹的媽媽幾天後特別來致謝，並說「我們如果要換車會考慮 Skoda」。從品牌行銷角度看，這個案例最值得思考的是？',
+      options: [
+        '應該設計「協助路人」的標準動作 SOP',
+        '最有效的品牌口碑，往往是「不為品牌做的事」——當員工不是為了行銷而行動，反而產生最強的行銷效果',
+        '應該在服務廠門口架設攝影機記錄善行',
+        '應該主動發新聞稿曝光此事'
+      ],
+      answer: 1,
+      explain: '如果陳渼媛是為了「為品牌加分」而幫助妹妹，妹媽會感受得出來，這份善意就會打折。正因為動機純粹，妹媽才被打動到願意「未來考慮 Skoda」——這就是品牌行銷的悖論：愈想行銷，愈不像；愈不為行銷，愈動人。'
+    }
+  ],
+  'service2023_hong': [
+    {
+      text: '洪廠長的三個方案中，最終選擇「大年初一派人開大熊南下換車」這個成本最高的方案。從危機處理的決策邏輯看，他的選擇背後是什麼樣的判斷？',
+      options: [
+        '為了讓客戶在媒體上稱讚而做秀',
+        '把「客戶過年的家庭體驗」放在「公司成本」之上——當客戶面臨無法解決的困境時，給出超越期待的方案，會在客戶心中形成終生印象',
+        '其他方案技師都拒絕執行',
+        '純粹是為了避免客訴擴大'
+      ],
+      answer: 1,
+      explain: '理性計算下，方案 1（拖車）成本最低；方案 3 是最昂貴、最費工的選擇。但洪廠長算的不是「這次省多少錢」，而是「這個客戶 5 年、10 年後會怎麼跟人說 Skoda」——這是長期主義 vs. 短期主義的差別。'
+    },
+    {
+      text: '在服務廠後續的維修中，技師主動「先拆公司車的水箱風扇給客戶用，待料到再回來換」。這個動作對組織文化最大的意義是？',
+      options: [
+        '反映出服務廠車輛的維護不重要',
+        '當員工被主管教過「客戶優先」的精神，他們會在主管不在場時，自己延伸做出符合精神的決定——這是文化「真的活下來」的證據',
+        '公司車本來就該被優先犧牲',
+        '反映出零件管理混亂'
+      ],
+      answer: 1,
+      explain: '文化不是靠口號傳承，是靠「員工在沒人盯著時做的事」傳承。洪廠長的決策在前，技師的延伸決策在後——這代表這個服務廠的 Human Touch 已經從個人變成集體的反射動作。'
+    }
+  ],
+  'extra_humantouch': [
+    {
+      text: '對照 Human Touch 的三個層次（責任內、責任邊緣、責任之外），下列哪一個對員工日常最務實的提醒？',
+      options: [
+        '只要做到第一層就夠了，第三層是英雄行為',
+        '不要急著追求第三層的英雄時刻——先把第一層做扎實，再練習第二層的觀察，第三層的選擇會在某一天自然出現',
+        '只要有第三層的事蹟，前兩層可以忽略',
+        '這三層是按職等劃分的，基層只能做第一層'
+      ],
+      answer: 1,
+      explain: '很多人讀完最佳案例會焦慮「我做不到那種感人的事」。但其實案例中的英雄行為，都建立在他們把日常做扎實的基礎上——周玲安能讀懂孕婦的疲憊、陳曉雯能注意到狗毛，都是長期觀察力訓練的結果。從第一層開始，認真累積。'
+    },
+    {
+      text: '若要在自己的工作中實踐 Human Touch，下列哪一個做法最符合所有最佳案例共通的精神？',
+      options: [
+        '每天記錄客戶的個人資料以備不時之需',
+        '把「我能為這個人多做什麼」當成日常自問——但這個「多做」必須來自對對方真實處境的理解，而不是套用感人模板',
+        '主動在社群媒體分享自己的善行以累積品牌印象',
+        '請主管提供更多預算來執行 Human Touch 行動'
+      ],
+      answer: 1,
+      explain: 'Human Touch 沒有公式——「送平安符」對某些客戶感人，對其他客戶可能尷尬；「蓋毯子」對睡著的車主溫暖，對清醒的可能干擾。共通的不是動作，而是「我是否真的在看這個人」這個提問。把提問內化，動作自然會合宜。'
+    }
+  ]
+};
+
+const STORAGE_KEY = 'ht_case_records_local_v2';
+const PASS_SCORE = 80;
+
+const STATE = {
+  user: { name: '', dealer: '', role: '' },
+  selectedCases: [],   // 抽出的 10 個案例
+  questions: [],       // 對應的 10 題
+  answers: [],
+  current: 0,
+  startTime: 0,
+  timer: null
+};
+
+/* ============ INIT ============ */
+function init() {
+  // populate dealer dropdown
+  const sel = document.getElementById('dealer');
+  OUTLETS.forEach(o => {
+    const opt = document.createElement('option');
+    opt.value = o; opt.textContent = o;
+    sel.appendChild(opt);
+  });
+}
+init();
+
+/* ============ NAV ============ */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+window.showScreen = showScreen;
+
+/* ============ START ============ */
+document.getElementById('registerForm').addEventListener('submit', e => {
+  e.preventDefault();
+  STATE.user.dealer = document.getElementById('dealer').value;
+  STATE.user.name = document.getElementById('userName').value.trim();
+  STATE.user.role = document.getElementById('userRole').value.trim();
+  if (!STATE.user.dealer || !STATE.user.name) return;
+
+  // 從 11 個案例隨機抽 10 個（去掉一個）
+  const shuffled = [...CASES].sort(() => Math.random() - 0.5);
+  STATE.selectedCases = shuffled.slice(0, 10);
+
+  // 對每個案例，從它的題庫中隨機抽 1 題
+  STATE.questions = STATE.selectedCases.map(c => {
+    const pool = QUESTIONS_BY_CASE[c.id] || [];
+    const idx = Math.floor(Math.random() * pool.length);
+    return { ...pool[idx], caseId: c.id };
+  });
+
+  STATE.answers = new Array(STATE.questions.length).fill(null);
+  STATE.current = 0;
+  STATE.startTime = Date.now();
+
+  document.getElementById('hdrName').textContent = STATE.user.name;
+  document.getElementById('hdrDealer').textContent = STATE.user.dealer;
+
+  startTimer();
+  showScreen('screen-quiz');
+  renderQuestion();
+});
+
+function startTimer() {
+  clearInterval(STATE.timer);
+  STATE.timer = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - STATE.startTime) / 1000);
+    const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const s = String(elapsed % 60).padStart(2, '0');
+    const t = document.getElementById('progTime');
+    if (t) t.textContent = `${m}:${s}`;
+  }, 500);
+}
+
+/* ============ RENDER QUESTION ============ */
+function renderQuestion() {
+  const q = STATE.questions[STATE.current];
+  const c = STATE.selectedCases[STATE.current];
+
+  const caseHtml = `
+    <article class="case-card">
+      <div class="case-tag">${c.year} · ${c.type} · ${c.branch} · ${c.hero}</div>
+      <h2 class="case-title">${c.title}</h2>
+      <div class="case-body">${c.body.split('\n\n').map(p => `<p>${p}</p>`).join('')}</div>
+    </article>
+  `;
+  document.getElementById('caseContainer').innerHTML = caseHtml;
+
+  const opts = q.options.map((opt, i) => {
+    const sel = STATE.answers[STATE.current] === i ? 'selected' : '';
+    const letter = ['A', 'B', 'C', 'D'][i];
+    return `
+      <label class="option ${sel}" data-idx="${i}">
+        <span class="marker"></span>
+        <span class="opt-text"><span class="opt-letter">${letter}.</span>${opt}</span>
+      </label>
+    `;
+  }).join('');
+
+  document.getElementById('questionContainer').innerHTML = `
+    <div class="question-block">
+      <div class="question-num">${String(STATE.current + 1).padStart(2, '0')}</div>
+      <div class="question-text">${q.text}</div>
+      <div class="options">${opts}</div>
+    </div>
+  `;
+
+  document.querySelectorAll('.option').forEach(o => {
+    o.addEventListener('click', () => {
+      STATE.answers[STATE.current] = parseInt(o.dataset.idx);
+      document.querySelectorAll('.option').forEach(x => x.classList.remove('selected'));
+      o.classList.add('selected');
+    });
+  });
+
+  const total = STATE.questions.length;
+  const pct = ((STATE.current + 1) / total) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progText').textContent = `QUESTION ${STATE.current + 1} OF ${total}`;
+  document.getElementById('btnPrev').disabled = STATE.current === 0;
+  document.getElementById('btnNext').textContent =
+    STATE.current === total - 1 ? '完成 SUBMIT' : '下一題 →';
+}
+
+document.getElementById('btnPrev').addEventListener('click', () => {
+  if (STATE.current > 0) { STATE.current--; renderQuestion(); }
+});
+
+document.getElementById('btnNext').addEventListener('click', () => {
+  if (STATE.answers[STATE.current] === null) {
+    alert('請先選擇一個答案再繼續');
+    return;
+  }
+  if (STATE.current < STATE.questions.length - 1) {
+    STATE.current++;
+    renderQuestion();
+  } else {
+    submitQuiz();
+  }
+});
+
+/* ============ SUBMIT ============ */
+async function submitQuiz() {
+  if (STATE.answers.some(a => a === null)) {
+    alert('還有未作答的題目，請完成所有題目後再提交');
+    return;
+  }
+  clearInterval(STATE.timer);
+
+  const elapsedSec = Math.floor((Date.now() - STATE.startTime) / 1000);
+  let correct = 0;
+  STATE.answers.forEach((a, i) => { if (a === STATE.questions[i].answer) correct++; });
+  const total = STATE.questions.length;
+  const score = Math.round((correct / total) * 100);
+  const pass = score >= PASS_SCORE;
+  const finishedAt = new Date();
+
+  // 將每題以「題幹+選項」方式記錄,方便事後審閱
+  const detailedAnswers = STATE.questions.map((q, i) => ({
+    caseId: q.caseId,
+    questionText: q.questionText || q.text,
+    text: q.text,
+    options: q.options,
+    userAnswer: STATE.answers[i],
+    correctAnswer: q.answer,
+    isCorrect: STATE.answers[i] === q.answer
+  }));
+
+  const record = {
+    name: STATE.user.name,
+    dealer: STATE.user.dealer,
+    role: STATE.user.role,
+    score, correct, total,
+    pass, elapsed: elapsedSec,
+    answers: STATE.answers.slice(),
+    detailedAnswers,
+    completedAt: finishedAt.toISOString()
+  };
+
+  // save to firebase + local fallback
+  const banner = document.getElementById('saveBanner');
+  banner.innerHTML = '';
+
+  saveLocalRecord(record);
+  let cloudOk = false;
+  if (window.__fb) {
+    try {
+      const id = await window.__fb.saveRecord(record);
+      record.cloudId = id;
+      cloudOk = true;
+    } catch (e) {
+      console.error('Cloud save failed:', e);
+    }
+  }
+  banner.innerHTML = cloudOk
+    ? `<div class="save-banner"><span class="save-dot"></span>成績已儲存到雲端，管理員可在後台查閱與列印。</div>`
+    : `<div class="save-banner error"><span class="save-dot"></span>雲端儲存失敗，已暫存於本機。請通知管理員或檢查網路連線。</div>`;
+
+  // ui
+  document.getElementById('scoreBig').textContent = score;
+  document.getElementById('scorePct').textContent = score + '%';
+  document.getElementById('scoreRight').textContent = `${correct} / ${total} CORRECT`;
+  const status = document.getElementById('resultStatus');
+  if (pass) {
+    status.textContent = 'PASS · 通過';
+    status.classList.remove('fail');
+  } else {
+    status.textContent = 'TRY AGAIN · 未通過';
+    status.classList.add('fail');
+  }
+  document.getElementById('sumName').textContent = STATE.user.name;
+  document.getElementById('sumDealer').textContent = STATE.user.dealer;
+  document.getElementById('sumTime').textContent = finishedAt.toLocaleString('zh-TW');
+
+  document.getElementById('reviewList').innerHTML = STATE.questions.map((q, i) => {
+    const userAns = STATE.answers[i];
+    const ok = userAns === q.answer;
+    return `
+      <div class="review-item">
+        <div class="review-head">
+          <div class="review-mark ${ok ? 'correct' : 'wrong'}">${ok ? '✓' : '✗'}</div>
+          <div class="review-q">Q${i + 1}. ${q.text}</div>
+        </div>
+        <div class="review-detail">
+          <div class="yours">您的答案：${q.options[userAns]}</div>
+          <div class="ans">正確答案：${q.options[q.answer]}</div>
+          <div style="margin-top:8px; color:rgba(10,31,24,0.55);">解析：${q.explain}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  showScreen('screen-result');
+}
+
+function restart() {
+  STATE.user = { name: '', dealer: '', role: '' };
+  STATE.answers = [];
+  STATE.questions = [];
+  STATE.selectedCases = [];
+  STATE.current = 0;
+  document.getElementById('registerForm').reset();
+  showScreen('screen-landing');
+}
+window.restart = restart;
+
+/* ============ STORAGE (local fallback) ============ */
+function loadLocalRecords() {
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    return Array.isArray(data) ? data : [];
+  } catch { return []; }
+}
+function saveLocalRecord(rec) {
+  const all = loadLocalRecords();
+  all.unshift(rec);
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(all)); } catch (e) { console.warn(e); }
+}
+
+/* ============ ADMIN ============ */
+let CACHED_RECORDS = [];
+
+async function openAdmin() {
+  const pwd = prompt('請輸入管理員密碼：');
+  if (pwd === null) return;
+  if (pwd !== 'skoda2025') {
+    alert('密碼錯誤');
+    return;
+  }
+  showScreen('screen-admin');
+  await refreshRecords();
+}
+window.openAdmin = openAdmin;
+
+async function refreshRecords() {
+  CACHED_RECORDS = [];
+  // 1) cloud
+  if (window.__fb) {
+    try {
+      CACHED_RECORDS = await window.__fb.loadRecords();
+    } catch (e) {
+      console.error('Cloud load failed', e);
+    }
+  }
+  // 2) local fallback
+  if (!CACHED_RECORDS.length) {
+    CACHED_RECORDS = loadLocalRecords();
+  }
+  // stats
+  document.getElementById('adTotal').textContent = CACHED_RECORDS.length;
+  const passCount = CACHED_RECORDS.filter(r => r.pass).length;
+  document.getElementById('adPass').textContent = passCount;
+  const avg = CACHED_RECORDS.length ?
+    Math.round(CACHED_RECORDS.reduce((s, r) => s + r.score, 0) / CACHED_RECORDS.length) : 0;
+  document.getElementById('adAvg').textContent = avg;
+  const dealers = new Set(CACHED_RECORDS.map(r => r.dealer));
+  document.getElementById('adDealers').textContent = dealers.size;
+
+  const filterDealer = document.getElementById('filterDealer');
+  const cur = filterDealer.value;
+  filterDealer.innerHTML = '<option value="">所有據點</option>' +
+    [...dealers].sort().map(d => `<option value="${d}">${d}</option>`).join('');
+  filterDealer.value = cur;
+
+  renderTable();
+}
+window.refreshRecords = refreshRecords;
+
+function renderTable() {
+  const ft = document.getElementById('filterText').value.trim().toLowerCase();
+  const fd = document.getElementById('filterDealer').value;
+  const fs = document.getElementById('filterStatus').value;
+
+  const filtered = CACHED_RECORDS.filter(r => {
+    if (ft && !(r.name||'').toLowerCase().includes(ft) && !(r.dealer||'').toLowerCase().includes(ft)) return false;
+    if (fd && r.dealer !== fd) return false;
+    if (fs === 'pass' && !r.pass) return false;
+    if (fs === 'fail' && r.pass) return false;
+    return true;
+  });
+
+  const tbody = document.getElementById('adminTbody');
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="9" class="empty-state">目前沒有符合條件的記錄</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map((r, i) => {
+    const d = new Date(r.completedAt);
+    const m = String(Math.floor((r.elapsed||0) / 60)).padStart(2, '0');
+    const s = String((r.elapsed||0) % 60).padStart(2, '0');
+    return `
+      <tr>
+        <td>${i + 1}</td>
+        <td><strong>${escapeHtml(r.name)}</strong></td>
+        <td>${escapeHtml(r.dealer)}</td>
+        <td>${escapeHtml(r.role || '—')}</td>
+        <td><strong>${r.score}</strong></td>
+        <td>${r.correct} / ${r.total}</td>
+        <td>${m}:${s}</td>
+        <td>${r.pass ? '<span class="badge-pass">PASS</span>' : '<span class="badge-fail">FAIL</span>'}</td>
+        <td>${d.toLocaleString('zh-TW')}</td>
+      </tr>
+    `;
+  }).join('');
+}
+window.renderTable = renderTable;
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[c]);
+}
+
+function exportCSV() {
+  if (!CACHED_RECORDS.length) { alert('目前沒有可匯出的記錄'); return; }
+  const headers = ['編號', '姓名', '據點', '職務', '分數', '答對', '總題數', '狀態', '用時(秒)', '完成時間'];
+  const rows = CACHED_RECORDS.map((r, i) => [
+    i + 1, r.name, r.dealer, r.role || '',
+    r.score, r.correct, r.total,
+    r.pass ? '通過' : '未通過',
+    r.elapsed,
+    new Date(r.completedAt).toLocaleString('zh-TW')
+  ]);
+  let csv = '\uFEFF';
+  csv += headers.join(',') + '\n';
+  csv += rows.map(row =>
+    row.map(c => {
+      const s = String(c);
+      return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    }).join(',')
+  ).join('\n');
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `HumanTouch_研討記錄_${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+window.exportCSV = exportCSV;
+</script>
+</body>
+</html>
