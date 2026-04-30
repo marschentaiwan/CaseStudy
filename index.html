@@ -561,7 +561,7 @@
           </p>
           <div class="hero-meta">
             <div class="meta-item">
-              <div class="num">11</div>
+              <div class="num">20</div>
               <div class="lbl">Real Cases</div>
             </div>
             <div class="meta-item">
@@ -579,7 +579,7 @@
       <div class="landing-right">
         <div class="form-eyebrow">REGISTRATION · 學員報到</div>
         <h2 class="form-title">開始今天的學習旅程</h2>
-        <p class="form-hint">請填寫以下資訊以開始本次案例研討。每次將從 11 個真實案例中隨機抽選 10 案,搭配深度題目進行測驗。</p>
+        <p class="form-hint">請填寫以下資訊以開始本次案例研討。每次將從 20 個真實案例中隨機抽選 10 案,搭配深度題目進行測驗。</p>
 
         <form id="registerForm">
           <div class="field">
@@ -3667,7 +3667,7 @@ document.getElementById('registerForm').addEventListener('submit', e => {
   STATE.user.role = document.getElementById('userRole').value.trim();
   if (!STATE.user.dealer || !STATE.user.name) return;
 
-  // 從 11 個案例隨機抽 10 個（每案固定 1 題）
+  // 從 20 個案例隨機抽 10 個（每案固定 1 題）
   const shuffled = [...CASES].sort(() => Math.random() - 0.5);
   STATE.selectedCases = shuffled.slice(0, 10);
 
