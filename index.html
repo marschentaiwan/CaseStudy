@@ -351,6 +351,35 @@
     content: ''; position: absolute; inset: 4px;
     background: var(--skoda-green); border-radius: 50%;
   }
+  /* 答案鎖定後 */
+  .option.locked { cursor: default; }
+  .option.locked:hover { border-color: rgba(10, 31, 24, 0.12); background: white; }
+  .option.show-correct {
+    border-color: var(--skoda-green) !important;
+    background: rgba(120, 250, 174, 0.18) !important;
+  }
+  .option.show-correct .marker {
+    border-color: var(--skoda-green); background: var(--skoda-green);
+  }
+  .option.show-correct .marker::after {
+    content: '✓'; position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--skoda-deep); font-size: 14px; font-weight: bold;
+    background: transparent !important; border-radius: 0 !important;
+  }
+  .option.show-wrong {
+    border-color: rgba(232, 161, 79, 0.6) !important;
+    background: rgba(232, 161, 79, 0.08) !important;
+  }
+  .option.show-wrong .marker {
+    border-color: #E8A14F; background: rgba(232, 161, 79, 0.3);
+  }
+  .option.show-wrong .marker::after {
+    content: '✗'; position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #8B5A1E; font-size: 14px; font-weight: bold;
+    background: transparent !important; border-radius: 0 !important;
+  }
   .option .opt-letter {
     font-family: 'Bebas Neue', sans-serif; font-size: 14px;
     color: var(--skoda-deep); margin-right: 8px; letter-spacing: 0.1em;
@@ -527,6 +556,475 @@
     letter-spacing: 0.25em;
     font-size: 11px;
     color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* 答完題目立即顯示的 FEEDBACK + PLAYBOOK */
+  .feedback-block {
+    margin-top: 20px;
+    padding: 24px 28px;
+    border-left: 4px solid var(--skoda-green);
+    background: rgba(120, 250, 174, 0.08);
+    animation: feedbackIn 0.4s ease-out;
+  }
+  .feedback-block.wrong {
+    border-left-color: #E8A14F;
+    background: rgba(232, 161, 79, 0.08);
+  }
+  @keyframes feedbackIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .feedback-status {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.2em; font-size: 13px;
+    color: var(--skoda-deep);
+    margin-bottom: 8px;
+  }
+  .feedback-block.wrong .feedback-status { color: #8B5A1E; }
+  .feedback-correct-ans {
+    font-size: 14px; color: rgba(10, 31, 24, 0.7);
+    margin-bottom: 12px;
+  }
+  .feedback-correct-ans strong { color: var(--ink); }
+  .feedback-explain {
+    font-size: 14px; line-height: 1.75;
+    color: rgba(10, 31, 24, 0.85);
+  }
+
+  /* PLAYBOOK 方法拆解區 */
+  .playbook {
+    margin-top: 24px;
+    background: white;
+    border: 1px solid rgba(10, 31, 24, 0.08);
+    overflow: hidden;
+  }
+  .playbook-header {
+    background: var(--skoda-deep);
+    color: var(--skoda-green);
+    padding: 16px 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.25em; font-size: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .playbook-header::before {
+    content: '▸'; font-size: 16px;
+  }
+  .playbook-header-zh {
+    font-family: 'Noto Serif TC', serif;
+    color: white;
+    margin-left: auto;
+    letter-spacing: 0.05em;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* 三大支柱(Three Pillars)區塊 */
+  .pillars-banner {
+    background: linear-gradient(135deg, #042B1F 0%, #0E3A2F 100%);
+    color: white;
+    padding: 24px 28px 28px;
+    border-bottom: 1px solid rgba(120, 250, 174, 0.15);
+  }
+  .pillars-title {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.3em;
+    font-size: 11px;
+    color: rgba(120, 250, 174, 0.7);
+    margin-bottom: 6px;
+  }
+  .pillars-subtitle {
+    font-family: 'Noto Serif TC', serif;
+    color: white;
+    font-size: 14px;
+    margin-bottom: 18px;
+    opacity: 0.85;
+  }
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  .pillar-chip {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 14px 14px 16px;
+    border-radius: 4px;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .pillar-chip.primary {
+    background: rgba(120, 250, 174, 0.12);
+    border-color: rgba(120, 250, 174, 0.4);
+  }
+  .pillar-chip.secondary {
+    background: rgba(120, 250, 174, 0.05);
+    border-color: rgba(120, 250, 174, 0.18);
+  }
+  .pillar-chip.muted {
+    opacity: 0.4;
+  }
+  .pillar-strength-tag {
+    position: absolute; top: 10px; right: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.1em; font-size: 9px;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+  .pillar-chip.primary .pillar-strength-tag {
+    background: var(--skoda-green); color: var(--skoda-deep);
+  }
+  .pillar-chip.secondary .pillar-strength-tag {
+    background: rgba(120, 250, 174, 0.25); color: var(--skoda-green);
+  }
+  .pillar-name-en {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.18em;
+    font-size: 17px;
+    color: var(--skoda-green);
+    margin-bottom: 2px;
+  }
+  .pillar-chip.muted .pillar-name-en { color: rgba(255,255,255,0.4); }
+  .pillar-name-zh {
+    font-family: 'Noto Serif TC', serif;
+    color: white;
+    font-size: 13px;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+  .pillar-chip.muted .pillar-name-zh { color: rgba(255,255,255,0.35); }
+  .pillar-motto {
+    font-size: 11px;
+    color: rgba(120, 250, 174, 0.7);
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed rgba(120, 250, 174, 0.15);
+  }
+  .pillar-chip.secondary .pillar-motto { color: rgba(120, 250, 174, 0.5); }
+  .pillar-note {
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .pillar-chip.muted .pillar-note { display: none; }
+  .pillar-chip.muted::after {
+    content: '本案例此面向不是重點'; display: block;
+    font-size: 11px; color: rgba(255,255,255,0.4);
+    font-style: italic;
+  }
+  /* 手機版 pillars 改成垂直堆疊 */
+  @media (max-width: 720px) {
+    .pillars-grid { grid-template-columns: 1fr; gap: 10px; }
+    .pillar-chip.muted { padding: 10px 14px; }
+    .pillar-chip.muted .pillar-name-en { font-size: 14px; }
+  }
+
+  .playbook-body { padding: 28px 32px; }
+
+  /* PLAYBOOK FOOTER 下載 PDF 按鈕 */
+  .playbook-footer {
+    padding: 24px 32px 32px;
+    background: linear-gradient(180deg, rgba(120,250,174,0.06) 0%, rgba(120,250,174,0.12) 100%);
+    border-top: 1px solid rgba(10, 31, 24, 0.06);
+  }
+  .btn-export-pdf {
+    width: 100%;
+    background: var(--skoda-deep);
+    color: white;
+    border: none;
+    padding: 18px 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+    transition: background 0.2s, transform 0.1s;
+    font-family: inherit;
+  }
+  .btn-export-pdf:hover {
+    background: #0E3A2F;
+  }
+  .btn-export-pdf:active {
+    transform: scale(0.99);
+  }
+  .export-icon {
+    font-size: 28px;
+    color: var(--skoda-green);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .export-label {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.2em;
+    font-size: 15px;
+    color: var(--skoda-green);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .export-hint {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    display: block;
+    letter-spacing: 0.02em;
+  }
+  .btn-export-pdf > div {
+    flex: 1;
+  }
+  .btn-export-pdf.loading {
+    opacity: 0.6; cursor: wait;
+  }
+  .btn-export-pdf.loading .export-icon::after {
+    content: ' …';
+  }
+
+  /* ============== PRINT 模式 (PDF 匯出) ============== */
+  @media print {
+    /* 隱藏不需要的元素 */
+    .conn-state, .admin-btn, .progress-rail, .progress-text-row,
+    .nav-row, .header, .no-print, #passwordGate, .lightbox,
+    .save-banner, #saveBanner, .quiz-header, .progress-track,
+    .progress-meta, .playbook-footer {
+      display: none !important;
+    }
+
+    /* 重置所有容器,避免多餘的空白頁 */
+    html, body {
+      background: white !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      height: auto !important;
+      min-height: 0 !important;
+      font-family: 'Noto Serif TC', serif;
+    }
+    .stage, .screen, .quiz-wrap {
+      padding: 0 !important;
+      margin: 0 !important;
+      max-width: 100% !important;
+      min-height: 0 !important;
+      height: auto !important;
+    }
+    .screen:not(#screen-quiz) { display: none !important; }
+
+    /* 案例卡片 */
+    .case-card {
+      box-shadow: none !important;
+      border: none !important;
+      padding: 0 !important;
+      margin-bottom: 24px !important;
+      page-break-inside: avoid;
+    }
+    .case-card::before { display: none !important; }
+    .case-tag {
+      background: var(--skoda-deep) !important;
+      color: var(--skoda-green) !important;
+      padding: 6px 12px !important;
+      font-size: 11px !important;
+      letter-spacing: 0.15em !important;
+      display: inline-block !important;
+      margin-bottom: 16px !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .case-title {
+      font-size: 22px !important;
+      color: var(--skoda-deep) !important;
+      page-break-after: avoid;
+      border-bottom: 2px solid var(--skoda-deep) !important;
+      padding-bottom: 8px !important;
+      margin-bottom: 14px !important;
+    }
+    .case-body {
+      font-size: 12px !important;
+      line-height: 1.7 !important;
+      color: #000 !important;
+    }
+
+    /* 照片 */
+    .case-photos {
+      page-break-inside: avoid;
+    }
+    .case-photo {
+      max-width: 240px;
+      aspect-ratio: 4/3;
+    }
+    .case-photo-caption { display: none; }
+
+    /* 題目區 */
+    .question-block {
+      box-shadow: none !important;
+      border: 1px solid #ccc !important;
+      padding: 16px !important;
+      page-break-inside: avoid;
+      page-break-before: auto;
+    }
+    .question-num {
+      color: var(--skoda-deep) !important;
+      font-size: 28px !important;
+    }
+    .option {
+      page-break-inside: avoid;
+      border: 1px solid #ddd !important;
+      padding: 10px 14px !important;
+    }
+    .option.show-correct {
+      background: rgba(120,250,174,0.2) !important;
+      border-color: var(--skoda-green) !important;
+    }
+    .option.show-wrong {
+      background: rgba(232,161,79,0.1) !important;
+    }
+
+    /* feedback */
+    .feedback-block {
+      page-break-inside: avoid;
+      box-shadow: none !important;
+      padding: 14px 16px !important;
+    }
+
+    /* PLAYBOOK 區塊 - PDF 重點 */
+    .playbook {
+      box-shadow: none !important;
+      border: 2px solid var(--skoda-deep) !important;
+      page-break-before: auto;
+    }
+    /* 隱藏 footer (按鈕區),避免空白頁 */
+    .playbook-footer {
+      display: none !important;
+    }
+    /* 確保 PLAYBOOK 標頭跟 pillars 一起出現,不要切割 */
+    .playbook-header {
+      background: var(--skoda-deep) !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      page-break-after: avoid;
+    }
+    .pillars-banner {
+      background: var(--skoda-deep) !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      page-break-inside: avoid;
+      page-break-before: avoid;
+    }
+    .pillar-chip {
+      page-break-inside: avoid;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .playbook-body { padding: 20px 22px !important; }
+    .playbook-section {
+      page-break-inside: avoid;
+      margin-bottom: 18px !important;
+    }
+    .playbook-section-title {
+      page-break-after: avoid;
+      font-size: 12px !important;
+    }
+    .playbook-steps li {
+      page-break-inside: avoid;
+    }
+
+    /* 確保所有底色與顏色都被印出來 */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    /* 設定頁面 */
+    @page {
+      size: A4 portrait;
+      margin: 14mm 12mm;
+    }
+  }
+  .playbook-section { margin-bottom: 24px; }
+  .playbook-section:last-child { margin-bottom: 0; }
+  .playbook-section-title {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.2em;
+    color: var(--skoda-deep);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(10, 31, 24, 0.06);
+  }
+  .playbook-section-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    background: rgba(120, 250, 174, 0.2);
+    border-radius: 50%;
+    font-size: 14px;
+  }
+  .playbook-section-zh {
+    font-family: 'Noto Serif TC', serif;
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  /* 核心方法 */
+  .playbook-core {
+    font-size: 16px; line-height: 1.7;
+    color: var(--ink);
+    background: rgba(120, 250, 174, 0.12);
+    padding: 14px 18px;
+    border-left: 3px solid var(--skoda-green);
+  }
+  /* 觀察訊號 / 應用情境 / 誤區 (條列) */
+  .playbook-list {
+    list-style: none; padding: 0; margin: 0;
+  }
+  .playbook-list li {
+    font-size: 14px; line-height: 1.75;
+    color: rgba(10, 31, 24, 0.85);
+    padding: 8px 0 8px 28px;
+    position: relative;
+  }
+  .playbook-list li::before {
+    content: ''; position: absolute;
+    left: 8px; top: 16px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--skoda-green);
+  }
+  .playbook-list.warn li::before { background: #E8A14F; }
+  /* 行動模板:有編號的步驟 */
+  .playbook-steps {
+    list-style: none; padding: 0; margin: 0;
+    counter-reset: step;
+  }
+  .playbook-steps li {
+    counter-increment: step;
+    padding: 14px 0 14px 48px;
+    position: relative;
+    border-bottom: 1px dashed rgba(10, 31, 24, 0.08);
+  }
+  .playbook-steps li:last-child { border-bottom: none; padding-bottom: 0; }
+  .playbook-steps li::before {
+    content: counter(step);
+    position: absolute; left: 0; top: 14px;
+    width: 32px; height: 32px;
+    background: var(--skoda-deep); color: var(--skoda-green);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px; letter-spacing: 0;
+  }
+  .playbook-step-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 15px; font-weight: 600;
+    color: var(--ink); margin-bottom: 4px;
+    line-height: 1.5;
+  }
+  .playbook-step-desc {
+    font-size: 13.5px; line-height: 1.7;
+    color: rgba(10, 31, 24, 0.7);
+  }
+  /* 手機版調整 */
+  @media (max-width: 640px) {
+    .playbook-body { padding: 20px 18px; }
+    .playbook-header { padding: 14px 18px; font-size: 12px; }
+    .playbook-header-zh { font-size: 13px; }
+    .playbook-steps li { padding-left: 42px; }
+    .playbook-steps li::before { width: 28px; height: 28px; font-size: 12px; }
   }
 
   /* SAVE BANNER */
@@ -3391,7 +3889,7 @@ const CASES = [
   {
     id: 'sales2025_chou',
     year: 2025, type: '銷售',
-    branch: '偕聖豐原', hero: '周玲安',
+    branch: '喬順民生', hero: '周玲安',
     title: '一個不期而遇的善意——換來一台車的承諾',
     body: `在去年約莫年底,那天我休假搭著公車,遇見一位懷孕的母親,推著簡便式的兒童推車,置放在走道上,上面坐著她年幼的孩子,他的手就扶著娃娃車推把。當時車內乘客不多走道是空的無人站立,孕婦坐在椅子上小心翼翼地護著坐在推車上的孩子,臉上透著疲憊有點迷濛想睡的感覺。\n\n接著沒有多久,突如其來的緊急剎車讓她重心不穩,推車猛地向前滑整個翻了,小男孩綁在推車上直接撞上了前方刷卡的機器柱子,母親驚慌地扶著肚子起身往前,我也立刻起身隨著孕婦往前一起幫忙翻起推車,一看小男孩的額頭撞傷了,血瞬間順著臉頰流下,孕婦眼裡是無助的也紅著眼眶,司機也慢慢將車先停靠在路邊。我立刻按住孩子的傷口安撫著孕婦,告訴他我們先下車攔計程車,先去醫院看是不是要縫傷口,接著其他乘客協助將推車移下公車也有人攙扶著孕婦下公車,乘客幫忙攔了計程車,我陪著他們趕往醫院。\n\n在醫院裡,我讓孕婦陪著小孩,我幫她處理掛號程序,直到孩子縫合傷口,她才稍稍地鬆了口氣,接著孩子的爸爸也趕到醫院了,我就將母子兩人交給他,我準備離開的時候,孕婦緊握著我的手,感激到娓娓道出跟我要電話,我從皮夾遞上一張我的名片,說著不要這麼客氣,我就離開了。\n\n大約 2 星期後,她主動打電話給我,跟我聊著這次的意外讓他們夫妻跟家裡的長輩(孩子的爺爺奶奶),意識到買一台車的錢都不及一個生命的重要,所以他們夫妻跟長輩決定要買一台車,讓我們全家和未來的新生命都能安全出門,平安回家。\n\n接著她又跟我說,當他們決定要買車的時候她第一個想到的就是那個在公車上伸出援手讓她很溫暖的周玲安,當天因為我的舉動有溫暖到她,讓她是安心地。但是她跟我說,畢竟是長輩要出錢買車,所以她就先由長輩決定看他們心中想要的品牌跟車款,直到比較完後沒有滿意的,他才跟長輩提出我的名片,長輩也沒有拒絕,所以就跟我約好賞車日期,就這樣賞車、試乘到下訂這短短的時間代表著他們對我的認同跟多數的感謝,說真的,我也很謝謝他們意外地給我這樣一個驚喜,我想換成另一個人也絕對想不到她會要買車。\n\n辦好所有程序跟等車的時間,來到交車那天,他們全家來交車,當然也少不了那天的小主角。眼看小主角的額頭還貼著去疤痕的貼布,媽媽說著,已經癒合了,只是不想讓他留疤所以就一直貼著,媽媽就接著說,弟弟你受傷那天就是這位阿姨幫忙的,要跟阿姨說聲謝謝喔!小主角害羞著轉過頭說著……\n\n整個交車程序到最後,我拿出一個我去宮廟裡求的平安符送給他們全家,經過他們同意後我把它放在車上,我說,這是另外一個心意,保佑你們行車都平安。媽媽摸著肚子,眼神喜悅又感動的說:「謝謝你,這是他們第一台車,從沒求過平安符的事,你真的好溫暖喔!讓我知道選擇一個信賴的人比選一台車都重要。」\n\n最後看著她和孩子安全地坐進車子裡,忽然有一種感受,現今的銷售不是只有金錢的交易,而是是一種責任的買賣,這個責任是一個永久的服務。\n\n我也謝謝蔡小姐。`,
     photos: ['data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5Ojf/2wBDAQoKCg0MDRoPDxo3JR8lNzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzf/wAARCAGUAd8DASIAAhEBAxEB/8QAHAAAAQUBAQEAAAAAAAAAAAAAAwECBAUGBwAI/8QAShAAAgEDAgQDBQUFBQYEBQUAAQIDAAQRBSEGEjFBE1FhByJxgZEUMkKhsRUjUmLBJDNy0eEWQ1OCkvAlNKLxF0Vjk7ImVYPS4v/EABkBAAMBAQEAAAAAAAAAAAAAAAABAgMEBf/EACgRAQEAAgICAQUAAgIDAAAAAAABAhEDIRIxQQQTIjJRQmEzUoGh4f/aAAwDAQACEQMRAD8A0SryjBO9PFRjI/mK8Jn9Kw012nxNUlcVVLOw7VIS5PcUrBtYqBRFRTVet1RUuhU6oWIiFESAGoK3Y86Ol2PMVOqaYLZacLZfKgLdr50VbpT3o7AgtVPavNZjypVuV86MtwDS7CtlNnFOkEsypM4yiHqw9KZOlrE2JZ4oieniMFz9aNe6Tp19eQXs8b/aYFxHIkrIVGc9jQde0iz1u1FrqEs7xA5ADAHPxxmrlhdmvaAjKkMPMVHe19KtU8KGJY0+6oCjPkKDJIh7Utmqnt/SgtDirN2Wo0nLTlLSA0WKYY6mNihECqLSMUpOWjNimYpkHy17FPIpDQDDTHYAU5mxUOaY9BuaNgk83L03PlQoY2kPO4OewPaiQwMzdMufyrZaBw4AFub8YUbhD3+NVJsbV+h8Oy3pSWb3IM5JI3b4Vob7VLXR4fstmimQdh0HxqPrOuhFNtp+2NjIO3wrMsSSSSSSd6duvRSb9jXd3NdymSdyzH8qBS4r1RsyUuaSmlgKNg4mmlwBQ3kwKCxZzt0pbAryjtQiWavKnnTwKAYq4p4FKFJPSiLGaYMVc0RUzRkioyRelMAJFR0io6RelFWL0oAKRUZYqMsdFWP0pkCkdFWOjKlPCUAJY6IqUQJTwtADC04LRAtO5aDDC0vLT+WlxTAfLXsU/FIRQDMUoFKaUUESkbpT6a3SqDEGkxU42yev1pv2ZfM1h5RfjUUCiKKL9nHmaXwQO9Pyg8aYBRAKUR+v5U8JjuKPKDxpFWiBaVV9RRVAHcUtnowJT1Q+tPXl8xRV5fOkAwrdifrTx4g6MfrRV5fOihV8xSJFLzAfeNMaWb+KppjU9CKC8Q7UBDaeXuaEZ5KlvFQHhpzQRmnkoTTvR3jxQGWqIwzNTTM1KVppFPQNMx8qTxvSvEU0ijRHeMPKl8ZTQ8V7loAnPGeteERnlWK3jyzdwNzQ+WrjQ9Ug0wlntBJIfx8+CB8MUSFtdaTottpcH2vUCocDIB6L/rUDWNea8YxQExwfm3xqv1bVp9Sly/uxj7qA7Cq071Vv8ESvEHmK9zConLS4PmahSVzCkLCohz5mmOXA6mgJTyAUFnLdKBEGZjzEnFSlXApAMLvvTgBT+WnqhNMgwuaIseaMkVHSL0pgBIvSjpF6UdIqMkdMApF6UZIvSjrHRFjoAKxUVY6MqU8LTINUp4SiBaeFoAYWnhaeFpwFAMC08LTwlPAoMMLS8tExTSKoGEUmKeaSkDKQiiYppoAZpRXjS0E9TGp9DbrVBGudHWOFpIpkcjtmqoxipZLYxmhFc1y2z4bSWIxSkKVIK0hWls0YrSFTUgr6UnL6UbCOQaTJo5SkKUbAPMwpfEaiclJyelBGeMwpwmc9M0hT0o1pN9luEl5A/L2NAMMso6hqaZ3Hc1ejXoz9+zjNQNWvIr3w/CgWIr1I71fXxUzaD9obzNJ4586byV7kqdqKZTQ2bNO5DXvDo2WgyAaaVB7Ubkr3h0/ItAeGDXvBBqQI6Xko8qNI3gete+zZ71LCVLsLA3blfERAOpY0TK0akVP2Y+de+zH+IVpDoDnpcxH51WS2/hTMnMG5TjK9DTu4U1Vd9mbzFJ9lf0qxEXpSiM0vI/GK37M/kPrXjbyfw1ZGPFDkKpuSKPIeMVxgl/gNCeJgN1NTnkZtkHzoZjYnLHNEyLxRLeMgsSMb1ICZogj3oyR+lUAljo8cVGSL0qQkXpTKgpFR1joyRelFWOqIFY/SirHRVjogSgBLHRAlPC08LQRgSnBaeFp4WgGBaeEp6rRMY7b0wDyU9VpxKDHM6rk43NKjI2Qjq2OuCDTBOWlxTsV7FBm4ppFPppoBhFexTjSGgGmmGnNTDQCV6vV6gEzTG607NMNMIPJUhNPaRA4ljGexaqz7W/eP868Ltv8Ahn61y49e2t38LC4sHhjMhZGA8jUUpQvtZ/gb60n2v+RqV1vo5v5EK0hShm7H8DUhu1/hb6UgeUpOSmfa0/hb6U03aeRoAvLSFKjyajHGMlWPwFRJOIbSPZo5vktPsLMpTfBZuikgeQqqHFWm594TL8UqTa8ZWMAPhTuoPXMeaclK1KaFxuVYD4V4LTZONrOWJo3uVwwwf3VRF1/SjsLofMU7P4JU7l9K9y+lRl1jTm+7crRFvrV/uzKfnUmLyV7kpBNGejCnc6HvQDeSvctO5l869zDzoBvLXgBTuZam20mm+EBcJKX7lTtTk2m1BxSgEdKl3bWOF+yLIDncudsUAFaV6HsmT50nSnkoO9DeWNepo2ejuYChPOFobM8myDA8zSCDz3NA0a0skmyjHrRIrUuctkmjQw79KsraEbbUErmtgo6UNoqtpovSojx04EIRUVI6LyUVEq4mmolSY4cmlijzRp54bK2eedgiKMkntVxJ6QCn+EBWBv8A2kRRl10+ATZPKvMcEetV9rx5fxOZLhkdT1Rlx9DVeNG3T+TFeC1A4d1yz1y08W1cBh99Cd1q15KAEFpwWihacFoIxUogXFOVadigBSyRwRPLMwSNBlmPQCuYcV8X3GoyS2mn3wsoE2JBwz/PtWp9ptxNbcMHwASXnRGA7j/sVxqPRL69uGIDGPJJPnVTU7pyW9RIuJp41/8AOyznIxmUkE+fWpOha7f6ZcmWCZ0YHOCcg+YNQta0KbTNJtnIYSyPg+lZ/wC0zLlWY7VeMmU6GWNxuq+j+E+JLfiGzZkwlzFtLFnp6j0q8xXz1wHrc2n8VWk3NypI4jkB6FTtX0MdqjKapSmmmmlJphNI3jTTTqa3SgGtTDTjTKREr1er1OGYetIaVqaaYVohHlTvAHlUsIKIsYrka7QDbjyppgHlVn4dDaOgbVxgHlTDB6VZGOmGMUBWmD0obw4GcVZmKhzR+5QarSBZrhUdQVIO1G/Ylm43gB+dHtIwbtAfI1cKiggYJ26gbVFtlDPHhnT33MBHwavDhLTXH3Cvxc1p1iGOlEWIDpRMqV0yL8IaePu83yfNRn4Qsgcq0oravDvnFDaD/vFPyyKMWeGYE+7LJ8wKdHowj6SE4HcVrHg/lzUWaDA2GKXlVM5FCpFSFg6YzRYoqmxw+lXskAWx9ad9lY9zU64/cws4GcdjVf8AtVQ5Q8vMM5GKm3vRydbO+yN60v2Zx3NKNRB6KDStft/wxS3/AKPX+wzA47mmGOQfiNEa/I+9GN6m+GJEDAYyM05lKVmlRIJcbOaLZwl8Fsk1Jkho9lH0phJgtgEzihSRYPSrZIx4dQ5k3oIKGPcVYQpgVHhUVPhTaqiajTLUORasZlx2qI60wjctERacEoqLvVwj4UrAe1fUpeS20q2J55ffcL1I6AV0WNdq5fI66rx9qcso50sh4aDrgjbNVvU2MZ5ZaUtjwrMNPLTgLIwyAO1Z3XbK8szyyI3hdnxXWlkRvdwwx5igTpbzkwvEjg9Q/Q1OHNlvt0Z8GNnTmPCPEU2gavBchyYSQJUz1XvX0dBIk8SSxMGR1DKR3Br5s4+0hdI1BJrNcW8u/KDsprtfsq1E6lwbZs5y8GYT/wAvT8jW+Vlm45NXG2Vq2woyxAA6kmq99f0eN2V9RtwU+97/AErDe1Dio2l3HpUD4Cjnnx69BWCi1FZzylEjgJ3PnU6N9A2l/aXYBtbmKXIz7rA1KFfPv7SKxG5tDJGFOPdJGQK3vs14yfUrltJv5C8nLzW8rdWHdTRo/G/xc8eXMFxaLpaNm6Z0kCemfOs/eCTTLcxwwI0aqAeX73N3yavuIdPRdejv3cZCDCeeAaoLi+53k7s3XO+awyytunZxceMx3FVFcpdRhb1SEyWAk35SKob7QbTUJGFi6JIo6E9fKtUiW0kEyPIomZeUKNgK9YW0QIkSJufrsO/xq8ctehycds1Wa4L4Pn1TiVreWTkhs1EkrrvvnYCu8YwAPIYrKez+K3t11GOKMiUyqzyH8QOcD5VrCa03tx3HxugztTDTmNMoI6mPsKeKYxoIw02lNJSMhrx6Uma9kUwa1NzXiaSgHAUQCvBaIorlaE5aYy0bFNYUEAVppWjsvpTeX0oMDlocyZQ4qXyUojoG1HIhBBxn0rOy6HM1xJKNRvUDsSEDnA9K3bWcbnLZ+VJ+zoT15qXo9sKujXQGF1e/8xmSi/YNTBymsXYHkWraHSoGHVvrTDo0P8b/AFp7o3GNFnrQz/45cdK8LbXEA/8AHLhsdcr1rYHRov8AiPSfseMf7x6B0ytt+2opC02qSSpjoVA3qZa3F+Zv31yzpjpV9+zEB+8T8RSjTlXo/wCVKzY2rYozgA9asoothtRIrMKfewwqQIwKC2gajFm0fbtWZe1IuJ7gFSRzDk9POtffr/ZZPhWSubiNbuS25GaUB5VOduh2quP/AJP/AAMv07SIYJGAbwgELDBPQ1ZRmII6SR2/MpxknGds1R22oTz3X2doQihC2G3JPxqrkeO4vHZGbnGVw3pXT47Zbmul/cojuAY1UqxKsh2+H51cxRf2eP8Awj9KyeiSRpctarI7ZUkKTsCMVtoUH2aP/CP0rl5Mdcmv9Np+ivljG9Es03FFlSnWa4apCxVP3VQZlw1WK/cqJON6og4V3qfGMLUSIYqUrbU4RkwyKiOtSXbNCYZpgJVoirSAURRVpK7+FGW8hmuOcGztd69q7xsOaSYs58ly39cV0rivW7PR9LuDc3CxyvEwjTuxxXG/ZfdKnEVxE7YMsB2Pcgg/1q7PwtPjv5xvEhe3ucCRpC7dGPQUkdok8w8YtzIegai3MwiumSMMHxkbe7UJLmZb2NSvMWJ5nB2ArCXrb0PGaUXtOgjOkQyBRlJMZ9DWj9g10G0XUbY/7qZZAPRl/wD81lvaTcoNOjg5svJICB8K0HsGgdLXU7hgeR5IowfPAYn9RXTh/wAbg5tebA8TPfaxr2oai0MngPdMgfGwwSAM/KtPoPDEbaaPtilub3seVTYYoZ725hj5DbrczRyJ3DcxNaKNQLVUjPKQMDaufk5LvUdXHwyTy9snc6Qskq2WnyAAoS2R0GardC0zUYuLLW2Bmt+eQiOQDcAd60kiXtjeC+uCsyrlT4a4KqehI71c6Dq9iWOozyJLJEpW3gjH7xmPXalj47vk7M/vzjw+xvXzr+/7/wDvw0UNzLqfDN0LkL9rtw8UjY/EvcfHFc3jnkdvdYK6t371voZU0zh+5jupoxf3heRoQckM2+PkK5o07xXLEKSCe1Xd6m3JbjOXPx9bXULO7s7xI+N8jY1Z6PBLdyCGBcucnHlVJb36lOULhvhV9wpxHYadqa2EsbGacgGUHZM9BVYy5XUTy8njNtpoOmLpdl4XWVzzSH1qexxTzQ23rSOS227phpKUjFNoI5RmhsN6KlBuZobWMy3EixoO7GgPYphFZrUOO9NtZvDjhkmx+IbCpdjxZpl5HzHni2yQ1T5RXjl/FwRTDT7eeC6jElvIHU+VedapIVIadikIoCSKeKYDThXK0PpK9mmk0EU17FJmlBoD2KUCvZqn4o1ddKsCwcLK5wD/AAjzpybD3E2sjTLHEDKbmU8qd+XzNZvTNc1L7fE4uPtEBX94Cdk9D61n727hvJhLdXEkqgbRquM+uacNThRAkUbhR0AwK18dRO3RpOJLFDgBzQDxTbc2BE2PPNc/Gpqf9w3/AF/6U4aoR0gT5saXge3RF1+3dAwkRQezVGm4iKKWXwHwegJzWEGqyD/cw/MmnjVzy4MEOfPmNPxhbbA8Uyf8BKT/AGpfvAlYyTV27RRA/E1HbV3P4IvzpeA23X+1eOsK04cWx94B/wBVc+bVJCM+HHjz3oL6q/8Aw4/qaf2xt0mTii3miZDFgkY+9VNzW0mpvdlxytGVC+p7/SsSdVcnaJPqacursvWL6NTnHq7guW5qtvJhbhZbNUc8hXDSYqqk029Znk+zQIpJJy+ao01tR1ik+T1Mg1+Ffv8AjD0wDV6qeltpL2llqAS6VYpuglV8oc9q6HAAbeP/AAj9K5RPqOiXyFLouhP4uUg/lWt0C5vYNIW5tpGvbKIYWRmH3R1Deo86yy4rbtcy600sqUtuMCh2d5BqNolzbOGRh2OcHyoibCsddqSwfdoL709T7tDY70yeWiKdqFT16Uw81NxSN1puacByiomt6pDo+nvczkZ6Ip/E1S18ydq5P7UddN1eww2rrJawAglW+83etuLHyyZ5XTE8RaxcatqtzcXkkjYBC77A56fCqO2uJtPuUvLVykyNlSKnXsyEK4GQfz8qHJAqKFYbneuqyekS10/hPie11+15JykV4g99G7+oqZrN3babayXDMDygnauRaNMLTVUYnAbbNaLi/UubTY4A2eY779q5bw6z1HXPqLcGZ1HVbjVr+S5uHJHRF7KK6p7P9Q1LSNDjFu8AtpTz8kw6N5g/SuR2kAkbDFgoGSRXUYXje2hWR8QxR80hHRVHYetdFnWnLvfdWRCfb7m5iVS9zIZXSNcgMeuKWPUwZ/CJZGU4wwxQdI0GK8c3l2zqZBzY58cg7KvwGKka1YTw2nJbSfa48e74pBYegbrWX2cMrtc+qzwmkiK9WfUHROcKF949jUbiriJdM8DQ9FtYY7pogbm7CgMmewPnWWPEp0+RREgaVPvB+mfXzoVxcrqH9tA/fN/e77it+H6aS7p8n1Nymselroj/APiXLzs/hwMSznJYnbJPzpVBS8yw71X8P6la21/eG8LLG4CCRRnlqbfahpvP+4vY5M9OXc1h9Rjfu2ydNuDLGcfsuq30dpCzqBzdqzMF/JFdC45j4vNzZoOpX7XN0wUHkXoT0qEhaZsQgsM45wOp8hXRxYTjx3XPy5+eWo61w97SZILSODUka7uHm5VKnBCY3zWx0/iq2v8AVEsUtbhC6cwdhsD5H/OuO2WgXWlRreXgiWRwQkGcvg96suHOIby1uXubFWaZThlkOFYeVc+dlu4NXHqu2sKH3ptjdR31nFcRlffQFlU55T3FPxvSNG1G/h0yyku7g4RBsP4j5VzPWtYudSZpn5nY/cjXogqz421I3+tppcTe5B1Hm3f6UlppqKgyvzrDPK26dfDxzW6ykVldSHnaEjO+S1HmZ4o8BeVhtt0Nax7cKCABis/rkRt/3xUmP8QH60tbXZIlcHaq9tfovMfCkPK6k9/OulPvXILZPCkjuIWBR+48+1dbtpBNbRSDfmQH8q04/wCOblnqkIpCtPYb16tGRwp6mmAU7HlXK0PPTNMJpx6daHQC17NJ3py0E8zhEZ3OFUZJNcp401U6lrCQqf3a749BW/4ovVtrExA45gWc/wAorj0cxuJ7i7b8bEL/AIRW3Hj8pyqTLMFJ5dqAbgnvUSSfmYmnWh8S5RT0J3rXxRtKXx3GVRyPOneDdH8BHxNFutRSCQxonMR132FR/wBrMT/dL9aNUbP+z3XkP+qvfZ7nf7ox1y1S7S5W5jLKMEdRRSqk5IFIbVKh5W5BIvNnGM0jwugJaWP/AKqs3iTDMEUNg4IFUTK5JHIx+VVOxtINzKI/DDe55VFdj/EKKBJygeC//SaE0E5O0T/SmWwwSDsa94h869LDNEnPIhVemTQOagDiU+dOEp86jc1KGo0EhpDjrW09mPEJs9TGmXB5rS793lPQGsIWoum3DWupW0ynBSQHPzoDpMtweC+MJbEk/sy7YOgPSMt/TNbxGWRA8ZyrDINYf2rW63UWm3mMrPDyk/mP1r3s64haeM6XfPmaLZWP4h2NZcuG+141vlHu0M9aKNhihOK51kp4O1MFPHSmDGpopzda8gycU4TNcfa2dH0bw4WxcXJKqfJe5rit9MztgnOwNbL2maj9s1qWJTmO2HhL8Rux+tYe6bKK3mMV6HFhrBhne0PCfa4Uf7vOM1MunieJiI8EE75qDLEedWB3HvZr17M32cgDBetNJQpn5JFYdQc0a+vDdtEN9hvnzqNMechvSvIOXc1Gj2PZtmdPLnx9Kv7PUTFBLBI5KvKjHf8ACCazNo+HU9g2auCnPn3cetaSS4p3qunRPbJZJLJcokkhVgWfGB6elTbpuezuZ7WVCABkxsGXp1q84LsLEcO6bMLdGlltwXkIySelR/aNa2lhwnd3luixzEKnMgwSGYDfz61w495aj0r9Rj49xxEI0kzsffcsSTRZJp7NRNEfeXqPMetJCnhDMYPM3rUq0EH2uFb1eeEuPEXPavU9YvKntATWUV25oVTmOWxmpttKixPPbQoA22W3I+FXuqcBs6fadJkS4iYZEZbDr/nWdlU29stuBhumO4NZ42Va04Z4YueKbiWWSb7PZRHEk2Op8h61sdP4ItbS4ga3uuZIn5wsi9T2qy4UtobbhexjtxkFSzOepYneraIAbHYHvXm8vNlcrHo8XDjMZay3Gsclg6XyTAhkMWxwcnfasLYyPEWcOQCfOt77RbSaTTbWWMcyRzHnI7AjY/WsDCqvOI22RRl/8qvDvFhz/u6D7MtWkh1XkuJCIrr3QpOw8jXWOX3h8a+f9OuGt7yOeMlBGwI+Vd6s51urWC4U5EiBvrQmOFaUtzd8S6lcTrI7xlsqpwclq2miXHiB08OaPkJBEpzn1FU2glLbjDW7VxhvFJHrgn/OtQZYlLj3VOKxy9u3jn4yqPU7uOK7UFLmTmbB5OgqdcW0d3p7BeYgr0frUmBoZsgAFh0PmKkz8kFlI34itOUWfLmugXTR3lxpk590OTEfI+Vdh4ck8XQ7UnqqlD8jiuFXjtFrqumxMuQa7RwVOLjQlZeniGrs1k58rvFeNTGNPPWhtVsRhTs0zNLXI1eO9KBTWKxjmdgo8ycVHn1C1gTnkmAXpkb05LQOQc04DuTtUW11Czvjy21wjuNyvQ0mq3H2TTpZO+MD409d6Jg+PtTLwzLGfekYRJ9axVwRb2yxL2GBVtr8huNViizlYF5j/iNUGoy80xUdBtXTJ8MrQC9StNb+0FjuFUmq/mp6SMmeRiMjBxV62WxnkLyMxPU5rwNBU08GqkJY6VMsVweZgqsuN6tftcH/ABVrOqcGnc3/AHii4S0trV9UQMQsZIHfNMGqJneIgeearaaafhBtouYEAgjB6VFv7sW0YwAWY7CqZnbH3j9aE7FupJx51PgNjXl9JcoFZQADnaoma81NzT0Z2a9namivb0geNxmm5xIjetIGxmkXd1+NI3ZeN18XgHSbk/eTwx9VxXOI7h7O5ivrfPNEfeA7r3FdL46xF7OLBD38Ef8AprlttKCSjVNDuHDuqR6tpsdwjBm5RzY/Wp7iuTez/WjpWpGzmY+C26/4T/ka6lqV0LO3WYLzqzBcg9M965s8NZdNZehMU8VntQ1+606T9/bwSJ/JlTj6mpWmcRWN/heYwufwv/nTuGUG4tHpkkoggklPRELH5CisPLcVV8Sy/Z+H7+T/AOkR9dv60sZui+nEtXnaa4ldtyzFj8Sc1R3DYgYdl3HwqzuWyTnzNVkuOWRD5HFeprTmp3LmFfUCo9xHzRhiMAbCpGcW6/AUt6oFuAOwoJWrb8xydhSvFkMVH3Rk1LA9wfCgyqMEd+9I0S0T+tWyuGUEdcdKgQdAcd6PA6ktGSQVNVh0Vdn9nusq/C0MIy0tszIVH8PUGicbSyatwrfW4jAZQsowxP3SCf0rD+z3UZbLUp7eHl5rmIheYZHMN/0zW9m5WtbmNZU8RomA+OK5LLhy3pvJ5ce7XIYmHIOTrQpUfOTimwsUJQdQcb0+QuR97/0/616Xw4/lpeDOIDHqP2SeZedlKx852DVY6xBZ65avcLai31CFyuVGA5HWuYXysLvmViGGCCNqvNJ1u5WPw5ZWaQn77EkkeVcWXFfPyxrt4ubGYeGUbDhjiJtOEdldoWiYHBHVetbCDVdOuIGlhuoyAucE4P0rldu/j6oiZ/ARn9aLLcW93eFLVGtzDjlKPknsev6Vjz8cuS+Pnsnaz17i+S4mGnLCxikYc69yD0xUBbM2zSOhEhc5V22wPWnrFmQSPyFwMc/L72PKiiKC5XwX5sjdSp6Gn1JqMblbluokcTPJl584/hGcV23gK4NzwvalmJKFk3Pka4kJkCmJAEVThlzuT611T2T3fjaVeWwUKsUoYbk9Rv8ApU1UYniO8j0v2lXcpOInk5X+YH9a08guXPNCUeMjIOK5/wAdOLjX7y4H4pmOfTOB+lWHAmu3sFv4V4vi2jzeHCxO6nBOPhWeWP8AlHVxZ+N1Wyt0uVkVpGRU7qBUTifWI7LT3HNlyMKPOpMzXd2eS1T6UCfghNRhb7dfypOc8pjwVU9sgjeoxu61y3py+AtPeGR2JYt37eldc9mFwTYXNox3Rg658jWF0vhO8h1wadcg8sbc8kyjZl7Yrb6RqWh6LqptlbwTEhjeV5DynfOD65rXL2wuP47rbMTmmNQF1O0unC28qPkZBVgQaPnanGAuaqeKdZOh6V9s5OZfEWNm/gznBx8cfWrUb1X8RWa6hoN7amJZWeIlUboWG4/MVzT20rBLrUl9N4rXguATnl5unyrSaey31jLAv3j7yj1FcZ8a0SY5E9vJn3tuYA/kfyNWkevLp+n3BTUSZWQiPkZsg/0rrn+mVbrTdRttAur6/veYpboECruSzHYVJl4kOvWEL+EIhvIwByOXt+lc1066vrjhd7SCFrhbmYyTyYyykdM+laGGX7BwoJmAV5I8rjy6Co8d5bdN8MeCf9r/AOleJ/Fku7tjsznl+A2qimYs5J7nNTvHUaVGikc/3SKr2VmbpWschBSg0qxOTsPzp620p7D5mqhEBpwNFWzlJ+8g+dGj05z1kQfOjcJHBp4qYulnvOvyX/WjLpQI/wDMY9OT/Wn5SDVVxppGatRpHncDH+D/AFpP2Wo63BP/ACf60eUGqqCKG1W8mmJ/xWJ/w0B9PjH+8b6Cjyg1VYTTetT2sNsr4jD4UEwLGdwcjzpbh6Rwp+FLy+ZNFY+lDLelIEK7daZGpEyf4hTy1JCS1xGAOrD9aQda9pU8sfBukQvGApKEMGznC1y1JcODXTva1KI+HtDgYe9jJHwUVyrmHl+dI1nJKyLHdRffiOfiO4rdf7Xs+jQWskAkjkT91MG3DDcAj5YrmwuXCFBjBGKstEk+0W82nucMPfhb+E/+9Kw5WpuuKLbX4I7mKOSNcYZGHQjqM+VDspGuZ44oQEDMFBJxWQ0jQtYcGK0iu5FLE+6uFznzrpHBXBktjcR3+puviJusQPMc+p6UsrJBJtvo08KKOP8AhUCs37QZxBwxcb7u6qB51pGO2c1ivadIRpNvFn70pY/IVlxTecXl6cllZjk8u1Qbn7/riplzcEEqsbkeYFVl3LzDoyN25hivSrlFkbEQH/e1GuzmzDfy5qIx5lb0U1JuBjTv+QCkYauDGpBzkUFFaTKqCxJ6CmwECNRnotLlkPunBHcUjBhJzIPI0e1P9rk/mQGowbkbGd3JotucTocnLHl2FOdUr6WtlcGzvYbhc5jcNt3rs1v4Z5JFCiNwCM+Rrh0TGSdogrBh/F3+Fdl0IrcaLp85JLmEK2fNfdP6VHNnjLKMeHPk6x9ueatpHhapqVvEBzpJ4iBT1Q9f1FU8sKuOSOF5H9Dt9a2PHlv4GtwXETlXkiByu2CDiqq6iFxCl1GSrH3ZuXs3n8/1BrTDPymyzwuF1fbL6lYyWkqq7c6kZVv6VHiXDqR1zWhv4PFs2V1yy+8jjofiKplXlYVVLGrDT5Ck8sq/eERUfOm6IAbmcsfebOD86dpa83i58hQ1DQ4kj2KzYrm5L+VaxecmBl3wPWnRTxocRbkblh0HzpsaxyYMsYJ8xR5IYmTlI93qVG2ayUDMILqIvJGBk/e6H40bh7V7/Qr6eCxn5Y505X5hkgeY9aBOQY2U9G7VT+K/2iPf3lyrH0FKzpWN7E4huMynfJJyTWmit0XhPQns/eIk55j5Mc1hr5zNOQa7PwfoSzcGwRsBvGXIPUN2o8fx008vzWWjgxWivInK0nRqmpnmydzUfUGFho0TTPvEgZjUO01u0fTF1C4lEEY2PibEHyrKYa6jb7nlFlqlzFY2Vxdy4AiQsCe/kPrXCr2Z5rhg7ndizE9ya3PFXFsWt2v2CxiZYg4LSucc2PIeXxrn9wyl3fmA3PftW+GN32wzzlnSytLyW0xJDcyry902xXTOA+J5dSZ7K9lWV1XmR8Yb4GuOxTMW/dDA7k960GgzNp2pRTwMeZlJX4EGtMsIxmXbvGcA0itikY7UzNee6Ge13gXQ9Yd5nhNvO+5kh2yfhWSuvZQVc/ZdSUr2EiV07mND58EkmqmeU9DxlcYuuGdd0S2jDui2ly/hkK2CR6j4CrziTR7+e1t4bSGOSGMLlefGQB0qZxRrDapxHZ2FvvBbygufNu9XbS75reZXW6z1HL10e+MhRrOJGz0NwR/SpS8PX+2bRR8J/wDSt/LHDOMSRKw9RUcafEhzBJLH6K230qvMtMhHw3ct95Cnwkz/AEo9poOqC4HjiyaEbEBTzEfHzrXxxco96Rm9TtRFGOhNK5UaZleF5GJPjBBnYBc4o6cLyhR/aAfitaIc3Zj9KcDJ/F+VLyp6UicMHvcH/pqTb8NNMXSF3lZeoQZIq2Dy+f5UnM4JIJBPXG1Gy0qodDi8QxtLll6qTgg+Ro66XY8vvRDPfepXMR8T3pjLynONmo2EdtPsF/3CfOgPaWfa3j+lTCV/hX6UwlQfur9KNmiAJHH4cYVU8hUSW0t3bLQxk+ZFW3OvkK94ig7AU9lpnJNKtmYgxDHUYpE0W0B2j/OtLGltcSBbl2jGPdZRnf19KcAsZxyKPlR5DShXSrcjAgQ/FatNF0bRYLkXWq23ux/cRY/vGpwk8sClEnrR5DQWvyLxBdK0toWhiHLChXHKPjUFOHLc4/slunqRk1bLIfOjLJtS3RpVDhuxXDPCjkdguBUqOwsAORbeKI+YQZqYX2oL4PWlun0l2Be0tWthLzxdUGMFasdMcmEBs571nud171a6TfKx8OX7w6HzFRlFS/C8A90Vzz2qT4ktYs7LEW+proqkGMFTtXKfaXL4nELQNuFgUDP1q+CfnE5+mAl52OFdR6VXX8bCP944yNwB1q5dBGPdTLVHeOQ+8+M9gK73MqrZuZH9anXR/wDD2HoKC9q0bM4xvuQKV5QYSvX0pGHaQZRSe/rRpICTgco8qkQxhEAHSnSAGgKW5hMdwCWB5TvipFlgXcOfwyj86W8j/MGoyOyqH/EAD8xU2dG2TWfhzrcKoIxhhit7wvPGdGt1jYHl5gfRixOPpvWMgeKezhfAJkUHGaC0EiSMYZGj7EKa5L+U8a6OLk+3l5RbcaX9rf3cC2riQwhlZx069Kp7S4W3LCQZiccrg+X+dSdK0C/1FHkgKeCG5eZ/OtnoXDVtp6rM4E1z3dh934DtWt5sOPHxgnDyc+XnepWEns5C7xCJ8dVdVOCOxrOuOViGGGGxB7V3gpIxABRd+4Nc49pNgU1GK/UDklXkYjbLD0q+Ln87ocv0v28fKVntIUMJVAPNkb+mKRY8wXCE7rJvRNBGWl+VGaPF5cxYx4icwqc/2rGEsL0MpicHxU2K+frUt5pDskLfPaqO9hdGW4jB3G+KsLC8jkQLzHn6YJqbj8wx5gwTLHfyFVM+Gu+VTjA3q01GUQhQ+VyMjmGM1TCRUkDSZ/eHB9BS10rHqlt4fHv1X+Jwv519GafAIbWL7OvII4gGHZhiuGcH2guuJbKLAceJkg9wK+gJTHDayM5wgXB+HeqsG2E494ltNPaCyW18aYqsvvN7oPYMP6VzPU9Uu9TmM11KWOdlGyr8BUniC9Oravd3eSeaQ+GP5QcAfSqmTCvkDAPbyrTDSMtjwOASD0Oxqpu0ZLh1KkqvQipoYjNCvElLLPHv7uGHnVo9AwTEHDAAdgBVppcryXcKoM4LY+lQoTHKuQgVx1GK1HAunrf65FC490q2fT3TU5ejnt2hqQEUsg3oRrzHWfIwC1BmkVlcMxUbgEdaLK/LGWPaq0I8kQZjy5yST23pyGpbHh+ys7l7hHkmlVSVLnoe5owbaps08VvGyht2GGY96q8kVtO2dH5hXucUIZPWnBaZH+J5UodqQKKeuBQHgz0VDJ50ikedPVlB60gePE86Q+J3pwmUDrQLuSSSMrbzCJ+zYBoN5ufzFIUZ0PMdx0o1zdQyWPgR26xXHKB9oDknPnjpUeCZo05WlDkrhmKDf1pkG0TeZFCZG86e8wBwDQml9aYNYEUzfzrzyih+Jk09AUZqZcHJRh+JQahBtqnriWwLAe8mN/gcH/8AIUaASg1MsdPub3m+zKGKdRneoPapGnX82n3iTxE7HceYo0KUqyOUcYZTgg9qcNqv9ZtI9Stl1TTxzEj96g61QKd6CLk+tJzmn0vLQAS/mKRZCjh12KnNG5M9qZLyRjfHMe1IL2xvioGd1bfFc89pHhPxGZU6iFMkVq7WYggZrC8aSmbXLjJAVcDbvtV8OOs9lnelFLGSMgjeoso5TjBJo/OM8p+RprZyTXXGNBSI7l9yRjHlUOewwOaLqPw1Y9qUYxT0Stt5eqselFLZO1NvrYs/PbqS52KqM81GGnakkYd7C4C46+Gai2Tqqkt9It3GyhCykc24z3FQSoz88fWp10zmP3w4KjA5gdqiY5pGPYAUxpJ0XVxaF0vJGIjH7lQM5JOCD8s1rIZkmQSIQyNvkVg/s4e7AxnqatLOSWON1DFVB2APWscuPyvSplqOucFSxNpr2ucSRyEkZ6g960PhhdsGuKeLdpHiKdlBG2MDHz602y4o1zSblTBfvImQGjl99SPn0+WKxz+mttsrq4/q5JMbHazgdOvmaw/tISJ7C2ZCS6OcYO2O9etuO7ooBNp0LP3KyEA/LBqp4v1N9RtYblkEfiKVWIHITB3xV8HDljlLRz/U4ZYeMU/Dy5lm+X9an3ieHdRS/wAJGfgai8MgmeY42CjP1q31CIMP+Wr5ZrJyT0gT2oy8eNiciqW0VbXXbZpB7qXCFvUZFah1DQRt3x1rPa1FyzrIO4qMabb+37kR9AeNFVMPsBj+Gua3OTcL5coIre+2qZp9F4Wlbq9sWPx5VrnUFx4iRo495BjPpV4zo9/DaezWRU4tsy3kwH0rrHtCvGseELyWPAkYCNf+Y4ri/BlwtvxHYuTgeKAfnXR/bFfCLhu0hztLPzHfsoP+dOzstuW2D5lcZ2UfnQZchumFO4FC0+UxjxG6tuaLdXEbugXYDalJZkdsuOjMZNFdwUwOy0M7DakBB27Hr8K1Z0JVZQkq9ejCuo+yrT+Z7jUSvuqvIh9T1/KuYtLyvkjZsAjzFd14CsGsOE7GKQYdw0rf8zEj/wBOKjkvSsfa7PegtuaE1xJjYCg3V0La3eWY8oHpXmbdegNXvY7aHLE9cAAdTVFZXdzOWmuJP3aIFWMbDJ/X/Womp6tHLETcYiRWJBJzgY7060uIJ9PjNnMkvu5bkOTn1rfDFOVObNzOeY5UdKlRw8qhGBIHQ9xUW0wp3O9WcTqeorbSNozxPGM4yvmKH4gq3jVSMg70OayilzleU+a7VPiFZ4nrTTKfOjTabMD+5cSfynY1CniuIG5Z4njP8y0aA3ikd6Qz+tRS3rSb09FtJ+0HzpPHY0FUJoypRobe8RjXgWPnTxGB3qfZaXcXa88SDw845yQAKNDarOebB70jI2Kl3CCGYg8rmNsHByDimXF2skjNHEqA/hXoKehtCcEUPcVNihe5YklY0X7zt0FEnsBDayTmG5cRf3gVRzBf4gM7jHlQW0SJs7Va6aCyTRH8Skj6H/Sq+3SKa3iubWVZreUe5Iv6HyPpVhYyeBLzEZBBHwzRobD5cV7kzR5VGcIM+oryQSt0QmjR7SdJ1GbTJeaP3o2++h6GrS90+31GI3ulEc3WSDuPhVUlnK3UAfE1ZaXpcw8S6W6aBIurKOvpRolUFIJVgQw6gjeiKverO7uPtmPFijyPx8vvH41WXaDlIPTyFGhtFub6OPKREO/n2FRVbnbLkkmo1zyo/u7VEu9csdPUCaXnlP3Yo/edj8KNDa+hIAzXPdaPNfzt4gPNITk/GrvOsatG0srfs6zUFhGpzLJjzPaszMysxcjOTmteKfKckd/eye3QUNZDnlf5Giufex/DQ5EDLWzM814VDLyxNt7y+RplxfqseysJDsPSnsnUeCeH0t7RNQulBnlGUBH3BWluUZo2GRnGwrkXDfFeoaMyRyu9xakYMbNuvwP9K6LpvEFnqts01nKWKffjx76/LvXnc2GfluvS4M8PHUVHEM62em3BvI7TxCCsYC7nPpXLVxmQ/D+tbrjTV4JOa3F/b8vXlWIl/gfKsPCyF3IAcdcf9/GungmsXP8AU3eRLfC3Qz3U4qx4fsX1HV47X8ErAfIdf61VSZVgQdwCAflWx9mSiTXIC33ljbB+VXl1vKMuObykrXy8D2JTmW4lTbpsawd/pFvFxHBYxSNIpdeYt6muzXYxA2Oy1xe9u3i4rkmxkRTKSfQVz8OWWW911c2GGMmo6XPwdp0yhojJC38pyKyHH2k/sq1sU8Qye8wzjHrXT4ZlliSRTlWAI+BrGe1VAdMtJD+GX+hp8HJlcpLR9Rw4TG2RiuGwBcyn+UfrV/Ph51A/hNUHDB5rmcd+UfrV5PzG4ikUfdU7edXzfvXFPRuAIOU+e1U2rR88YONw2Kt7qRRDkdM5qtuVaaRVjBbmYAKOpOaiKaD2zBF0fhi3O0iwdPIcq1ywHllTHc4rp3t19y70NOYZW0I5e43rl7jDIT5itsPRX2trGUwXMUy9UYMPlWx9qeprfro9tC/Mph8U4PY/+1YlTjFE5nmucyuWCKAuew8qeiPAAXFAkXNSTihuKYeicmPB69KeBjJPSkjTfPajKgYgNsD1pg/RrY3uqW0Tg8juoYehYf0r6LQLEqxqMKoCqPICuMcG20bcR2drIACZg4bz5d8flXZ271jye14enhACfu1z3inVvtF9JFEf3UTFV9T0+Zrotw3hW8sgzlUJ6+lcclyC09xgHBJC9EBP3R/Me5ri48dt8skxbZWs4WlwXuJCBzb4Wq250fTIrpDBNLDPy80jxNjf4CpOtX5gtmlhXPh26pGF/AxGWPyzXtHm028tIhI48ULg8x5WbHfPfy+VdExsRvYZfV7JQ8Nyl1CehcZ/MUe24q8I4vbKVcdWh98D5dRSXUsFoS9rdiIHICtup+NQ5JUk9+e3/wD5YDkfSr2nTV6dxDpd6QtvfRFz+Bzyt9DV5GxZQT0PfzrnM1taakFUi3l5RuZI8MfietetbCa1eJdK1O8tW94ycsnNGo7YDZp6G3WtGm/vrZQiySKTHIQMg1VOZnLeOxdwcHm3wa5/ccW67orwieezveZvdJQxsPXIqTce0i/8cyXehxBn3LRTbN670g1c1vGxyY1+lRXtU7Lisw/tHY//ACWT/wC8KE3tDB66NN8pRQTUeBjpS+Ew6VlP/iCnfR7j/wC4KcPaFH/+z3H/AFigNT4TmiiGYryB2C+QO1Zm349jlyBpMi4/jmUV4+0iONiv7FmOO4lU1PZ9NOlifxk0YaevYVl4PafEknO2izjA2yysPpU7S/aDpl9OIbmKSykY7eKoCn5jpR2FpfpfQ2Zj02O3kmWVWKTj3WUgg/Q0ZtXhSwjhuLnT7e53SeF5xhRgjb54r13PFKARKqsN1dSD8vUGs/caXw4Z/tEun23jZy370iMnzxmnOyonC+n3Gk6bPa3UkcivPzwmJuZccu5B+lW4xVZLq9jGBz3VugVeVVVgFUeQFZvW+L35mg0YoxGzXDDKj0XzNPRN9E+NhUgXSxrl3Vf8TAVxWfVNUuNrnWLnfsjBB+VQXMMhzcTSSnzklZqrQ27hNxDpEB5Z9VtEPfMo2pupe0bhq309LS0vjcY++Y4zvXEQLeNWKxDCjJPJ/WrC0u5IeSWCxiY5AHjDmGfhS8Rt09eJbm6sXvrPSrgWa9Z7giNflnrWR1PjfUXZkiitolHRy+ahs+s8SWuoXeoagBa6WAHRzspPQKowKzt9pltDqQtmnaRGj5w+N84zinINjalxFdy/39+x5tuWEAYqJpurXelym6i8FlPUyblv61X3CK6csIIG/KT503SZIPtKrdqCi+YzinobdZ4b1htZsvtAiMYzytzdPlTL/hh5gZNPK5O/hk4z8KrtH1dI7AQabAXYnJZhgLVrb3Grx5aO6hJf7ysuy/A1Etl6O9shcxTWt00NzG8UnQqwxSp73yFXPFyNBpKyyytNdSSDMrdgOwHYVmbe5Yx++NyOoroxy3Ns7NHXBHKwHXoPiaq5R4jxg9DLj6VZTjlhMxYFmJVV75wN6gyx+GtqO/iDNVSSZRilgmlt3EkEjxuOjKcGnzrQO1OwS6O1i6ur2aKW9wZOTAflwWHr51EiYRMWY4XmwT5ZAolyzMF5iSAdsnpQ5kzDMP8ACaj0e9+ytNbsHLSEnACgDOT3rQcG38dlrtlIrhRz8jZ22O39ax0cY5lPfnrQcP28dxqSLIjOVVnRAcczAZA/KpyvVVh1lK7xeN/ZmI/hrhGqyMmuXoII/enrtXcoNUne3QRxxxMUGwXJG3nXI+P9MvotVfUGmSRrqcRJEfvHYb/Cuf6ezGun6jK5zTpHAk1zfcPW/PG3PGOXJ7jsaZ7R9Ne54Yl3/fQsrpGu5Y56bVG4WsDplkBcyuZCqhirbZHbFXFzEJUUsW8FTzbZBJG4GaiXWe4eeduHjXH+FpiNUaJgQWQ9exG9aiRvfAwc71R8WSfsjjP7W8XLDORIeUYGCMNSz8S2QcGHxJAOm3aujPeV24/XSdeYwRVz7NRFJxXEs6q37tigYd8Vi5uIEdmZLV8HzatH7LNZtm4xgju4QjSxskLZzh//AGzU3G6OXtO9vaq2paVhfeELZbzHN0rlJBZxnoDXWfbw39v0tdv7tu3rXK2wOmKvj/UZe0xRSxn+0Y/l3ry9qWBS0srqpITAJHarIYikAyaeBnrSgYNAOjTOKKy+6T5UISMMcq9DnJpzZdCGbA9KpKz0u6YTQTo3LPbSBwe+Aa7tG4kjRx0ZQ31FcA0uOONyRnm8ySSa7fw9fJqGjW06bELyOPJl2P8A361lyz5Xx1P1pxHpF4+eXELb+W1cZvp1cxxJzGNN8kfebvXWeMpfC4Y1F/8A6RH1rjUsw+xWwB3OST3865OGdNs72BeaszXEi3UDLG0h5XQ5wvrVvp+m2F7aoLa6UyjfbAxWfsJY7wBomK92V+39KmmzhyWCGNgfvRtyn8tq6fhE6LqmjX1uXnmZvCj3PNt9Kv8Ah/SvEgSYThWdd1J3+dVEUV5cKLeTUZ3gP4DjP1q3TRbZEXwZZ4mA+8kh3oO1avpdxGMYRh1xjrUW6/cxs81sqqg5mZDjYUJLfV7cf2XUhIo/DKmP0qt4juNZnsVt7yKNIXcCSWNs5HlQlRzN+0bx72YZBOIlPZaqNRu5JrkW8TnkU4wPPvVjqFwLW1PLsxHKtU2nSeDO5aPnLRsoOeh70wZcR3ECCVpsoTgEGifZLs4Pjjfp73Wgzyl9JKMDkOCD6Zokd6TZwhT+8jO/rigiBLkT+AZBz4zuetPa2uxn94NhkjmNR727VdSjnUHGFPy71M+0gXbE5MTIR070GFBFcTxmSOQcoJByx2pJEnhUGSRcHABB6UPTLsBbiNQQGXIB7HvSXVwDYokqnnGVJ/Q0BKW3ulZSJ0BO4oLyTF5BIPFCnDmj/alZbGdVchUHignruQcVFt7vl1SYBAAwYYz5dKAMs8RHKZphjt4jbU0PbknnEhHqSc/WplgY5HkjuYQ68xIHTY71NRYPFdTbqyLjlDHpRolQTagjlgYsTsCuCaPzPIgjAMMSgsQcZqxjKcjExqcE7ntVRfEK0jKxwYn28tqYJbSRfZPFdFLcxUk0+SSOPV4IxyhGTBA9ahaYEOnT+ICST7v0phbm1qL+XlH0FAT766DWV5k75Cgf9/CplneRlNLMgbkZwZSB8qqNXblWZQMc7r+lSosx2NoNvcHMB+dGi2k2upSOmvQQAiG6dZDk9Ar5quuJnur2xydzEo264H+lF0AgxXssgyDG4A8zg/51GjAj1ByT/cxY+eKNaM9SBp25yfGPIe/rRbK0iaGW65cuxPL6edQjJmFV7ICfmf8ASr+yi8PQRO4wDsKAs+Gm5bQnb71aW3fOPKstw+ALX/mNaOJ1jQFmC1nVRA45lU21nCvT3mNZuzUNFVrxPN494i4YBEAAb61WWOApB7VvjOkZezmhViMjeo2oLyiI+TirMCoGpj93nyINaJFnXaoL7GrF91+VQJxvTvpIMgyB8aJKuBKMdYx+WaaTkBe2aPMPex5xn+lSpUFeXkP81dJ9mXDlxfxXOqRqp8NvDQHuepx+Vc1kYgp6EGttwZxdJoeIJmdbcvzBo+qk+nftWPJLrpeF1XSZBLAwS6iaM9iRVZNa2X7VsZdUUNAsnNzdR6GtRpGu6ZxLbeBLJFNgZDo2CPiOxqFruhCK3JQmWHB5W8vQ1z6bbSLrR5YlEti/jQn3lwcnH9abDdtcRJaTKEIOObFcy1LV+JOELoy6XduLGQ/3Ug50VvgelWehe0yG6Yx8U2qhmOVurROUr8V71U47rcTc+9VM4/4f/a9oUtFUXUUnMpPcdxXKhC8EjQyqVkQ8rA9jXc7e60m/HiWOt2cinfEjcjAeoNcw43Fmdec2UsUuEAkki3Ut6Vrx2+qzzk9s9irHhUyLxPphhB8QXSYx8ag4+taf2bWEk3GmmO8bBEkL5IwNgTV5ek4+2l9vYP2rSDjbkk3+Yrlcn90a617ehldHbH4pBn6VycjMRqeO/irL2lR7gGjaZdSQNexxleWQ4YEZqPaEmFM9cU2zbF3KP4s1RJ6jFL0pKUVSS17HN16V7FOUZNMh7ZvDfnNdM9m11zwXkGcqCrgevQ/0+lcvJxgee1aXgrWl0jUlediIZEZXH6fmKWc3iePVdK4+24Q1Ll3Phj9RXD4GZ1bmY4jjZx6bV27jVmbhu+XBACjPruK5La2sRWQFchwyle+CK4uG9OjOdo3CyItjJGfvSBSc9APOrloo0kkAOY1Gx7Gks7QWMcf2XGQuAHHbyqrlu9Vt57g3MSiMjEXu5A39K6ZGVq4s1KusjKACR+dXsa+tU9uviW6e+G93JKnvVpaMXjBJ95dm+NASgMDFRtRhS5g8B+j9/I+dSl3ps0fiLt1G4osLbnur2TS28sDjEsZI+YrM2shSdObY82/x6Gum8QWHNAt/EPu+7MPTsa5vrFu0F5IB0c8yH1pG9Ih8KSEfhLD5VEgyIGI7YNTLOYyzRSsPvMA2foabp8DG5v7RhuiMQPgaNhG1AL4aNjcrt9alK3NLGD0ZAfn/ANmn3Vp42iRzH/czFG+BXI/SpUcIB0mcqCJIwG9d8UbGlLp6GO7kBBwVIH1ol2jS2i4GW5qtLW35eKJrN/eVGmQA9NgcfpTLiEHh+VhsUmX475o2aLbc32SBcdsVGhV/2zIAp5stkfLere1izpWlsO5kz8noAULxdMo6Ev8A/iaWxpK0uKRpS4GUH3jUyS1neWQqAFblwc+XWmWgeLTrgxPyNzqM4+NT9OcyWSPM/M/v5PTODTtJGjt3WJ0Y4LknI7Zqlv4QI5TkkKh+e4FWdw+dWQCRj7wHIDt0qu1F1FjI2Rvt9W/0pwA2EWLIBcjnJ29OlNgQHVpSFGI+bf4DFSLGSJYbcO6rhSTk+ZqNa3KCW7lJOHyFwOuW7UEfqaOVVTgu75JPwFHvAUs2cnZAVHyAH9aFduZrq2aOKRokOWPLjvSyLcXtubdUUFnJ+9nOTnoKBp7SogLFgTjKc31YD9M1XhyyzTE/3sh+laC10LU2gkORFGIwGDDlJx5Z3qO2nWdlZxvcSt9oJPJESG5d++KDVKW0khitogTLM4QY8zWo4mKWNva6XEf7tAXp3DiRWEzaxeRNGkSEW6MN2J6mqLULt729luZfvO2ceQ8qPkL/AEAj7Jk/xGr+3kDEe6Mg7HFYS3u5VQRK5CZzgGthpz80KP1PLmpsOVTavL4l/MxOfexUe12YnzNLOeaRmPck022O59DXRJ0zTQdqg6lvC49Kmg7VCv8AeJvhTFHUZiU+aioVzsamW3vWsRz+AfpUK/PK1V/ilHQ5YfGpkuOeP1yPyqBCf3y+Wany9Ij/ADVEUprleUj4gVJXZaBf+7g/zf1o8TBkDDpioppNheXFhcCe1laOQdxW30j2kTWwC3iMABg8m4b4g1gV3FI48qm4ynMrHQ+IeMNI4h059NgsCt1ckIk3RUJOxxXPru3a2uZbeT78MjRt8QcH9KZZPyX0JzjEin86tuMI/C4q1RPK5Y/Xf+tKTV0LdqgDyqZp8sUF3DJPH4kSuC6H8Q8qiiiKMirJoJOI40cNZ6bbRADGCObfberb2eavdXfHGnG5YMvvgIowBlTvWMC52zitl7KtOnm4whmRCYbZXZ5B0G2BvU5fqMfbae1zQ7zXE0uKyQEpI/M7fdUYHWsPN7NdTS25kv7BzjdfExXd2wdiAR61i72BI9Vuk5Bu+elYfcuM6dGPH51xebT7nTJja3aqJE3BRsgj0NV8JKz84/iroHGNvFdWc1xbR/2izblkX+U75rCIincDGa2wy8oz5eO4XSf1FeoUTco5W6djROZfOrZCIM08bUJZUA7/AEpPGPZD8zTKjSjvSy8xiUIrM3N0UZPShJI7tgqK6R7K41LXqSIhfkVslQcb4oyupsSbrW8TJ42gXiE/eXc/OuWWcbJeCNgc4OfpXWddXOjXY6/uzXM9SCi2k2wxwgYbEb5/pXFwx05nzy+Ci+7nejxIHYHIZWGcGs9HfyLiG9JeIHAkA95fj51obJAWWWJ1kiIwGWuncZFbTbd2LIGibzjOKkWFn9m8QmV5OfH3vSjouaKBTIqqcU8DvSbjrTgcjamR0CxkvFMoMcw5WB6b1zLizSmsrl7STPukmBz+JfL4iulsOZTty1T8RQLq9oLW4jDMv3ZMbj51N6pxyQGWP3gNj2PTPoamR3qx6618YyI5EIcZGclcH86upOD9YBIgxKvbmODTU4Q4i5gPsnOPIsCPzqbYpVR6gv2C7txE3NIUZOmAQTn8jSi/xp9nD4RMkJYk8wx1yKtpODuIZJCw01UP8nKo/IUi8C8Rt/8ALwfi9LeIVb3v/wCpG1JI/wB2zcxUsM7jBoU160tjc2ixAGVwwPN0wavW4I19cCW1gTA25pyP601+E9UtcSyPaKQRhVdmLfIGnuBTRTXMNhaQmIKIy+HYH3uY5oRlb9qNeh0V2ztynG4xWquOG9evyjQI/TdUgkIH/VRrD2Ya7etmUyW4JxzSqqj9aNFtjjPO0XKZn5G6hV64pEaULyrLNyg5xzACuqW3sVQxhrzXH5s4Kxx/1JqytvYxw+mDc6jeyHyyq/0qi3HGUjKuH5+Vwchmm3zSlYEQ8zxH05i1d3tvZXwfb45raebHd5m/pR73gvhC28MDS+R3OF8J2BOOu+aOy8o4BG4Zh4UfMfJIqmQWd7PtDaXTegHLXebfgHh2SNZfBuXVtwHuHGPoak33DmlafpM7WVqInReYMGJO3qarSfNxC14e1Z3RxYRpj8Uz5/KrSHhvUjITJfwQA9fAi3raENInIOrbCiw6ZJIvMATV+BebILwpaN/5u9u7g+RfAqXbaDpdoQ0NkpYfifc1qE0/lJDKNjjejcsUMicsagZGSd80/tp83OuJ7aaSQtglMe6B0A9KyE8BjzmuvcSWoInRF2G42rmWsxcjnOBU2aVLtWWME11crBboXcnoO1dDRrPQdM8O6lV76SMqiL1BIrF2GrnS7Zks4x9obdpiOnoKDamW5ujPMzO2SSzHJyay1utp1E6XpTINmNJO2+KWGuhmmDpUW93jb4VJXdaj3Y9xvhQKWwObSP0GPzqFqhxIB51L005tseRIqFq+0q/Cq/xT8gWpzKo9asbgfulP84qrsz++WrW52ts/zD9amHVXqKnB9GNDtWJT0xUvUFzDKemGBqJaD3APSoynZz0kqMCvMKeOlNakDLaFpb+3jjGWeRVHxzWp9p9k1lxpecy4EypKp88qAf0qPwBaLd8ZaVG6B1E4Yg+m9bX25WHvadqSr3aF2/MVFv5aVJ05TT0bC752NNFEi3yKsnmfHQds11z2JKRpuoyHoZVH5VyH/eKretdw9kESR8JlwDzvO3MT3xUcv6qw9txmoN7p8N0/iHKy42Yf1qbSGuZtLrtyni7UbHRb+a3dPFuDhZogMB0O4Oa5w/hNM5gUrEWJVWOSBWp9p23F95kbkKRn/CKygBHSujCaiOTO5+xCARTOXfqaeu/WvVpGRoT1NFRR6mkAp60yqREoXcDeuh+y9iNQuh/FCP1rn0OK6B7MttQuD5Q7/UUs/wBRj7bnUl59MuR5xn9K5XqpIiQHu+f+/rXV7lWe0nXb3o2H5VyXW3ARcdga5OH5dHI59c6xPb6pPynni58FD0q90XXGR/FsGJHWW3asXcNzzyN5sT+daDgvkSS8mkxypGOvxrZm6Zpep2+oRF7ckMB78Z6rU5Zxn3tq5L9vuPtclzbOyb7BSRt8qurXirUISom8O4i7mTYj/mH9aN0ajpB95cihNkd6zVnxdYHH2nxbYn8RHMh+Yq9tr+1u0BguYZM/wuM1UqbCz3fhL724oEWpRxv++iB+BqPfc7ScqgkKMn0qtlzjJp62nbWQ8QaeuAUYVLXiHTwNy4+VYWMDK8zFRndgM4qwvZYpoFVLpSUG+QwL/LHWovHiqZ1rhxLpo/G30pw4m07t4h+Arn/pvn4VKtjhDnmznypfaxH3KvdVv4tSu/Gt88iqFwfOpvCEUba9G0qqQkbsC3YgdaotPXCSFhjL99qv+F0jm1SRH5SrW0oZQe2KepBbttU1fTHnWBNQtWlY4CLKMn5VQarxNwzJcAT62FaPKckeSAfPYdaw+mR6EnDnD7Wxtv2w1+nicrfvMc5zn5YrY8SafY3+vaZoNpaQIGf7XeMkYBEa9AT6mq3tnrS1bX9Kh06+nWZ5ItMPhTkj3uYbfOg6zxImmxacbfT57yXUATBFGQG2Xm/SuQcR6xPa6hxJpkY/dXV+5Y56crtXRby11zUjw9NotsLaTT8r9ouMFCGiA5gOpG5FPd0fjFjJxPfQWTS3ehzW9xJKsVpA0gJmc/DoBTIOINXvLW+tI9ISPWrWSNWiZuZFV+j58hUWKDVeIFvtO1K9hi1PR7lJYbyKPCklc7r86Bwzez6ZpWvcSancC6mnm8OJ1XAl5MheUdgScfKjZah8vEuu6d+0rS+a0muIREsc0KcqRu7Ywfh1o0V1qltPqujarepfctmLhJlXlK5OCpqy0jQIf9m5YtcUPLe5nvGY4wx369sVlbCwituF+J9WtTKbedTHatM5ZmjTbmz1wTmgdU5ZoomV5Jo1AIyWYDFefizSbGNlbUIebsFPN+lcma+ubkELycpONlO/zqsucjPjLgDO5bv8qv7lno/ty+3UL32g6ZEW8Nbick591QB9TVdee0KeWJVttPhiXGzSuWb8q50FUxkqWTzPLnPzJqVCIwgw7SH1YCl55U/t4xf6jxXreoSM09yEUjGI0C7VnZ5Wlbmcsxz3Oc1IYjnG4z5Bf60CTmydxn45xSPRsYxjfuRnzNTtMYnmUZ5R2oelWE+qXRgt190btIeiir3ULCHTXhtoTkhMu3manH9lX0r5/vCnx024GCp9aVOtboS0Pu0G5/uzREPu02bdDQKj6W37uRfJzQdbH90fPIp2lH3ph/NmnayvMkRHZjT/AMU/KushmcVb3Izat6VXWMeJcmrRwv2aTJ7UsTqHdjmgnH8gNV1rIgJDkg42q0kAKSY7xVT268zYqcxFgCOXIoZNFVcLihOMbmpNsfZDGZeNbdsbRxSMfT3TXTPalY/buC7zC5eArKvyO/5Vi/YrbIl1qN867rGsSn4nJ/QV1HUI0vtLu7Zt1lhZT8xXPnl+baT8XzMlOjHvE9BinNGYZXjP4CV+hpBkdgRXRGRQviTRqgyxbAxX0VwdpTaNw3ZWcuPFC8z/ABbfFfPFuHMqiMEsTsFHevpbTGlbS7M3A5ZfATnHkcVjy1eCVmkJpCa9nasWjJ+0DQLTVNGnuWgX7VAoZZVGGwOorkdxos0cfPbnxV7r3FfQckayxPFIMo6lSPQ1yZrdrO8uLKTZoZCoz3GdvyrTHKwTGZMK6PGeWRSp8iMV7FanVIlKnnQH5VSafax3U0iMSMHYitZl0i8eqhLRFq7/ANmyRlLgj/EmacnDVw4ws8fzU1UylTePJVRHFdD9mZAubw4/3S/rVBpPCFzeXS273UUfuliwQtgD6Vv+GuHI9CEjC5eeSRQpJUKAM52FLPKa0nHG7aLlHKc9MVxPX2AgJAxiE/Wu2NsjfCuJ6oEuJ2imcxncKScKwzn5GuXib5uax2dxMeYRlVJ+8+wq0SC4sNNkURSFJmHiShTygDtW/wBM020jJJtk5wMh294n5mrBWQjwpI/dI6EbYrfaNOXwFHcZwMdN6kzRrHI5i9/YFh3rUajwpaXLs+nMIZP+Gfun4Vmb7T72wkCXMLDlOzDNBaoWFWNfdzG3U56fMUTDowJGI/wyDt8xQ45A0niAkEDcZwT8/wDOnx8iKzjPK3XB5T/lTIeO+u4AT9tkdf5Zf86L+0NQkj5obqUH+Z1qMAwj/dAsD5oGpJUjKDxFVCf/AKNASzqd9EimS5mJPXDrio82sXv+7vZQe4LD/KkZOVF8OFW+MFR7nxSQDbhfURjegD22rXkkw8W9cxAjmw+D19cU+7vblGBW7kxk7ibtUWxlaO5XH95kBY8qRnPl2qbfxuSPEDqysQwGFwc9KADDqt1CjHxmkVjnDcxrZ+yi/ebiad5yFRLOVi3KQAMVhbmIqQXPvYz26fHFa72W6hY2PEo/acyJBNA8RaZsqcjoe1GhV7pM2hvoPD0Fl4L6x9tRpgiEycoY5yfhV1w1xbp8eqapqF3b3019dTlFWG3LhI1OFGR9a0Ka9wXpOGt7rS4SOhgVc/8ApFQ7z2kcKwgcl67EHOIojVSM7vSjfg+LUbPiS9m0+VtQN5cfZuYEc4LbEA9fjWwu11y10jTBpEUDzRIgnhnPLzDlxgHtvWZufbDoMQzBb3cuexAX+tVVz7aYdxaaQxx/HLt+Qo6LVai34e1ie21GW5uorW61OdDcCHJCRAYKg+ZA61Ya9w7HdaDbaZZTG0jt5I3RlXm+6fKuZXXto1VsfZtPtIvPn5mx+YqquvavxRcDMdzBAPKOFf65p7h+Ndgh4aupbe5g1XV7q8jnUKV+6Bg57V7jj7Pp3A+ox+7DClsY416DyAFcKuePOKbs/vNXvAD2RuQf+nFVtxdarqTA3NzdXLZyBJIz/qTS2PH/AGfaOHCZIZFfdM+lD1C2McZlACZ6LnYCptpomqyoOW3kIJ361YjhPVrrAuMRrjq7BaNK2ybJzxhmUtttgE0VJeVFHKseO3etI3Cltan+2apZw4785Y0w23DVrtJqM05/hhjxn50aG1AzgtlVJPmRTra0e7nCM4RSdyTV6dT0C22t9Kec9mnlP6ChPxZdRo4s7OztFxj93EM/WgNBpxsdPt1gtXjwOp5hljVNrE4n1GRgegCj5VmZtXvJJOfxfeJ/CoFX+lyxXFiJbiJYlGxZts/Cpn43avcR5wSo9KbCcnBO4qZCsd9qKWtrEeUuqAnJLE12uDg/h+CzFq+kWrBgMyNksT/i6j61WXNIJhXEkO1K4yhrXcW8HnTtTCaQryQyJz+GxyU3OwPcbVQrouqOeRbCfP8AgNXjyY35Fwy/ig08lbmUdjV5ZaPJrUy20cioR7xZvKrAcFXtrp817cMscijIj6kjvV1wppn2WUXDvl2XAGNhU5c2Mwur2eHFlcpuKW/4Hu7KNZbSUXB/Gv3SPhUG60LVYNPa4l0+4EJU/vAnMPyzXULv+5rVaOvLpVsn8gNYYfUZRrycOPuPnCzjSe6hgZ8LJhCR2ycVo+NvZ/Z8KaSl5HfTTXEsoREZQARjJNdvl02xmdZJrK2kdTlWeJSQfTasH7boubQLKZVUslzjrvgqf8qr71zyjLwkjjcTMy++pBHn3prlScZGaHyt1DMPTOacwGMfnWzN2z2SwRScJtyR8sgnYOSPvnsc1rBG8LnlyfNe/wDrVJ7KuY8E2eVAwz4IHXetWyBxhxny9K4s/wBq6MfT514x01tK4ju7ZsFWbxUPmrEkVVKowASc1tvbNZG34jt7gyc3j2w5QRuOU4/rWEDCReU7OK68LvGMcva10G7On61ZXIjVxHMpKt0O9fRrNze8Oh3r5etn8G7iaXOFcE58s19NW88c9tDNEQY5I1ZSPIis+U+P0ITTs+7QyR3pQfdrFoXNc+48thba5DdL925jwf8AEu36Vvs1lvaJamXR4btB71tMC3+Ftj+eKrH2c9sLfjmjPwqn0ZSmoSqe+Kt3cOgFV8CeFqIP8QrSelWdtRGRyVItuuTVfHJ7u9T7Nl5CTvtRivKr/hmPmubiYdlC/WtA5wKreHYvD0xJMYMzF/l0H6VZHell7YCYBU7Z2riVxIJPEDjIjlZDn4kiu3oN/jXBZpo7fXL6C4YiOV2B/lOdm/786y4/asxoZZrc5tpTy/wNuKsIdWQgJOpiPn1FVz20sa83LzIejpuDTA224zW2me1+ziYiSEhgOrKc4qRzpPF4d1Gsq9NxuKzAzG3PC7RsO6nFT7fWZ49rmJJx/EPdb6jY/Sg9iahwlaXKmW1JQny7Vnbnh3U7PmaKMyoOpQZ+orb2Wtaey48UwN3Eox+dSP23pSHJvoM+jUy6csm8RGAeB0YehWlMgYAGJjj1NdHn1vhcnmuLn3j/AAxlh+lAOpcHv7xlmIP8MBo2WnPpJC+AqsMerUxonmIBUnHmK38+ucFQAZiu28v3RqLJxZwZEdtNvnPxUfqaNjTGQ2bg+IwPiK2V/d7/AFqeFnkPM8bE5yexzWoHGvDSqDFoMhz08R13+maBL7QLKHBg4atwf5pz/wD1o3f4GYuLO8uCOWI7elR7jTbtArtBJvtlQTmtQ/tLuh/c6PpsfkGVmx+YqPN7RtdfPhRWMIzt4duP6k0bv8GmaXS9Sl2jtbg/CI1Lh4Y1yX7mmXDE9ymKmXPHnEj7DUjH5iOONf0WoFxxNrc/39YvCPLxmFPsJ0XAevvu9p4Y83kC0ZeCLqPP2rUdPhHfmnBIrOTXt1Kf3k88hHUs5OfzoDMWb3i2/bY0+w1R4a0a3/8ANcQ2/qIk5jSfZuELb795fXJHZV5RWXw7N7uAB0pwV+fPICPUAUF01cetcO2rYs9FeY+c0lK/G0sa4s9MtIB2PLkisslrI+4RyT6kijx6XdOThGGfMAUx0s5eMtZum5TeeGM9I1A2qsvdVvLnIe5mkye8hqUujTFcSMgHqf8AKnrpEKf3lwo/wIKQUTKzD94hJHkaXwsnY8gHbFaEWWnxj3mdz/M3+VK8lnbrmO3T5DNHQ3VLGkp+4Cwx5Zoy6fcyjeMr6napj6u42it1A7ZP+VQ5729uNiyoh7IMUFoiWtvbSjx2EjjflHQfGiPcvcmJXOIweblHQAdKipbyHO27bE+lXWiackt2hu0LR5HMoOMjyqbflUa/2VaE97qa6lOh8CBi4J/E/YfKuyZDDB71ScPT262EdvbRRxJGvuqgwMVaq+9YW7raRQcRKU1WBjuDDgfIn/OnQMFT3jROJh/5WbyYqfn/AO1RowHjGd6ys/J0YX8TNYIbTbgHpyGqjSh+6i+FXksP2iGaM7jwXJ+QNU+ljEMYPYVV9DGp9yCyADvtWwtx4MEUY/CgH5VmLKLx72BOwbmPyrU5zRGfJRQ2RWA9s9s8vDENwvSC4Ut8GBH6kVuhkdKz3tFtDfcF6nGqkssQlUDuVIP9KvG/kxvp884PmaQkYxSKT8qQnfauxi+iPZmVHBWmqoIPK2c/4jWnbeqDgi2aHhDSopsc3gBvd9d6u+Zk+9uP4q4svbeenG/bZzf7QWOT7ptfdHkeY5/pXPCvMPI11T25QKyaRdKPf5pIyfTANcp3rq4/1Y5exRzEBXHMOx8q7nwJeyPwpp/jZ9xSgPmAdq4YpxsK79wrbh+FNMMS8yfZxlT1z3INRzelcftcLKrDcg0UN7hNVpVoySpJA+RFGhuQV5Wrn21sSgai61aNf6ReWqffliZV+Pb86MGA6HrRVfG/lVQnF4gWT3jh1OCPI1FvH8OSJx2apMYLTzE95WP5mgahFsMjbNbxVvS2hkHIM96sLRwcj0qjs3do1QMDy7HNWtqpVjRJ2q3cdE0gq2lWhXp4YqS3Q1WcNyc+kRJ3jJQ/XP8AWrJjtU32xSV2NcF4ki8PiS+jEnLiRhgj1rvALeS/WuM+0G1NvxXOSoIlPMPcz13rLj9qz9MzaX91YWsskEowsje6dwd6tP2rZzOiXUJjkcEhk6VSSf8Al7xMYwxO4x2BoUhzLasxG4I/KttM9tJ4Mco5reZXB7GhvFImcqaziTvFJLyEjlO29Fj1q8QgBgR609EBqTajLKQ8bJEDsq71EIkxjk3+laFNWVv76H5rT/HsZvvDH+JaZM8pJwGU/OvMXI91N/WtII9OHURU4NpoH3FPwU0bDKSQSSN1IHltSiCUdBn1Y1qluLEHAjA/5KU3tqv3Yx8kFGwzMUMqvzBTntjNOa0upWzyN8lNaA6oB9yLb44pjapKekYHxNPYUq6TcuctA5+K4p40S6P+7wPIsKs21Gc7AKPlQWvLlvx4+Ao2AE0S4HVox8TTxoY/HKn0JrxuJ2G8rn50ws56sx+JoA37Ktox70/0FKLTT4+rsfnUfFe5RQSSP2em6xZ+Ip4u4V/u7cD5CooWlC0GO1/KfuKq0P7RMTnn/KkCU4LQDGaRurtTShbrUgJTlj3qTQxGfKvNEWABqeYs7gdKIkIIzQFYLYeVGjtAe1WiWy+VSI7UUBXwWXTarixtRHggb0SKDHapkSctTVRpuHpSIhyseZP0rVwTeIoP1rC6PKUm2zjvtWqtLjByoJHcVlZppErXIxNpsnmmHHyqptX5owPSruUmaCRABh0I61Q2WyAdxUWdtcL0tbBAY7liNjEUz8azmmbxgDtWq0xP7I7En3yc4rK6ZsH3/Ef1p08b3Wj0JB4ssrfhAUVciRfMVXaSipZqTjLktU9SB0oZ5d07xPIE/KhXoM9lcRFNniZcH1FF5qXINCdPlqRTHM8ZH3WI/Ok77VP4ljEXEGoxgcvLcOMfOq5Tk8uMk7V2y9Oe+305w2Q/D2mFdlNrHgf8tWPIKrtBia20LToGzzR20anP+EVYKxzXHfbdz720Rj/Z60OOl0B/6TXGAd67j7ZITLwf4qjIhuUZvgcr/WuHAg7108X6ss/Y0K8zqO5OBX0rpdqlnpVnbRbJFCgH0r5x0cr+1LTxF5k8Zcjz3r6aYDHu7DsKz5vg+NHljST7w3HQjrUKe2K7np/Go/UVY4x1FIcdtjWLXap5niIDDbsexqXDKGwPOiSW4bPh4U91P3TUMxMjgKCrfwHv8D3oDmIh8OedGGGSVwfqaFqEQaBqsuIU+y69eLjAlIlGf5hv+eaq7mYCL0Nb4/0t9ImnOS7cvfrV3aFgfeNZ/SWH2hh5mtGi8pqr7GPpruGZcNLF2ZQwq8astoEnLqFuB+MMv5Z/pWrVeY0sp2mjrWD9qWiSTxW+qQAM0RCSL3IPQit6PWqHjHMljHGOnNk/SufH2vL04XKOWaZG2Drn51BbnMEJVTzo3St3d6QjuSVqEdHQH7tdMY1kTHI0zsBswr0dq5OTWrfSwoyBjFDXT+VRld8U9ko1tzjpRVtzjpVx9kA7UotxjpRsKkQelPENWRgxSeF6UaCu8H0pPB9KsfC9KQxU9BXeCfKveD6VYeH6UhioCmup4rf74JPpUNtRX8EZNWuoaXJdEBCo3zlq9baRNbRlVuUGf4Y8/nRoKy1ujNJyMgFTvDPlR00iFJfFaSZ5TvzMRjNSRb42o0Ff4Zr3IasPA8694A+NGgr+U0oU+VT/ALP6Uv2fyFAQQKIq1KFqe1FSxkborGkNoiiiKADU+LSpW7YqXFpH8QYn0o0NqpcfwmnxjlblxselXA0bb3SQfWmnSnX77fMCjQlQo0NSI0PxqXBbRgbgkjrmpkaKvRQPlUq2iRQOce6amRW2N3+lFXNFTc0jiTZLysMDAq8th0ONqqrVMYyNqtYWAAHSs8lRaW8irGds4GcVSNb3EMu8eQ7ErymplzKUtyEAJJA3oFsrXBUso8JySNznFVhhMheS4ekwzm10kiQhHJwuD5mq4w24Ebxcyh93CjIA86br6tNEIMEQJInMc4p0NqnLCVZ0BYAgHAI9a0xwx8rixvLfa5t2C2yGNuZF227VIjbm6dPOq7ScIZYsH72Qc1MwYiSn3DuV8vUVjZ21xy8ptKB3pwJoCvkZB2oitUqcF9p1k9jxheZA5J8Spj1H+lZu0laG4jlHLlGBGRmuucWcKWmscXC6vbxlgaJeeNPvZHYGl1b2daE2kTS6T4sd0i5jLS83MfIiunG7mmOXtt+Hr+TUtDsb2ZQsk0QZgowKs0qp4eie30LToJUCSJborKDnBA3q05xiua+20VvF4sH4a1BNVfktGhIZu4PbHrnFfNZUoxGcgHr519B+0R1/2L1Xn3zEOX45GK4B4EzqZPCbl/iCnFb8XpnmseHSv7ZsOYBh46ZHnuK+knyGJQ7Z6V89cBXFvacVafJeRiVPE5QP4WPQ/I19As25FTy+zw9Cq4YY7+VIyg0N8EDsR3pBKV2f6islnHNNdVdcOAR+lEO4phFAc89pVs0E1neAkqwMRJ6+YrEXFxzRHeup+0S0+0cLzuBloGWUfAHB/I1x+VvdxW/H6RldJumq0c0EjD3XJwfPFaZWyetUph5OHrC6AORduh+HKDUuG46b1VmzxvTUcPHxNWtR/CWY/wDSa2vNg71jeDFD3M1yfuovIp9T1rWq+TU5XsqliqbiDDsqeQq4wRsRiqfVgWuD6CsJ7aVQNbKTuBVfcwcr9KvWQb71BnjU53Fays7FLPF+7O3XahSRZ7VPuAvMijJy3l5UFxvstWlWtD6UIxVYujdgKA6Hz/KnCQzFQzHip6w565NP+xox704FYEFJyCrX9nr5n6Uo00H+L6Uy2qOUeVe5PSroaYPI/WnjTE70aG1AUPak8M4rRrpsIG4oq2NuPwg09F5Mu0fQ470QW7HohPyrTtaw+GyrGuSNjiljC8isANx5UaLbNrYTN0ib6UZdKnb8IHxNaGkwaNDalTRm/E4qQmkQr94k1ZgGlC0xuoaWEC9EoqwRqNlFSQtKFFBAhAOgFLy0YLTlQnoKQBEdKI6krA5/DRVtiRkn6Uqciuks0zzgfHHlThZrj3SatFt1HUfWvJEEbkxt1U1NVEKK3Cjpn41IS3TqyjNSREScYonhVNVAVhU7LkURFZDg7+tEQYNElJ8PYd6zsXALhi4WJep3NTbWNl5OYbgYG3Sq4SlL0/4RVnEwk6jB7b9a045rtnlO0DVMrbsXxkyKW+HNUy3jAiUruPTtVPxRMYJIlU+7Iu4+fWrWwuU8JFVl94YpyeOSZjNCW6tBd4zlXOB86ntzDbHzFV92yxBX2xnOxqwhmD7g9qjPHVacfU0FnkYso27r/lUhHVlBByD3psuGUkD3qilzCGYbbe8p/Ws2jPtHJdX08hkKkSlC2PPbbPapECARDn25clj0BFPFnJZwNyrJIJH8TLnmyT6eVOW3nNtMqgI7LgEpkD4iurH058va50tzJp8DkYJTOKlZqs025ItYoioDogXlQbbeVSvHYnaM/wDMcVzX23noLXbWC/0i4tbpS0MqhWAOD1ptpcadbwpb/ZYlQADlMYxQtSNw0L8salFQscN1I7UGGzgkUlkTmKhw7E5zWvHJpnmrJ+FNLuuKbHVLBEhjiy08SjAZh90gVruZckkiqK1k8JI2yFZ5wsgIJBH9KvFAHYClyzs+O9PNID0yflTSzHbl29aIRkU3pWWlmgug93H+HrT1bn/Gfh5Uw0wg9QSD2NPRmazai50i8hYFueBxue+Nq4E4JKjvX0IsoKMkoAODv2NfPlyyrM52wHP61rxIyaYMH4FeM/ei1BCP+ZT/AJVXROcdajm9YWP2VD+7lcOw/wAOcfrU7Qoftmp2tuekkqqfhWlmkzt0LQLRrLSIVxl3HPIO4J/7FWcU2/Xepk8KsAVyCvRl6ioc8WDmUBSekij3T8R2Nc2+9tF1hm6tVPexh5WyT1q5GQu9VVwMyGlDVksQUHI+dQ3jB6VbSrtio7xKeoq5U2Kd4A049EJ+tCe1XPWrX7MS8hBzjA3oTwsOq1cqdKprcDsaGYV/hqyeP0phiBqpU6qIkKj8IoojA7UYR4r3KflT2WgsCvUXkJ6KT8qcIJD0jb6U9loCvEVJFnOf92R8af8AYZu4A+dHkPGoeK9y1PGnydyopw0493+go8h41AAoUa4DL/CxFW66emdyxry2MSTleTIZQRk+Wx/pS8oPGqvApeUnsT8BV0LVF6Iv0oi2+3Sl5n4qVYZD0Q0RbWQ9cCrgW58qcLfHajyPxVK2R7n6URbNR1BNWoiApQg8qXkPFXrbADoKeIPSpvIK9yijY0iiIDtTuQeVGKntSBTQAuSmvHzDbY9jUjlrxWgAx+8M4we48jRfDzTWHhtz/hOzf51Iyo7ikYBibtSFTykEHFSQwPQE04KT0XFLQ2z2pxzQnxo1Zwo3CDJoVhrkL/38j/4ShBzWkeMjfb1GKGYUbdkUn4USFldqu4tBqxaXYLy8q/WoX2bVrQ8sMcUiDo3Pg1pkjRUwqgUgTHeqs2XwobWLUZ5OW6WONPJASau1V49wMfE0ZIwTk05hmi9nOnkkcjqAajXQLcwZjhhijhMHINNuIfGhZD3HUdqi4rlCsr0QxiKZS4XoR1FGXWYmVgsB97YE1kuIJddtbRorK255SR/aIjvj/D50XhfU57iLl1e3uFukbb9zjxB29K1xZZLqJmjcsvVWNT45fHUuBhh1FR44ywLMMEnJHlS7owZOtZ5ReNLdfvLaVDuGUqR50W2tLiFEEa4CjAAGdqC7qysDscVMsb+VQqMvMBt03o4ujzRLjTZpYgF8SJ0bm51HX4jyqwilEg3I5sb1MuJ+a35Y1Zc/eJ7VTTZSY42xjFaZzc2zwuqtFI6GlaPPQioMVzke9t60fxtgaxai+GaQxnNDExzVNxNxEdKtStsFe7b7qn8I8zQYfGGu22maPdJDPG14w8NYwclSe5+FcSu2CrljV1fTtc3bXFyx5t8r5mqc2jXbBwwVeY4U9SK1wmkZU+3OUDHv0q50e7k0+dL2LlLwMHAPSq+KAdOnpU63tWM8Vuu/infHZe5q9bLenbIpPHijkUYEiBx8xmkkwdqDw0Wk0aAy5OMhc+WdqsGt1besLiryOP3DVbMPfNWT9KgzLvWcWiOKHyVIK01l5VLHsM0wjQJlSfNiaf4XlR4I8Qxj+UfnROWmELwFJ95AflSi1jP+7X6VNCDPSiIlPZIS2kf/AA1+lO+zqBsoHyqbyUvJntRstIPgDyr3g+VTPDr3J6UbGkLwaUQ+lTBHThHRsaQxB6U7wPSpnJXvDo2aH4I8qDNHyvE3k3Kfgf8AXFWPhHzoVzCWhflGWAyPiNxRsgREAelOCelHVQyhh0YZBrxAHU0bMErikK7UU4PTPyFJyt2X609kAV3r3LRjG3kBXvCJ6s3y2oAHJ6UmB5ipHgqO2fjS8oHQUy0i49D9KUIT0WpHLXtxQNAeE3oKQxeZNSKQigkYxKRgjI9abCOQmM9vunzFSiN6FLGSAVHvLuP8qYeAoqCmIQ6Bh0NEWmHnXahgCjMMihYxQRcbGm07tTcUCnpT2XIpsYowHlQAeXFextRmU0NhQAWXmryIFOR1pxG9KKonjHn3l69x500xBhlfoakIK86H7y9e486mwIE9q0ikdPIjtWc4lOuNbrb2Vq6vzAtNC/3h8O1bAjIyKay81OTQtqg4b1XUobD7PqVncTTK3uuzYyPImrqJJZAZbgAOxyQBsPSpVui594b9qm8gK8pp2/BSKpox2r2SMeVS3i5W9KZyeVTrato7sVjZlGWA2Fch1zUrx72Z7tVSYsc8x+76V2RojjpVRqOiaffn+22cMh82SlMdH5bcaEsl/OEEmQN3IGyijvMsbHkAA6beVXfFGnxaRfmKws0gikQbqPvGqFbGQnmmkAz2zitJ2m3SUEZykqxkh/dXlHU+VWsipocaG6KtfXLBQgP3B5f50fQJbiKJLdWWf94GRVTcEdMtjOBmtbBpkJCm4hjmkB5uaRQTzedaSanbPLL+LrQLmQaNaeKuPc6gdN6tY5NtiCDVXArcox2qVGCu6Y36qeh/yrKxpL0mP0qLNXq9XM2AoV1/5WT/AAmvV6mEhgOYgdq8BtXq9QDlp4r1eoBRRF6V6vUAtN616vUAoAp4Ar1eoBxUY6V4KN69XqAAznfpSqOYjJNer1OEFbxr4IG+FJUb9gSBROUeQr1eoD1eNer1AJSdDXq9TIhpDXq9TBMUmK9XqATFIOter1MniKRhXq9TIFBi4dR0K8x+OcVIUbivV6igppjAV6vUA3FexXq9TB60Va9XqAd1FDYV6vU00IjelHWvV6mB06UTtXq9SAE45HVl6lsH1pD1+der1MjkqZESRg16vUqZXUEb1HxvXq9RCLincinqAa9Xqo0e80uyvV5Lq3SQfzDpUEcN6PHutjF8xXq9TnpNHTTrSHaGFUH8oxThCg7V6vUUoKqKEyBSr0r1eqVP/9k=']
@@ -3553,7 +4051,37 @@ const QUESTIONS_PER_CASE = {
       '應該收取交通費以示專業界線'
     ],
     answer: 1,
-    explain: '客戶不會在最重要的時刻找一個剛認識的業務——能被想起的,是長期累積的「人」的價值。這正是「服務不是成交那一刻,而是多年後仍被信任」的真義。同時案例提到林昭博「四年來總會關心他們,卻從未給過壓力」——這份分寸感,是這份信任能累積的根本。'
+    explain: '客戶不會在最重要的時刻找一個剛認識的業務——能被想起的,是長期累積的「人」的價值。這正是「服務不是成交那一刻,而是多年後仍被信任」的真義。同時案例提到林昭博「四年來總會關心他們,卻從未給過壓力」——這份分寸感,是這份信任能累積的根本。',
+    playbook: {
+      pillars: [
+        { key: 'human', strength: 'primary', note: '林昭博四年來持續關心傅先生夫婦,卻從不主動觸碰「孩子有消息嗎」這個敏感話題——這正是「要有同理心、展現關心、讓事情變得個人化」的最高境界。把客戶當大家庭一員,而不只是一筆訂單。HUMAN 不是熱絡,而是看見對方的脆弱並保護它。' },
+        { key: 'simplifying', strength: 'secondary', note: '預產期當天客戶心裡只想「我太太要生了」這一件事,其他全是壓力。林昭博一句「沒問題,我載你們」直接「主動承擔責任、為顧客節省心力」——這就是「大事化小、減壓無痛」:在客戶最忙亂的時刻,少擔心一件事。' }
+      ],
+      core: '不施壓的長期關懷——在客戶最脆弱、最敏感的話題上,保持關心但永遠不主動提起。讓客戶感受到「他記得,但不會讓我尷尬」。',
+      signals: [
+        '客戶當初購車的「理由」(七人座、為了將來的孩子)反映的是「期待」,不是「事實」——這是個夢想,值得記下來',
+        '每次見面客戶都沒主動更新進度 → 表示這是敏感話題,不該主動戳',
+        '客戶分享好消息時的情緒(緊張、感動、開心混合)→ 表示他需要的是支持,不是慶祝'
+      ],
+      steps: [
+        { title: '記錄客戶分享的「夢想」而不只是「需求」', desc: '購車理由背後的人生願望要記下來。例如「為了將來的孩子買七人座」這種帶情感的線索,不是只記「KODIAQ、現金、白色」。' },
+        { title: '每次接觸時表達關心,但用「廣義問候」而非「直接問結果」', desc: '說「最近過得好嗎、還順利嗎」而非「寶寶有消息了嗎」。前者讓客戶可以選擇要不要分享,後者把客戶逼到角落。' },
+        { title: '明確承諾後續支持,但不設條件', desc: '「需要任何幫忙告訴我」是承諾,不是業務話術。關鍵在後面不要加「順便介紹車也歡迎」。' },
+        { title: '客戶兌現夢想時主動現身', desc: '當客戶分享好消息(懷孕、結婚、升遷),用最快速度回應並提供具體可幫忙的選項。這是信任最終的回收時刻。' }
+      ],
+      apply: [
+        '客戶提到要創業、換工作、搬家、結婚,但還沒成事',
+        '客戶分享買車是為了某個目標(露營、帶長輩看醫生、孩子上下學)',
+        '客戶提到家人健康、孩子升學、長輩照顧的擔憂',
+        '客戶經歷家庭變故(離婚、喪親),但還在調適中'
+      ],
+      pitfalls: [
+        '誤把「關心」變「打卡式問候」——每月一通制式電話讓客戶反感,反而傷害關係',
+        '誤把客戶分享的願望變業務切入點——例如「等寶寶出生我們有家庭優惠喔」會瞬間破壞純粹的關心',
+        '過度熱心反而造成壓力——對敏感話題,不問就是最好的問;客戶想說自然會說',
+        '把「長期關懷」當「等待業績」的策略——心態功利的話,客戶感受得出來,信任反而建立不起來'
+      ]
+    }
   },
   'sales2025_chou': {
     text: '周玲安在公車意外當下做了多個動作:起身協助、按住傷口、陪去醫院、處理掛號。如果你是新進業務看到這樣的故事,最該汲取的核心觀念是?',
@@ -3564,7 +4092,37 @@ const QUESTIONS_PER_CASE = {
       '銷售要主動出擊,不放過任何潛在客戶'
     ],
     answer: 1,
-    explain: '如果周玲安當下心裡想著「這可能是個客戶」,行為會變得功利——而正是她「不為什麼」的協助,才打動長輩決定指名向她買車。Human Touch 的弔詭在此:愈不求回報,回報愈自然到來。'
+    explain: '如果周玲安當下心裡想著「這可能是個客戶」,行為會變得功利——而正是她「不為什麼」的協助,才打動長輩決定指名向她買車。Human Touch 的弔詭在此:愈不求回報,回報愈自然到來。',
+    playbook: {
+      pillars: [
+        { key: 'human', strength: 'primary', note: '周玲安看到的不是「一位潛在客戶」,而是「一位無助的母親」——這就是 HUMAN 的本質:把眼前的人當人看,而不是當交易對象。她在公車上連名片都還沒給就先處理傷口、攔計程車、陪去醫院、辦理掛號——這四個動作沒有一個跟業績有關,全是「同理心」的具體展現。' },
+        { key: 'simplifying', strength: 'secondary', note: '在意外當下,孕婦面對的是「孩子受傷+我懷孕+不知道該找誰」的多重壓力。周玲安一個人把「壓住傷口、攔車、掛號」這整串複雜流程攬下來——這就是「主動承擔責任、為顧客節省心力」。她把混亂變成秩序,把恐懼變成「有人罩著我」的安心感。' }
+      ],
+      core: '無企圖的善意——不是業務場合也能做正確的事。最強的銷售,往往來自完全沒在銷售的那一刻。',
+      signals: [
+        '公共場合突發狀況——別人會圍觀,你願不願意走進去?',
+        '對方眼裡的「無助」——當客戶或路人臉上出現「我不知道該怎麼辦」,就是同理心該啟動的時刻',
+        '對方的弱勢身分(孕婦、長者、帶幼兒、行動不便)——這些都不是「賺錢機會」,而是「該幫忙的訊號」'
+      ],
+      steps: [
+        { title: '在任何場合都保持「人的眼睛」,不是「業務的眼睛」', desc: '上下班通勤、假日出遊、辦私事的時候——你是「一個人」,不是「業務」。看到需要幫忙的人就去幫,別計算對方是不是潛在客戶。' },
+        { title: '伸手幫忙時不要「順便」遞名片', desc: '名片是對方主動要才給。周玲安是孕婦緊握她的手「感激到娓娓道出跟我要電話」時才從皮夾遞名片——而且只說「不要這麼客氣」就離開。沒有任何業務語言。' },
+        { title: '後續不主動聯絡', desc: '幫完忙就走,不要事後傳訊息「您家小朋友還好嗎?順便跟您介紹一下我們的車...」。給對方完整的空間,讓他們自己決定怎麼回應你的善意。' },
+        { title: '當機會自己上門時,坦然接受', desc: '客戶兩週後主動打來,代表善意已經發酵。這時你可以用最自然的方式幫他們選車——因為信任是現成的,你只需要做你本來就會做的銷售。' }
+      ],
+      apply: [
+        '路上看到車禍、意外、有人跌倒——任何場合的突發狀況',
+        '日常生活中看到帶幼兒、孕婦、長者或行動不便者需要幫忙',
+        '客戶介紹來的非車主朋友(例如剛好一起喝咖啡的人),不要一見面就推銷',
+        '在維修廠遇到非 Skoda 車主求助時(可以對應 service2025_lin_pai 案例的精神)'
+      ],
+      pitfalls: [
+        '幫忙時心裡想著「這可能是個客戶」——這份功利感對方感受得出來,反而毀掉真誠',
+        '幫完忙立刻給名片+加 Line+傳資訊——這會把純粹的善意變成業務話術',
+        '事後在社群媒體炫耀「我今天救了一位孕婦」——這是把善行變成業績工具,完全違背 Human Touch 精神',
+        '只在「可能有業績」的場合才願意伸出援手——對方是學生、退休族、看起來經濟不寬裕的人就袖手旁觀'
+      ]
+    }
   },
   'service2025_chen': {
     text: '陳曉雯沒有「假裝沒看到」狗毛,也沒有「直接清掉了事」,而是用紅包袋裝起來給陳小姐。這個選擇背後最深的服務洞察是?',
@@ -3575,7 +4133,39 @@ const QUESTIONS_PER_CASE = {
       '保留毛髮可作為下次溝通的話題'
     ],
     answer: 1,
-    explain: '陳小姐進廠時嘴上說「要放下不要再想牠」,但行為(沒整理車子、車內滿是狗毛)洩漏了真實——她其實還沒準備好。陳曉雯讀懂了這個矛盾,把「清潔」轉化為「保留回憶」。一個本來就要做的清潔動作,加上一個紅包袋,就成了一份珍貴的紀念。'
+    explain: '陳小姐進廠時嘴上說「要放下不要再想牠」,但行為(沒整理車子、車內滿是狗毛)洩漏了真實——她其實還沒準備好。陳曉雯讀懂了這個矛盾,把「清潔」轉化為「保留回憶」。一個本來就要做的清潔動作,加上一個紅包袋,就成了一份珍貴的紀念。',
+    playbook: {
+      pillars: [
+        { key: 'human', strength: 'primary', note: '陳曉雯沒有把陳小姐當「一個來保養的車主」,而是看見一位剛失去家人(毛小孩)的人。她在客戶簽名抬頭時看見眼眶紅了、車內滿是狗毛但客戶不想清——這些細節被讀懂、被尊重,而不是被忽略。這就是「以人為本」最深的展現:看見對方此刻最脆弱的部分,並用適當的方式回應。' },
+        { key: 'surprising', strength: 'secondary', note: '紅包袋裝狗毛——這個動作絕對在客戶的預期之外。當客戶以為自己只是來保養車的、預期保養完拿到帳單和洗好的車,卻收到了一份「對逝去毛孩的紀念」——這就是「超越期待」最動人的版本。不是物質驚喜,而是情感驚喜;不是「多送你什麼」,而是「我看見了你看不見的需要」。' }
+      ],
+      core: '讀懂客戶「說的話」和「做的事」之間的落差——客戶的真實需要,往往藏在矛盾裡。當客戶嘴上說「放下」卻行為「無法放下」,他真正需要的不是被催促放下,而是被允許帶著回憶繼續前進。',
+      signals: [
+        '客戶語言與行為矛盾——嘴上說「沒關係」但眼眶紅了、嘴上說「要放下」卻在車內留著對方的痕跡',
+        '車內的「不正常細節」——平常很愛乾淨的客戶突然不整理車,通常代表他正在經歷某個情緒事件',
+        '客戶突然不提某個過去常常出現的話題(例如過去每次都聊毛孩,這次刻意不提),代表話題對他來說太痛'
+      ],
+      steps: [
+        { title: '日常記住客戶的「家人」與「情感連結對象」', desc: '陳小姐當初買車就是為了載狗——這個資訊陳曉雯記在心裡,所以才會關心「寶貝今天怎麼沒一起來」。把客戶的家庭成員、寵物、興趣記下來,不是為了業績,而是為了「下次見面時你能繼續是個朋友」。' },
+        { title: '當不小心碰到敏感話題,立刻誠懇道歉,但不要過度補償', desc: '陳曉雯說「對不起,我不該多問」——簡短、真誠、不囉嗦。不要急著轉移話題或瘋狂安慰,讓客戶自己決定要不要說。' },
+        { title: '不要「視而不見」,但也不要「強行介入」', desc: '陳曉雯沒有勸陳小姐「想開一點」、沒有送花籃、沒有大張旗鼓。她做的是把「狗毛」這個客戶捨不得清的東西,用一個有儀式感的方式保存下來。輕巧、不打擾、但深深被看見。' },
+        { title: '把日常服務動作,加上一個「為這位客戶量身打造」的細節', desc: '清車是本來就要做的;但「用紅包袋裝狗毛」是只有對陳小姐這位特定客戶才會做的動作。Human Touch 的高度,就是在標準服務裡加入「只屬於這個人」的層次。' }
+      ],
+      apply: [
+        '車主提到家人重病、過世、離婚等重大人生事件',
+        '車主提到寵物離開、長輩離世、孩子離家',
+        '車主退休、失業、創業失敗等人生轉折時期',
+        '車主在交車後車內出現「不該有」的情緒物件(花束、紀念品、訃聞)——通常代表某件大事',
+        '長期車主突然變得沉默、不愛聊天、明顯狀況不對勁'
+      ],
+      pitfalls: [
+        '看到客戶情緒就閃避不談——讓客戶感覺「連我的悲傷你都不願意承接」,反而傷害關係',
+        '過度安慰、瘋狂講道理「想開一點啦」「人都會死的」——這些話只會讓客戶更想離開',
+        '把這種服務寫成 SOP 套用到每個客戶——例如規定「失去毛孩的車主一律送紅包袋」會變得很怪',
+        '事後在團隊分享會把這個案例炫耀化——案例的力量在於「真心」,被當成展演就失去靈魂',
+        '誤把這份用心當作「應該換來介紹」——陳曉雯沒有預期那通晚上的感謝電話,正因為沒預期,所以真誠'
+      ]
+    }
   },
   'service2025_meiyuan': {
     text: '當小妞妞在客休室跑來跑去時,陳渼媛沒有上前指責孩子、也沒有暗示李小姐管教好,她選擇邀請孩子做吐司。從問題解決角度,這個選擇最聰明的地方是?',
@@ -3586,7 +4176,41 @@ const QUESTIONS_PER_CASE = {
       '可以拍照上傳社群媒體做品牌宣傳'
     ],
     answer: 0,
-    explain: '面對「困擾性行為」,責備或要求「不要做」往往無效——因為孩子(或客戶)的本質需求沒被滿足。提供一個建設性出口,讓本來的困擾能量轉成正向參與,是更高層次的解決方式。同樣也解放了李小姐「身為母親在公共場所必須不斷道歉」的羞愧感——讓她可以「只當一個人」而不只是「過動兒的媽媽」。'
+    explain: '面對「困擾性行為」,責備或要求「不要做」往往無效——因為孩子(或客戶)的本質需求沒被滿足。提供一個建設性出口,讓本來的困擾能量轉成正向參與,是更高層次的解決方式。同樣也解放了李小姐「身為母親在公共場所必須不斷道歉」的羞愧感——讓她可以「只當一個人」而不只是「過動兒的媽媽」。',
+    playbook: {
+      pillars: [
+        { key: 'human', strength: 'primary', note: '陳渼媛沒有把小妞妞當「干擾其他客戶的麻煩」,也沒有把李小姐當「管不好孩子的媽媽」——她把這對母女當「正在掙扎的人」。當李小姐在公共場合對其他客人道歉「這孩子有過動症狀」時,陳渼媛感受到了一個母親的羞愧——這份「看見」,才有後面的解決。HUMAN 不是發飲料,是看見一個被生活壓得喘不過氣的媽媽。' },
+        { key: 'surprising', strength: 'secondary', note: '客戶帶孩子去保養廠,預期的是「保養完離開」——絕對沒預期「我女兒會在這裡專心做一份吐司」。這就是「超越期待」最高境界:不是物質驚喜,是「服務的可能性被重新定義」的驚喜。陳渼媛還順手教小妞妞用手機自拍,讓媽媽得以好好休息——這些都是「沒被要求」的多走一哩路 (Extra mile)。' }
+      ],
+      core: '用「轉換」取代「禁止」——當你想要客戶停止某個困擾行為時,最有效的不是說「不要這樣」,而是提供一個更有吸引力的替代選項,讓他自然脫離原本的行為。',
+      signals: [
+        '帶幼兒進廠的客戶——尤其是當孩子明顯停不下來、家長明顯緊張',
+        '客戶對其他客人連連道歉——這是「我覺得自己很糟」的訊號,該被解圍',
+        '家長壓低聲音、表情無奈、不斷拉住孩子——代表這位家長已經筋疲力盡,需要的不是建議而是支援',
+        '客戶帶著明顯比一般情境困難的對象(過動兒、失智長輩、行動不便者)——這位陪伴者通常比你看到的更累'
+      ],
+      steps: [
+        { title: '先觀察 1-2 分鐘,不要急著介入', desc: '陳渼媛先在吧檯靜靜觀察,確認小妞妞的狀況不是一時的興奮而是持續模式,才走過去。倉促介入會被解讀為干涉。' },
+        { title: '用「徵詢」而非「指示」開啟對話', desc: '陳渼媛說的是「小妞妞放心交給我嗎?」——把選擇權留給媽媽。不是「我來管你的孩子」,而是「我可以幫你嗎?」。這個語氣差異是天差地別的。' },
+        { title: '直接動手做,不要等對方反應', desc: '陳渼媛說完不等李小姐回應就轉身去吧檯準備吐司材料。因為李小姐當下太疲憊,正常會推辭「不用了不好意思」——直接做了她反而會接受。但這需要事先看清「她推辭是禮貌,不是真心拒絕」。' },
+        { title: '把活動設計成「孩子覺得有趣 + 家長能放鬆」', desc: '做吐司不只是孩子有事做,還有兩個關鍵效果:(1) 媽媽終於能坐下來;(2) 媽媽可以從旁看見孩子被善待,感受被支持。一石二鳥的活動,才能真正解決問題。' },
+        { title: '結尾留下「下次見面的伏筆」', desc: '陳渼媛說「下次如果還有再回廠可以再帶小妞妞過來」——讓這次的溫暖不只是單次,而是建立持續關係的起點。' }
+      ],
+      apply: [
+        '客戶帶幼兒、過動兒、特殊需求孩子來廠',
+        '客戶帶長輩、失智者來廠',
+        '客戶情緒明顯緊繃(剛吵架、剛從工作中抽身、生理期、考試期間)',
+        '客戶因等候時間長而開始煩躁——找個「分散注意力的活動」(咖啡 + 雜誌、簡單的紀念品 DIY)',
+        '客休室出現「干擾其他客戶」的狀況——用轉換而不是責備來解決'
+      ],
+      pitfalls: [
+        '直接糾正孩子「不可以這樣喔」——傷害的是媽媽的自尊,不是孩子',
+        '對家長說「您要管好孩子」——這句話會讓媽媽崩潰,從此不會再回來',
+        '直接拉開孩子或用嚴肅表情——對過動兒可能引發更激烈反應',
+        '把這套變成 SOP「每個帶小孩來的都做吐司」——刻意執行就失去溫度',
+        '事後跟同事抱怨「今天客人小孩好難搞」——這代表你內心其實沒把對方當人,只是表面服務'
+      ]
+    }
   },
   'service2025_ni': {
     text: '倪宇農在 22:50 拖車抵達後,看到車主行李滿滿打算去租共享機車回家,於是「拿起電話吵醒服務廠主管報備後」開代步車載他回家。這個流程最關鍵的細節是什麼?',
@@ -3597,7 +4221,40 @@ const QUESTIONS_PER_CASE = {
       '應該收取代駕費用反映時間成本'
     ],
     answer: 1,
-    explain: '個人的善意如果不進入體系,只會是「曇花一現」;當員工知道「報備就會被支持」,Human Touch 才能成為這家服務廠的常態。倪宇農半夜願意吵醒主管報備的舉動,代表這家服務廠的文化:做正確的事不會被責備,反而會被支持。'
+    explain: '個人的善意如果不進入體系,只會是「曇花一現」;當員工知道「報備就會被支持」,Human Touch 才能成為這家服務廠的常態。倪宇農半夜願意吵醒主管報備的舉動,代表這家服務廠的文化:做正確的事不會被責備,反而會被支持。',
+    playbook: {
+      pillars: [
+        { key: 'simplifying', strength: 'primary', note: '車主面對的是「連假前夜+排氣管掉+太太小孩已搭計程車先回+一堆露營行李+晚上 11 點」——對他而言,「怎麼回家」是當下最棘手的問題。倪宇農一句「上車吧,我載你回家」直接「為顧客節省心力,代客戶處理他能承擔的事」——這就是 SIMPLIFYING 的最佳示範:把客戶的爛攤子拿過來自己扛。' },
+        { key: 'human', strength: 'secondary', note: '半夜 11 點,服務廠員工本應下班——但倪宇農「把車主當朋友看,而不是業務時間結束的陌生人」。他注意到車主嘴上說「沒關係我自己租機車」其實是客氣,而行李、疲憊、深夜的處境都在訴說「真的好需要幫忙」。看穿這層客氣,是 HUMAN 的能力。' }
+      ],
+      core: '系統性的多走一哩路——個人的善意要進入組織流程,才能持續而非偶然。倪宇農做的不只是載一個客戶回家,而是示範了一條「員工願意付出+主管支持員工+公司賦予彈性」的文化路徑。',
+      signals: [
+        '客戶嘴上說「不好意思啦不用麻煩」但行為(行李、疲憊、孤立無援)告訴你他真的需要',
+        '客戶處於「正常服務範圍以外」的時間(深夜、清晨、假日)——這時的協助價值最大,也最容易被記住',
+        '客戶面對「服務廠完成後但車主這邊還沒解決」的灰色地帶——拖車到了、車收了,但客戶呢?',
+        '客戶有「不便用標準方案處理」的物品(露營裝備、嬰兒推車、寵物、大量行李)'
+      ],
+      steps: [
+        { title: '先看見客戶在「服務範圍之外」的困境', desc: '倪宇農注意到的不是「車修好了沒」,而是「車主這個人接下來怎麼辦」。當你只想著「我的工作做完了」就會錯過真正能展現價值的時刻。' },
+        { title: '直接報備主管,進入體系而非個人擅作', desc: '「我立刻拿起電話吵醒服務廠主管與他報備」——這個動作是這個案例的精髓。即使是半夜也要報備,因為:(1) 用代步車載人是公司資源,要走程序;(2) 員工自己也需要被保護,出狀況時公司知道;(3) 這份善意才能變成「下次別人也可以這樣做」的範例。' },
+        { title: '識破客戶的「禮貌性推辭」,但用客戶會接受的方式收尾', desc: '車主說「這摩托車應該可以不要勞煩」——倪宇農沒爭辯,而是「拿著鑰匙打開車門後說上車吧」。動作勝過語言,讓客戶在被照顧的當下不必為「接受幫助」而尷尬。' },
+        { title: '不要求回報,但接受回報', desc: '隔天車主帶冰飲回廠謝謝同仁——這份回報是自然的、是客戶想表達的,接受它就好。不要主動暗示「不用客氣啦」這種反而把氣氛搞尷尬的話。' }
+      ],
+      apply: [
+        '車主在非營業時間(深夜、假日、連假)發生緊急狀況',
+        '車主車況需要長時間維修,但他眼前還有立即的交通/行程需求',
+        '車主從外縣市拖車回來,人在你的服務廠所在地完全沒交通工具',
+        '車主帶著大量物品(剛出國回來、剛搬家、剛買大型物品)無法用簡單交通工具離廠',
+        '車主帶長輩、幼兒、孕婦或行動不便者,標準的「自己叫計程車」對他們是負擔'
+      ],
+      pitfalls: [
+        '私下幫忙不報備——個人英雄主義反而傷害組織文化,出狀況時公司無法保護你',
+        '報備時用「請示」而非「告知」——例如「主管要不要這樣做?」會給主管難題;應該說「我打算這樣做,跟你報備」',
+        '把這份服務變成「我加班幫了你」的功勞展演——對客戶要輕描淡寫「沒事啦,順路」',
+        '事後跟其他客戶炫耀「我曾經半夜載車主回家喔」——這樣的話傳到原車主耳裡會很傷',
+        '誤把「破例服務」當成「以後都要這樣」——倪宇農做的是判斷後的特殊處理,不是新的服務標準'
+      ]
+    }
   },
   'service2025_lin_pai': {
     text: '當非 SKODA 品牌的車主走進來求助,北投廠的同仁回應「好,你先別急,我們過去看看怎麼幫你」,而不是「這不是我們品牌的車,無法幫忙」。這個選擇背後最深的品牌邏輯是?',
@@ -3608,7 +4265,40 @@ const QUESTIONS_PER_CASE = {
       '只是因為當時剛好沒事可做'
     ],
     answer: 1,
-    explain: '案例中車主原本只是「抱著試試看的心態」,因為旁邊的 A 品牌已經拒絕她了。當她聽到「好,你先別急」這句話時的反應,以及最後「她有換車念頭時她決不會忘記 Skoda 北投廠」的承諾——都證明了:當你把人當人看,而非把客戶分等級,品牌就有了真正的競爭力。技師雨中跪地、同仁撐傘的畫面,更是這個精神的具體化。'
+    explain: '案例中車主原本只是「抱著試試看的心態」,因為旁邊的 A 品牌已經拒絕她了。當她聽到「好,你先別急」這句話時的反應,以及最後「她有換車念頭時她決不會忘記 Skoda 北投廠」的承諾——都證明了:當你把人當人看,而非把客戶分等級,品牌就有了真正的競爭力。技師雨中跪地、同仁撐傘的畫面,更是這個精神的具體化。',
+    playbook: {
+      pillars: [
+        { key: 'human', strength: 'primary', note: '「眼前是一位在路上無助的人」——這就是 HUMAN 的最高定義。北投廠把品牌歸屬當成「之後再說的事」,把人的處境當成「現在最重要的事」。技師在雨中跪地、另一位同仁撐傘——這個畫面之所以動人,是因為它證明了 SKODA 員工真的「不把人分等級」。隔壁 A 品牌做的是「歸屬判定」,SKODA 做的是「人」的判定。' },
+        { key: 'surprising', strength: 'secondary', note: '車主原本只是「抱著試試看的心態」,預期會被第二次拒絕——結果迎面而來的是「好,你先別急,我們過去看看怎麼幫你」。這份反差,就是 SURPRISING 的本質:不是物質上的驚喜,而是「世界比我以為的還善良」的驚喜。這種驚喜會被記一輩子,也是這位車主說「她決不會忘記 Skoda 北投廠」的原因。' }
+      ],
+      core: '把「人」放在「客戶歸屬」之上——當外部需要幫助的人來到面前,先處理人的處境,再決定要不要進入商業關係。最強的品牌行銷,往往發生在你沒在做行銷的時候。',
+      signals: [
+        '不是 SKODA 車主的人來求助——加油站、路邊、隔壁店家',
+        '對方已經被別人拒絕過——他臉上的不安、低聲下氣、「抱著試試看」的語氣',
+        '對方的狀況有「立即危險性」(車輛無法行駛、雨中、夜間、帶幼兒等)——這時拒絕的代價是道德的,不只是商業的',
+        '對方的問題你「能做」但「沒義務做」——這正是展現品牌價值的最好時機'
+      ],
+      steps: [
+        { title: '第一句話不要說「不是我們品牌」', desc: '北投廠第一句話是「好,你先別急,我們過去看看怎麼幫你」——這句話的力量在於它把「資格判定」延後了。先解決「人」的不安,再處理技術問題。練習這句話成為反射動作:「好,我先看看狀況。」' },
+        { title: '即使不收費也要展現專業,不要敷衍', desc: '雨中跪地、撐傘、進廠升頂高機、詳細說明——北投廠的處理沒有因為「這不是客戶」就草草了事。如果只是隨便幫一下,反而會讓客戶覺得「果然 SKODA 也是看客戶分等級」,完全失去 Human Touch 的精神。' },
+        { title: '婉拒對方的付費表達,但接受他的善意表達', desc: '車主主張要付費,北投廠拒絕——這個拒絕是對的,因為收錢就把「無私的善意」變成「服務交易」,破壞了整件事的純度。但車主送飲料來,接受——這是客戶想表達感謝的方式,讓他表達。' },
+        { title: '事後不主動聯絡,留下選擇權給對方', desc: '北投廠沒有跟車主要 Line、沒有事後傳訊息「下次保養可以來我們這裡喔」。讓對方在自己想到的時候自己回來,而不是被推銷感壓住。' }
+      ],
+      apply: [
+        '非 SKODA 車主進廠求助(故障、緊急狀況、迷路問路)',
+        '路邊看到任何品牌車輛拋錨需要幫忙',
+        '隔壁店家、加油站、鄰近商家的緊急求助',
+        '社區或路上有人發生意外、車輛卡住、需要短暫援助',
+        'SKODA 車主介紹的非車主朋友(例如朋友的車有問題)來諮詢'
+      ],
+      pitfalls: [
+        '幫了忙但事後拼命發名片、Line 對方、推銷換車——這會把善意瞬間變調為招攬',
+        '主管事後問「為什麼幫非車主?浪費資源」——這代表這家服務廠的文化還沒到位,Human Touch 變不了常態',
+        '只在「對方看起來像潛在客戶」時才幫忙——年輕情侶幫忙,看起來很窮的就拒絕,這完全違背精神',
+        '幫的過程草率敷衍——「反正不是我們客戶」的心態會讓客戶感受到,反而比拒絕更傷品牌',
+        '事後在社群媒體 PO 文「我們連別牌都幫忙喔」——這把善行展演化,失去靈魂'
+      ]
+    }
   },
   'sales2024_chen': {
     text: '陳奕帆原本以為偉倫是「三師職業,會在意品牌形象、希望豪華進口車」。試乘時看到他擦汗顫抖才恍然大悟。這個誤判過程對銷售最大的教訓是?',
@@ -3619,7 +4309,41 @@ const QUESTIONS_PER_CASE = {
       '應該先問清楚購車預算再推薦'
     ],
     answer: 1,
-    explain: '「醫師=愛豪車」「年輕人=要省油」「女性=要好停車」這類標籤推測,往往讓業務看不見眼前真正的人。陳奕帆學到的是:放下假設,用眼睛看當下的客戶在告訴你什麼。後續她以「台灣交通複雜」為由鼓勵駕訓,也是一種「為客戶保留尊嚴」的高情商做法。'
+    explain: '「醫師=愛豪車」「年輕人=要省油」「女性=要好停車」這類標籤推測,往往讓業務看不見眼前真正的人。陳奕帆學到的是:放下假設,用眼睛看當下的客戶在告訴你什麼。後續她以「台灣交通複雜」為由鼓勵駕訓,也是一種「為客戶保留尊嚴」的高情商做法。',
+    playbook: {
+      pillars: [
+        { key: 'human', strength: 'primary', note: '陳奕帆放下「三師客戶 = 愛豪車」的刻板印象,真正用眼睛看眼前這位緊張到擦汗、雙手顫抖的偉倫——這就是 HUMAN 的核心:「把每位顧客當獨立個體看待,而不是套用標籤」。更高的境界是:她以「台灣交通複雜」為由幫客戶找駕訓班,完全沒戳破他「不熟悉左駕」的真實困境,守護了客戶的尊嚴。' },
+        { key: 'simplifying', strength: 'secondary', note: '客戶面對的真實困境是「我不會在台灣開車,但又必須通勤」——這是個情緒+技能+面子的複雜難題。陳奕帆主動為他找駕訓班、陪他去報名——這就是「為顧客節省心力、主動承擔不屬於自己的責任」。她把「不知道從何下手」變成「跟著我做這幾步就好」。' }
+      ],
+      core: '放下標籤,讀懂身體語言——客戶的真實需求,常常藏在他們不好意思說出口的「能力缺口」與「面子問題」之間。業務的價值不只是賣車,而是找到「擋住客戶買車的隱形障礙」並幫他拆掉。',
+      signals: [
+        '客戶試乘時的身體訊號——擦汗、握方向盤的手在抖、煞車猶豫、轉彎過慢',
+        '客戶對「明顯該興奮的點」反應冷淡——例如新車試乘卻面無表情、問規格沒興趣、問配備興趣缺缺',
+        '客戶的背景與你預期的「典型客戶」有落差——外籍、新手、長者、剛康復、剛失去、剛換職業',
+        '客戶嘴上說「沒問題」但行為遲疑——這時候要追問的是「擔心什麼」而不是「為什麼不買」'
+      ],
+      steps: [
+        { title: '進來客戶不要先套用「身份標籤」,先當作「沒見過的人」', desc: '陳奕帆原本以為三師會愛豪車——這個推測差點讓她錯失偉倫。練習「看人不看身份」,前 10 分鐘只是聊天觀察,不要把他放進你的客戶分類抽屜。' },
+        { title: '試乘時觀察的不只是「他開得怎樣」,而是「他開車時是什麼狀態」', desc: '陳奕帆看的是偉倫「擦汗、手抖」的身體訊號——這比他開車技術更重要。專業業務看「人」,新手業務看「車」。' },
+        { title: '當你發現客戶有「隱形障礙」時,用「為他保留面子」的方式提出解決方案', desc: '陳奕帆沒有說「你不會開吧?去學一下啦」——她說的是「台灣交通真的很複雜」。這個說法把問題的源頭從「客戶不會」改成「環境很難」,讓客戶不必承認弱點就能接受幫忙。這是高情商的關鍵。' },
+        { title: '陪伴客戶跨過困難,不要只給建議就抽身', desc: '陳奕帆陪偉倫去駕訓班報名、課程後又安排一次試乘做「驗收」——這份陪伴超越業務職責,讓客戶感受到「我不只是被推銷,我是被支持」。' },
+        { title: '在客戶準備好之前,不要急著要訂單', desc: '一個多月的駕訓班期間,陳奕帆是「關心練習狀況」而非「催促下訂」。耐心讓客戶在自己準備好的時刻下決定,而不是被壓力推著走。' }
+      ],
+      apply: [
+        '外籍客戶、移居者、剛回國的台僑',
+        '長期沒開車的客戶(剛康復、長期通勤族剛開始要自駕)',
+        '剛拿駕照的新手、剛換手排/自排駕駛經驗的客戶',
+        '客戶買車是「人生第一次自己開車」(過去都是別人載)',
+        '客戶有特殊身體狀況(視力、聽力、運動傷害)但不好意思直說'
+      ],
+      pitfalls: [
+        '用「您不是醫師嗎?應該買豪華進口車吧」這種標籤式推銷——讓客戶感覺被分類而非被理解',
+        '看到客戶試乘表現差就直接放棄——「這客戶大概不會買啦」,錯失真正幫他解決問題的機會',
+        '直接點破客戶的弱點「您是不是左駕不太會開?」——傷害自尊,客戶會逃走',
+        '幫客戶找解決方案後就消失,等他自己處理——陪伴是這套方法的精髓,不能只給建議',
+        '把這次成功歸因於「我多用心」——其實核心是「我放下了刻板印象」,下次遇到不同類型客戶仍要重新觀察'
+      ]
+    }
   },
   'service2024_meiyuan': {
     text: '美湲蓋毯子時,並不是被告知「要這樣做」,而是出於「我穿薄外套都覺得需要保暖,更何況他在沙發上睡著」的同理推論。這對 SOP 制定者最重要的啟示是?',
@@ -3630,7 +4354,41 @@ const QUESTIONS_PER_CASE = {
       '應該只服務男性車主,避免誤會'
     ],
     answer: 1,
-    explain: 'SOP 規範的是「最低標準」,但 Human Touch 是「最高標準」。把所有可能性寫進 SOP 不切實際——更有效的做法是培養員工的同理心,讓他們在沒被告知的情境下也能做出溫暖判斷。陳渼媛把這個案例宣揚為「Human Touch 不是狹隘到車子上的維修,而是廣泛到超出車主預期的任何一個服務行為」,正是這個精神的總結。'
+    explain: 'SOP 規範的是「最低標準」,但 Human Touch 是「最高標準」。把所有可能性寫進 SOP 不切實際——更有效的做法是培養員工的同理心,讓他們在沒被告知的情境下也能做出溫暖判斷。陳渼媛把這個案例宣揚為「Human Touch 不是狹隘到車子上的維修,而是廣泛到超出車主預期的任何一個服務行為」,正是這個精神的總結。',
+    playbook: {
+      pillars: [
+        { key: 'human', strength: 'primary', note: '美湲蓋毯子這個動作背後的關鍵句是:「我穿薄外套都覺得需要保暖,更何況他在沙發上睡著了」——這就是 HUMAN 的最高境界:「同理心」+「以己度人」。她不是執行 SOP,而是把車主當成自己會關心的家人,主動展現關懷,不等對方開口。這正是行為模型中的「要有同理心、展現關心、讓事情變得個人化」。' },
+        { key: 'surprising', strength: 'secondary', note: '車主來保養,預期的服務範圍是「有咖啡、有 Wi-Fi、有舒適座位」——絕對沒預期「我睡著的時候有人會幫我蓋毯子」。這份小小的、超出標準範圍的關懷,正是行為模型中強調的「在顧客服務流程之外加入出乎意料的貼心驚喜」。SURPRISING 不一定是大手筆,有時候就是一條毯子。' }
+      ],
+      core: '把客休室當成「車主的客廳」,而不是「等候區」——當服務空間的隱喻變了,員工的行為自然就會改變。所有溫度服務的源頭,都是「在這個空間裡,我把對方當什麼?」',
+      signals: [
+        '車主在客休室「不像在等待,而像在休息」——閉眼、滑手機很久、坐姿放鬆',
+        '車主睡著了——這代表他真的累了,而且他願意在這空間放下警戒,這份信任值得被回報',
+        '車休室冷氣很強,而車主穿著薄衣',
+        '車主明顯帶著疲憊感(剛下班、長途駕駛來、帶幼兒奔波後)'
+      ],
+      steps: [
+        { title: '把「客休室」在心裡重新定義為「客戶家裡的客廳」', desc: '經理問美湲時,她的回答是「客休室就像是車主回家後的客廳」——這個比喻改變了整個服務的層次。當你把空間當成「客廳」,你自然會留意溫度、燈光、聲音、舒適度,而不只是檢查座位有沒有坐滿。' },
+        { title: '練習「以己度人」的反射動作', desc: '美湲說「我穿薄外套都覺得需要保暖」——這是把「我自己現在的感受」直接投射到客戶身上的能力。練習問自己:「如果我是現在睡在這沙發上的人,我會需要什麼?」答案通常很直接。' },
+        { title: '主動行動,不等客戶開口', desc: '車主睡著了不會說「請給我毯子」,他根本不知道自己需要——美湲是先看見、再行動,沒等任何指示。Human Touch 是「預先察覺並回應顧客需求」,而不是「等他要求才反應」。' },
+        { title: '在行動中保留客戶尊嚴', desc: '美湲蓋毯子的方式是輕柔的、不吵醒客戶的——這份「不打擾」很重要。如果蓋毯子時還順便把客戶搖醒「先生先生我幫你蓋毯子喔」就完全失去意義了。最好的服務是「客戶醒來時,世界比他睡著時更溫暖一點」。' },
+        { title: '把這個經驗內化為「文化」而不是「規定」', desc: '經理的關鍵動作是事後在會議上把這個案例宣揚出來——但不是寫成「凡車主睡著者一律蓋毯子」的 SOP,而是傳遞「客休室是客廳」的精神。文化是讓員工有判斷力,SOP 是規定員工做什麼。' }
+      ],
+      apply: [
+        '客休室冷氣強,客戶看起來冷的時候',
+        '客戶長時間等候疲憊不堪——主動詢問需要什麼飲品/點心',
+        '客戶帶幼兒等很久——找一些可以分散孩子注意力的活動',
+        '客戶看起來在處理工作但網路不順——主動詢問需不需要協助',
+        '車主帶長輩進客休室——多注意座位舒適度、溫度、無障礙動線'
+      ],
+      pitfalls: [
+        '把這套寫成 SOP「車主睡著一律蓋毯子」——失去同理判斷的彈性,客戶反而會覺得被打擾',
+        '蓋毯子的時候特意走過去刷存在感「先生我幫您蓋了喔」——破壞了「無聲服務」的純度',
+        '事後告訴客戶「您剛剛睡著我幫您蓋毯子喔」邀功——讓溫度變成業績話術',
+        '只在「看起來像 VIP」的客戶睡著時才會蓋——這代表你的同理心是有等級的',
+        '誤把員工自發的善意當作理所當然,沒有給予肯定——美湲值得被經理當眾鼓掌,這份肯定才能讓文化傳下去'
+      ]
+    }
   },
   'sales2024_zheng': {
     text: '鄭捷韓為陳先生家行動不便的孩子訂製一張「上車小梯子」,陳氏夫婦看到當場爆哭。從這個案例最值得思考的銷售心法是?',
@@ -3641,7 +4399,40 @@ const QUESTIONS_PER_CASE = {
       '行動不便的孩子應該由父母自己想辦法'
     ],
     answer: 1,
-    explain: '陳氏夫婦在購車過程中應該不會直接提出「希望業務幫我們解決孩子上下車困難」這種要求,因為這超出業務的職責。鄭捷韓「一直有在思考要如何讓他們方便上下車」,代表他把客戶的處境放在心裡,並用一張小梯子把同理心變成具體的物品——這比千言萬語都打動人。「禮輕情意重」的關鍵不是禮物本身,而是它證明了「我看見了你沒說的需求」。'
+    explain: '陳氏夫婦在購車過程中應該不會直接提出「希望業務幫我們解決孩子上下車困難」這種要求,因為這超出業務的職責。鄭捷韓「一直有在思考要如何讓他們方便上下車」,代表他把客戶的處境放在心裡,並用一張小梯子把同理心變成具體的物品——這比千言萬語都打動人。「禮輕情意重」的關鍵不是禮物本身,而是它證明了「我看見了你沒說的需求」。',
+    playbook: {
+      pillars: [
+        { key: 'surprising', strength: 'primary', note: '陳式夫婦預期的交車流程是「鑰匙、合約、保固卡、開車回家」——絕對沒料到「會收到一張為我們孩子量身訂製的小梯子」。這就是「啟發生活、多走一哩路」的最佳範例。SURPRISING 不一定是大禮物,而是「客戶會永遠記得的那一刻」——陳氏夫婦爆哭、孩子上車的瞬間,這個畫面永遠刻在這家人心裡。' },
+        { key: 'human', strength: 'secondary', note: '鄭捷韓做這張梯子的起點是「同理心」——他看見「客戶小朋友行動不方便」這個事實,並把它記在心裡。陳氏夫婦在購車流程中應該不會主動說「請幫我們解決孩子上下車問題」(因為這超出業務職責),但鄭捷韓主動讀懂了這個沒說出口的需要。這就是 HUMAN:把客戶當大家庭一員,不是當訂單。' }
+      ],
+      core: '把客戶沒說出口的「家庭困境」變成具體的禮物——禮輕情意重的精髓不是禮物便宜,而是「這份禮物只屬於這個家庭」。客製化的不是物品,是看見對方處境的眼光。',
+      signals: [
+        '客戶家庭有特殊需求(行動不便、長輩、嬰幼兒、寵物、輪椅)——這些需求他們通常不會主動提',
+        '客戶在試車或聊天時不經意提到「我家小朋友不方便」「我媽腰不好」「我先生膝蓋舊傷」——這些都是寶貴的線索',
+        '客戶選車時對「車身高度、後座空間、上下車便利性」異常在意——背後通常有人需要被照顧',
+        '客戶常常需要載特定成員出行(每週帶長輩看醫生、接送行動不便的孩子)——這些日常困擾就是禮物的方向'
+      ],
+      steps: [
+        { title: '把客戶在聊天中提到的「家庭困境」記在筆記本上', desc: '鄭捷韓在介紹車的過程中聽到「小朋友行動不方便」這個線索,然後一直思考解法。練習做一個「客戶家庭備忘錄」:不是記他的職業、收入,而是記他關心誰、誰需要被照顧、家裡有什麼麻煩。' },
+        { title: '不要急著推銷配件,先想「客戶真正困擾的是什麼」', desc: '鄭捷韓沒有跟客戶推「電動踏板」或其他高價配件——他想的是「最簡單的解法是什麼」。一張小梯子幾百塊,但它真正解決了問題。Simply Clever 的核心精神:用最直接的方法解決最真實的問題。' },
+        { title: '把禮物留到「最有戲劇感」的時刻揭曉', desc: '鄭捷韓選在交車最後一刻才拿出梯子——這個時間點的選擇很重要。如果一開始就送,就只是「附贈品」;留到最後揭曉,變成「驚喜的高潮」。儀式感讓禮物的意義加倍。' },
+        { title: '禮物本身不需要昂貴,但要讓客戶看出「這是專為我們做的」', desc: '陳氏夫婦爆哭的原因不是「梯子很貴」,而是「我才剛說我家孩子上下車不方便,你就做了一張梯子給我」。客製化的力量在於「我被看見了」,不在於物品價值。' }
+      ],
+      apply: [
+        '客戶家有行動不便者(輪椅、義肢、術後)——車側扶手、上車小凳、簡易斜坡',
+        '客戶常載長輩——後座扶手墊、軟靠墊、上下車輔助',
+        '客戶有嬰幼兒——專屬車牌貼、嬰兒抱枕、第一次出遊組合',
+        '客戶有寵物——後車廂寵物墊、安全帶、便當盒',
+        '客戶有特殊嗜好(露營、釣魚、單車)——對應的小工具、收納方案'
+      ],
+      pitfalls: [
+        '送的禮物跟客戶真實處境無關——例如送高級皮帶夾、品牌精品,雖然貴但客戶用不到',
+        '把客製禮物吹噓「這個我花多少錢、做多久」——重點是客戶被看見,不是業務多辛苦',
+        '把這套變成「凡買 KODIAQ RS 一律送 XX」的標準流程——失去客製化的核心',
+        '事後在團隊分享「我用一張梯子騙客戶哭」——這種把感動工具化的態度遲早會被客戶感受到',
+        '客戶沒明確說過的需求不要亂猜亂送——例如沒看到對方家有寵物就送寵物毯,反而很怪'
+      ]
+    }
   },
   'sales2024_xie_2024': {
     text: '謝維遠目睹路邊車禍時主動協助,兩週後對方主動來電購車。從這個案例對「銷售場域」最關鍵的領悟是?',
@@ -3652,7 +4443,41 @@ const QUESTIONS_PER_CASE = {
       '只有現場有業績可能性才值得停下幫忙'
     ],
     answer: 1,
-    explain: '林太太在電話裡說「決定找一個不是業務員而是一個有態度與幫助他人的心的銷售顧問」——這句話點出了 Human Touch 的核心:客戶分得出「業務員」與「有態度的人」。後續謝維遠聽到林太太想要 2506 車牌不敢說出口,飛澎湖標牌的舉動,更是把這種「聽見沒說出口的話」的能力推到極致。'
+    explain: '林太太在電話裡說「決定找一個不是業務員而是一個有態度與幫助他人的心的銷售顧問」——這句話點出了 Human Touch 的核心:客戶分得出「業務員」與「有態度的人」。後續謝維遠聽到林太太想要 2506 車牌不敢說出口,飛澎湖標牌的舉動,更是把這種「聽見沒說出口的話」的能力推到極致。',
+    playbook: {
+      pillars: [
+        { key: 'surprising', strength: 'primary', note: '客戶林太太「想選 2506 這個有意義的號碼但不敢說出口」——這份心願如果用標準流程,根本不會被注意到。謝維遠不僅聽到、還飛去澎湖標牌、用紅紙遮住車牌做儀式感——這整套就是「保持好奇心、展現勇氣、多走一哩路 (Extra mile)」的最高展現。SURPRISING 不是大手筆禮物,是「我聽到你沒說的話,並為它付出代價」。' },
+        { key: 'human', strength: 'secondary', note: '故事的起點是路邊車禍,謝維遠跟太太完全沒想著業績,而是純粹「目睹一場意外就停下來幫忙」——這就是 HUMAN 最純粹的展現。後續客戶說「決定找一個不是業務員而是有態度與幫助他人的心的銷售顧問」——這句話本身就是對 HUMAN 的最佳定義:客戶能分辨「業務員」跟「人」的差別。' }
+      ],
+      core: '聽見客戶沒說出口的話——銷售的最高境界不是回應客戶問了什麼,而是回應客戶心裡想要但不敢說的事。願意為「客戶的小心願」付出不成比例的努力,就是 SURPRISING 的本質。',
+      signals: [
+        '客戶夫妻間的「小聲對話」——你不在主題裡,但無意間聽到了某個願望、抱怨、糾結',
+        '客戶說了某件事但配偶說「隨緣就好」——這往往代表「我想要但不好意思強求」',
+        '客戶提到「以前的某個東西很有意義」——婚戒、車牌、生日、結婚紀念——這些都是情感連結點',
+        '客戶在某個細節上欲言又止——通常是因為「覺得自己要求太多」'
+      ],
+      steps: [
+        { title: '練習「耳朵要打開」,聽客戶沒對你說的話', desc: '謝維遠是在填合約時聽到「林太太跟林先生表達原車牌號碼一事」——這不是對他說的話,他完全可以裝沒聽到。但他記在心裡,改變了整件事的走向。練習在客戶分心、私下交談的時刻保持高敏感度。' },
+        { title: '不要當場戳破客戶的心願,默默記下來', desc: '謝維遠沒有當場問「林太太您想要什麼車牌?」——這樣會讓客戶尷尬,因為「我們才剛下訂,要求是不是太多了」。把心願記在心裡,後續默默處理,效果才大。' },
+        { title: '評估這份心願「值得多少代價」——通常你會願意付出超乎預期的多', desc: '謝維遠的代價是:查全省、發現只澎湖有、後天就要領牌、搭高鐵+船去澎湖領牌、前一晚還住朋友家——這些成本是他自己消化掉的。但他願意,因為客戶剛經歷車禍、願意指名找他、值得這份回報。' },
+        { title: '用儀式感讓驚喜的效果最大化', desc: '謝維遠用紅紙遮住車牌——這個小動作把「揭曉時刻」設計出來。沒有這個遮住的動作,客戶可能在停車場就直接看到車牌,驚喜被稀釋。儀式感是讓 SURPRISING 達到最大效果的關鍵。' },
+        { title: '揭曉時不要邀功,把功勞歸給客戶', desc: '謝維遠揭曉後說的是「因為你們對我服務特質的認同,讓我們今天可以結這個緣,對我來說是最大的價值」——他把功勞還給客戶。這個說法的力量在於:它讓驚喜變成「對你的回禮」,而不是「我多用心」。客戶會記得這份話一輩子。' }
+      ],
+      apply: [
+        '交車車牌的客製化(生日、紀念日、有意義的數字組合)',
+        '客戶提到的「失而復得的物品」——舊照片、舊收藏、停產的小東西',
+        '客戶口中「以前怎樣怎樣」的懷舊細節——可能是音樂、書、品牌、地點',
+        '客戶家中有「正在等待的時刻」——孩子出生、婚禮、退休、畢業',
+        '客戶剛經歷重大事件後的回流(車禍、家人離世、轉換人生階段)'
+      ],
+      pitfalls: [
+        '為了製造驚喜過度花費自己的錢——謝維遠的開銷是評估後的合理付出,不是賠本演出',
+        '把這套變成 SOP「凡客戶交車一律準備驚喜」——驚喜的本質是「為這個人」,SOP 化就失去靈魂',
+        '揭曉時拼命強調「我多辛苦」——把感動的時刻變成業務的功勞展演,客戶會反感',
+        '事後拿這件事到處宣傳「我曾經為客戶飛澎湖」——客戶會發現自己被工具化了',
+        '誤把「客戶意外指定你」當成「我天生有魅力」——其實是當天車禍時的真誠累積出來的'
+      ]
+    }
   },
   'sales2024_chenchao': {
     text: '陳俊超在斗六熱身賽第一次被婉拒簽名,在林立要關車門的霎那喊出「林立,請簽名,這是你忠誠粉絲的生日禮物,你忍心不送他嗎?」這個動作對銷售最大的啟示是?',
@@ -3663,7 +4488,41 @@ const QUESTIONS_PER_CASE = {
       '應該事先安排見面會以省去麻煩'
     ],
     answer: 1,
-    explain: '陳俊超在文中坦白寫「對我是一個有偶包情節的人來說真的有尷尬到」——這個自我揭露很重要。Human Touch 的代價有時候不是金錢,而是「自我形象的妥協」。願意為客戶的孩子放下自己的尷尬感,這種「不舒服」才是真正的禮物。客戶感受到的不是簽名球本身,而是「為了我兒子,你願意做到這個程度」。'
+    explain: '陳俊超在文中坦白寫「對我是一個有偶包情節的人來說真的有尷尬到」——這個自我揭露很重要。Human Touch 的代價有時候不是金錢,而是「自我形象的妥協」。願意為客戶的孩子放下自己的尷尬感,這種「不舒服」才是真正的禮物。客戶感受到的不是簽名球本身,而是「為了我兒子,你願意做到這個程度」。',
+    playbook: {
+      pillars: [
+        { key: 'surprising', strength: 'primary', note: '孫小姐買車的客戶旅程裡,「我兒子的生日禮物」根本不在範圍內——陳俊超主動把「業務+棒球粉絲」兩個身份結合,跑到斗六熱身賽,甚至放下面子兩度開口求簽名。這就是「保持好奇心、展現勇氣、多走一哩路」的極致版本。SURPRISING 的核心不是業務送的禮多貴,而是「業務願意為這個家庭付出多少自己的東西(時間、面子、行動)」。' },
+        { key: 'human', strength: 'secondary', note: '陳俊超在跟孫小姐聊天時聊出「兒子是林立 39 號的粉絲」——這個資訊一般業務聽過就忘了,但他記在心上,並把它升級為禮物。這就是「銘記並善用顧客的個人資訊」、「在每次服務之外持續維繫關係」的展現。HUMAN 不是只關心客戶本人,而是把整個家庭納入關懷範圍。' }
+      ],
+      core: '為客戶的家人,放下自己的舒適區——銷售有許多代價是「自己沒做過的事、不好意思的事、有點丟臉的事」。願意為客戶付出這些「面子代價」的業務,客戶會用一輩子的信任回報你。',
+      signals: [
+        '客戶在閒聊中提到「我兒子最喜歡XX」「我女兒一直想要XX」「我爸是XX迷」——這些是寶貴的禮物線索',
+        '客戶提到家人即將有重要日子(生日、考試結束、畢業、結婚)——這是 SURPRISING 介入的最佳時機',
+        '客戶的家人有「明星偶像、運動隊伍、特定品牌愛好」——這些都是可以製造驚喜的方向',
+        '客戶常常分享家人的故事——代表他重視這些連結,你做的努力他會非常感動'
+      ],
+      steps: [
+        { title: '商談中的「閒聊」其實是寶藏,記下來', desc: '陳俊超是在聊孩子個性、教育的話題中聊出「全家都愛樂天桃猿、兒子最愛 39 號林立」——這個資訊本來只是「拉近距離的閒聊」,但他把它升級為情報。練習做客戶家庭關係的記錄,不只是業績檔案。' },
+        { title: '當你發現「客戶家庭有特殊時刻」要靠近時,主動規劃驚喜', desc: '陳俊超是聽到「3/19 兒子生日要露營」這個訊息後主動想「我能不能加一點驚喜」——不是客戶要求,是業務主動規劃。「主動」是 SURPRISING 的核心。' },
+        { title: '為驚喜的執行,勇敢面對「不舒服」', desc: '陳俊超第一次被婉拒、覺得超尷尬——但他選擇再追一次。這份勇氣是禮物的真實價值所在。如果他第一次被拒就放棄,那就是普通的「業務很努力」;但他追到底,變成「業務願意為我的孩子放下面子」。' },
+        { title: '揭曉禮物時,不要讓客戶覺得自己「欠你」', desc: '陳俊超把簽名球送出後,沒有強調「我為了你跑去斗六、被拒絕、追上去」——讓孩子單純享受禮物的喜悅。如果業務一直 highlight 自己的付出,反而讓客戶心裡有負擔。' },
+        { title: '把這份服務歸因於「客戶值得」,而不是「我用心」', desc: '陳俊超在文末寫「孫小姐的購車是因為張小姐對 Skoda 品牌與我在銷售服務上的認同才會轉介紹,這也就是比回饋我一個紅包都來的有意義」——他把整個故事歸因於「客戶的信任」,而不是「我多努力」。這份歸因方式讓服務文化能傳下去。' }
+      ],
+      apply: [
+        '客戶家人有「特定偶像、運動明星、藝人」的粉絲——主動取得簽名、紀念品',
+        '客戶家人有「即將到來的重要日子」——生日、結婚、生子、考試、退休',
+        '客戶家人有「特殊嗜好」——主動找相關的小禮物或情報',
+        '客戶家人經歷困難——主動關心,而不是只關心客戶本人',
+        '介紹來的客戶——主動展現「我珍視這份信任」的具體行動'
+      ],
+      pitfalls: [
+        '把「為客戶付出」變成業務炫耀的素材——失去純粹性',
+        '只在「介紹來的客戶」才這麼用心,一般客戶就標準化處理——客戶會感受到差別待遇',
+        '送禮物時瘋狂強調自己多辛苦——讓孩子收到的不是禮物,是「我媽欠了業務一個人情」',
+        '誤把「面子代價」當成業績投資——心態功利就會在某個瞬間露餡',
+        '事後預期客戶會「特別感謝/介紹更多」——這份預期會讓你的服務變得有條件'
+      ]
+    }
   },
   'service2024_dai': {
     text: '戴禎癸的中秋假期爬山被打斷,接到車主求救後決定「從平溪開我的車過去跟你換車」。這個決策最值得思考的是什麼?',
@@ -3674,7 +4533,41 @@ const QUESTIONS_PER_CASE = {
       '中秋假期就應該拒絕客戶來電'
     ],
     answer: 1,
-    explain: '戴禎癸文中的這段話很真實:「接下來是我要心驚膽跳了,我要駕著李先生的車回到服務廠,說真的我都會害怕了更何況是車主呢?」——他把客戶會經歷的恐懼,自己承擔下來。這就是 Human Touch 的代價:不是讓客戶感覺好,而是讓自己暫時不舒服,把舒服讓給客戶。最後文中那句「但是也保住一個 Skoda 車主的安心跟信任,我真心覺得滿值得的」是真心話,不是套話。'
+    explain: '戴禎癸文中的這段話很真實:「接下來是我要心驚膽跳了,我要駕著李先生的車回到服務廠,說真的我都會害怕了更何況是車主呢?」——他把客戶會經歷的恐懼,自己承擔下來。這就是 Human Touch 的代價:不是讓客戶感覺好,而是讓自己暫時不舒服,把舒服讓給客戶。最後文中那句「但是也保住一個 Skoda 車主的安心跟信任,我真心覺得滿值得的」是真心話,不是套話。',
+    playbook: {
+      pillars: [
+        { key: 'simplifying', strength: 'primary', note: '客戶的真實困境是「車檔位燈閃 + 一家四口 + 萬里偏遠 + 親戚行程 + 中秋連假」——這是個多重壓力堆疊的情境。戴禎癸沒有照 SOP「請等拖車」,而是想出「我從平溪開過去跟你換車」這個極簡解法——直接把客戶的所有問題用一個動作解決。這就是「主動承擔責任、為顧客節省時間心力、引導至解決方案」的最高展現。SIMPLIFYING 的本質就是「把客戶的多重困境,用最直接的方式幫他清掉」。' },
+        { key: 'surprising', strength: 'secondary', note: '客戶預期的標準流程是「呼叫拖車、等很久、家人行程受影響、回家很麻煩」——絕對沒料到「業務會親自從平溪開車過來跟我換車」。這份「超乎汽車產業常規」的處理方式,就是 SURPRISING 的本質。文中李先生「從拒絕我到謝謝我的安排」的反應變化,證明這份驚喜的力量。' }
+      ],
+      core: '把客戶的麻煩變成自己的麻煩——SIMPLIFYING 的最高境界,不是讓客戶有更多選項,而是讓他不必選。當你看到客戶面對多重壓力時,願不願意把問題從他身上拿過來,放在自己身上扛?',
+      signals: [
+        '客戶遭遇「不是車本身的問題,而是車的問題引發了人生問題」(假期被打亂、行程衝突、家人受影響)',
+        '客戶卡在「兩難局面」——標準流程能解但會犧牲客戶的時間/體驗',
+        '客戶的處境離服務廠遠(外縣市、山區、偏遠地點)——這是看出「員工有沒有把客戶當朋友」的試金石',
+        '客戶嘴上說「沒關係我自己想辦法」但語氣明顯緊張——他客氣,你別當真'
+      ],
+      steps: [
+        { title: '先確認「人的安全」,再處理「車的問題」', desc: '戴禎癸接到電話第一件事是確認「他們一家都有平安了」,才談車。這個順序很重要——人安全了,客戶就有耐心聽你解決方案;人有狀況,什麼方案都聽不進去。' },
+        { title: '當標準流程(拖車)會傷害客戶體驗時,大膽提出「非標準解法」', desc: '戴禎癸沒堅持「請等拖車」,而是創造性地提出「我來跟你換車」——這需要員工有「跳出 SOP 的彈性」。Human Touch 的精神是員工要會判斷,不只是執行。' },
+        { title: '把自己的不便與焦慮,藏起來不讓客戶看到', desc: '戴禎癸從平溪下山、開車去萬里、再開故障車回廠——這一路上他自己很害怕(他在文中誠實寫出來),但對客戶他始終是「沒問題、我來處理」的姿態。把客戶該承受的恐懼,自己消化掉。' },
+        { title: '當客戶過度感謝時,輕描淡寫帶過', desc: '戴禎癸後來跟李先生說「這件事不用一直放在心上,對我們服務廠來說是一個同理的服務」——把不平凡的付出說成平凡的事。這份輕描淡寫,讓客戶不會覺得「我欠你太多」,反而能持續這份信任關係。' },
+        { title: '把這份付出歸因於「值得」,而不是「我多偉大」', desc: '戴禎癸文末說「保住一個 Skoda 車主的安心跟信任,我真心覺得滿值得的」——他用「值得」這個詞,不是「我犧牲多少」。這個語氣決定了文化能不能傳下去。' }
+      ],
+      apply: [
+        '客戶愛車在偏遠地區拋錨,標準拖車解法會嚴重影響家庭行程',
+        '客戶在連假/假期/重要行程中車輛故障——時間敏感性極高',
+        '客戶在拖車回廠後沒有交通工具回家——對應 service2025_ni 案例的精神',
+        '客戶需要長時間維修,但他人在外地、孤立無援',
+        '客戶帶長輩、幼兒、寵物受困——標準解法對他們是巨大負擔'
+      ],
+      pitfalls: [
+        '私自借公司車不報備——出事責任歸誰?應該效法 service2025_ni 倪宇農「報備後執行」',
+        '把這次破例當「以後都要這樣」——這是判斷後的特殊處理,不是新標準',
+        '事後跟客戶 highlight 自己多辛苦——「我那天爬山爬到一半下山,還開了多久的車」會讓客戶心理負擔很重',
+        '把客戶的車當「我代步用」——戴禎癸是「先試一公里確認車況」才開,謹慎不冒險',
+        '誤判客戶的困境程度而過度服務——例如客戶其實住附近、有家人能載,你還硬要送他回家就尷尬了'
+      ]
+    }
   },
   'service2024_meiyuan_milktea': {
     text: '陳渼媛察覺孕婦想喝奶茶但不好意思說,主動客製了一杯。文中她說「我終於敲到她想要但是又不好意思說的食物了」。這個能力的本質是什麼?',
@@ -3685,7 +4578,42 @@ const QUESTIONS_PER_CASE = {
       '應該在客休室提供更多飲品選項'
     ],
     answer: 1,
-    explain: '陳渼媛的關鍵不是「她有奶茶」,而是「她當過孕婦」。她記得當時自己想吃東西卻不好說的感覺——這份記憶成為她讀懂這位孕婦的雷達。Human Touch 的深層基礎是:每個人都曾脆弱過,把那段記憶留著,就有了同理別人的能力。同時客戶問「我怎會這樣詢問她需要什麼飲品?」的回應「我曾經也是孕婦啊!」是這個案例最動人的句子。'
+    explain: '陳渼媛的關鍵不是「她有奶茶」,而是「她當過孕婦」。她記得當時自己想吃東西卻不好說的感覺——這份記憶成為她讀懂這位孕婦的雷達。Human Touch 的深層基礎是:每個人都曾脆弱過,把那段記憶留著,就有了同理別人的能力。同時客戶問「我怎會這樣詢問她需要什麼飲品?」的回應「我曾經也是孕婦啊!」是這個案例最動人的句子。',
+    playbook: {
+      pillars: [
+        { key: 'human', strength: 'primary', note: '陳渼媛的關鍵不是「她剛好有奶茶」,而是她「曾經當過孕婦,所以讀得懂這位孕婦的不舒服」——這就是 HUMAN 最深的展現:用自己曾經的脆弱,去同理眼前人的脆弱。客戶問「你怎會這樣問」時,她說「我曾經也是孕婦啊」——這句話比任何 SOP 都更有力量。她不是執行服務,她是「以一個曾經懂過的人」去服務。' },
+        { key: 'surprising', strength: 'secondary', note: '客戶在客休室預期的飲品選項是「咖啡/果汁/汽水」——絕對沒料到「會為我客製一杯溫熱奶茶」。更驚喜的是,這杯奶茶不是從外送買的,是用「品牌玻璃杯+紅茶包+員工私藏的高鈣牛奶」現場調的——這份「自己動手為你做」的層次,遠遠超出客戶對汽車保養廠的期待。SURPRISING 的本質就是「我為你做了一個沒人會想到要做的東西」。' }
+      ],
+      core: '把自己曾經的脆弱,變成同理客戶的雷達——服務客戶的能力,常常源於你自己經歷過什麼。員工的生命經驗不是包袱,是寶藏。',
+      signals: [
+        '孕婦、產後新手媽媽、哺乳期女性——她們對飲食有特殊敏感,但通常不好意思直說',
+        '生病中的客戶(嘴破、感冒、剛手術)——標準飲品她們可能都不適合',
+        '客戶看起來不舒服、表情緊繃、坐姿不適——但客氣地說「不用」',
+        '客戶反覆起身走動、明顯坐立難安——通常是身體有不適但不想麻煩人',
+        '客戶帶著明顯狀態(扶腰、揉肚子、扶頭)的肢體訊號'
+      ],
+      steps: [
+        { title: '當客戶第一次冷淡推辭時,不要當真——觀察 10-20 分鐘再判斷', desc: '陳渼媛第一次問被「冷冷回答」拒絕,但她沒放棄,而是持續觀察 20 分鐘確認客戶真的不舒服才再次靠近。第一次的「不用」常常是禮貌,不是真心。' },
+        { title: '提問方式從「需要什麼飲品嗎?」升級到「特別想吃/喝什麼嗎?我做的到的我幫你」', desc: '前一個問法的答案範圍是「咖啡/茶」,後一個問法的答案範圍是「任何東西」。問法決定客戶敢說的範圍,陳渼媛升級問法後孕婦才敢說「奶茶」這個原本怕被嫌麻煩的願望。' },
+        { title: '當客戶說出「客製化請求」時,立刻說 YES,不要說「我看看可以幫您訂外送嗎」', desc: '陳渼媛回的是「沒關係不用叫外送,我客製一杯給妳」——這句話的力量在於「我親自為你做」。叫外送是花錢,親手做是花心,客戶感受到的層次完全不同。' },
+        { title: '在製作時加入「為這位客戶量身的細節」', desc: '陳渼媛用「品牌玻璃杯」(儀式感)、「微微茶味」(考慮咖啡因)、「私藏的高鈣牛奶」(對孕婦好)、「微糖」(客戶要求)——每個選擇都針對這位孕婦。客製化的不是物品,是思考方式。' },
+        { title: '事後解釋「為什麼是我」時,用人生經驗而非業務話術', desc: '陳渼媛說的是「我曾經也是孕婦啊!所以我懂啊!」——這句話讓服務的層次從「員工貼心」升級到「人對人的同理」。客戶記得的不是奶茶,是「她懂我」的瞬間。' }
+      ],
+      apply: [
+        '孕婦、新手媽媽、哺乳期女性',
+        '帶幼兒的家長(自己沒空吃喝、明顯餓著)',
+        '生病、術後恢復、過敏體質、特殊飲食限制的客戶',
+        '長者(可能需要常溫、需要軟食、需要保暖)',
+        '看起來情緒低落或剛經歷重大事件的客戶——一杯溫熱飲品能傳遞「我看見你」'
+      ],
+      pitfalls: [
+        '把這套變成 SOP「凡孕婦一律送奶茶」——失去個別化的精神,變成形式化',
+        '當客戶第一次推辭就放棄——大部分有真實需求的客戶第一次都會客氣',
+        '客製過程中強調「我用了私藏的高級牛奶喔」——把純粹的關懷變成業務話術,毀掉所有用心',
+        '事後在團隊宣傳「我用一杯奶茶換到客戶感動」——把感動工具化,失去純度',
+        '不適合的同理推論——例如自己沒當過孕婦卻強行同理,可能反而推測錯方向'
+      ]
+    }
   },
   'sales2023_xie': {
     text: '當秦媽媽因秦爸爸過世希望換成爸爸生日的車牌,謝維遠回答「錢是小事,我處理」並延後交車去苗栗標牌。從風險與成本角度,這個決定有什麼深層的智慧?',
@@ -3696,7 +4624,42 @@ const QUESTIONS_PER_CASE = {
       '他純粹是衝動沒有考慮成本'
     ],
     answer: 1,
-    explain: '理性業務會算:標牌成本 + 延後交車的時間損失 vs. 客戶介紹的期望值。但謝維遠的計算是另一個維度——「這台車對客戶而言代表什麼」。當你把客戶當人,計算方式就會改變。同樣道理也讓他願意花一個月時間找十幾年前停產的靠腰組——這是「把客戶閒談當正事聽」的能力。'
+    explain: '理性業務會算:標牌成本 + 延後交車的時間損失 vs. 客戶介紹的期望值。但謝維遠的計算是另一個維度——「這台車對客戶而言代表什麼」。當你把客戶當人,計算方式就會改變。同樣道理也讓他願意花一個月時間找十幾年前停產的靠腰組——這是「把客戶閒談當正事聽」的能力。',
+    playbook: {
+      pillars: [
+        { key: 'human', strength: 'primary', note: '謝維遠的核心動作不是「賣車」,是「陪一家人完成最後一段旅程」。秦爸爸過世、奶奶坐輪椅、這可能是秦媽媽人生最後一台車——他理解這是一個家庭的告別與重新出發。「把客戶當大家庭一員」這句話,在這個案例裡是「真的把這家人當自己親戚在對待」。試乘車到府讓奶奶試坐、一起吃飯、用心找十幾年前停產的靠腰組——每一步都是 HUMAN 的具體實踐。' },
+        { key: 'surprising', strength: 'primary', note: '兩個層次的驚喜都做滿了:(1) 找到全省早已停產的舊款靠腰組——超出客戶「換新的就好」的預期,直接幫她保留下來;(2) 為過世的秦爸爸標到生日號碼 0121——客戶根本不敢期待這個願望能實現。SURPRISING 的最高境界是「我做的事大到讓你覺得不可思議,卻又樸實到不像在邀功」。腸胃炎還咬牙搭高鐵到苗栗,這份「展現勇氣、多走好幾哩路」的精神,是 SURPRISING 的範本。' }
+      ],
+      core: '把客戶的閒談當正事聽,把客戶的願望當自己的願望——當客戶經歷生命的轉折(過世、退休、生大病、最後一台車),業務若能升級為「陪伴者」,銷售就跨進了一個全新的層次。',
+      signals: [
+        '客戶說「這可能是我人生最後一台車」——這句話的份量遠大於買車本身',
+        '家中有重大變故(過世、重病、離婚)——這時客戶最需要的不是業績話術,是陪伴',
+        '客戶提到某個「過去珍貴的物品」(舊款配件、紀念品、停產商品)——這是情感連結的線索',
+        '客戶夫妻間悄悄對話提到的願望(車牌號、車色、配件)——不要假裝沒聽到',
+        '長輩級客戶對細節異常在意——對他們而言每個細節都有故事'
+      ],
+      steps: [
+        { title: '在交易之外，建立「家庭關係」', desc: '謝維遠是「客氣地拜託我開試乘車到府讓奶奶試坐」開始,後來「一起在家吃了飯,吃得很飽還有手沖咖啡喝」。這個進入家庭的過程不是為了業績,是真的成為朋友。當你被當朋友看,客戶會用一輩子來回報。' },
+        { title: '聽見客戶閒談中的「不可能」,把它當任務', desc: '舊款靠腰組已經停產十幾年,一般業務會說「沒辦法,換新的吧」。謝維遠選擇了「試試看」——拍下款式、找了快一個月、透過親戚的朋友打聽到屏東工廠。這份「不放棄」的精神,正是 SURPRISING 的核心。' },
+        { title: '當客戶遇到變故,優先處理情感再處理流程', desc: '秦爸爸過世時,謝維遠第一句話是「秦媽媽錢是小事,我處理」——不是談條件、不是說需要走流程、不是談「車牌費用要多少」。先把情緒接住,讓客戶覺得「我有人可以靠」,再來處理事情。' },
+        { title: '為情感性需求,願意「不計成本」', desc: '0121 這組號碼全省都沒有,只苗栗有標牌可標。前一天腸胃炎還咬牙出發——這份「不計成本」不是衝動,是判斷後的選擇。因為謝維遠知道:對秦媽媽來說,這台車是「失去秦爸爸後的最後連結」,值得他這份代價。' },
+        { title: '在交車這個高度情感性的日子,加入「儀式感」', desc: '交車當天是母親節,謝維遠準備了蛋糕和兩束康乃馨——把交車跟節日的祝福編織在一起。Human Touch 的精髓:不要錯過任何可以加深情感連結的時刻。' }
+      ],
+      apply: [
+        '客戶遭遇家庭重大變故時的購車或交車',
+        '客戶換車是「最後一台」(高齡、健康狀況、退休)——這份「最後」要被慎重對待',
+        '客戶提到家裡有失能、長期照顧、特殊需求的成員',
+        '客戶舊車有「捨不得換掉」的配件或細節——主動處理而不是說「沒辦法啦」',
+        '交車日剛好是客戶生命中的重要日子(生日、紀念日、特別節日)——主動編入儀式感'
+      ],
+      pitfalls: [
+        '對客戶的情感性需求說「這是不可能的」、「公司沒辦法」——讓客戶感覺「跟你說也沒用」',
+        '幫忙找停產零件時抱怨「我找了多久多累」——把情感變成業務話術',
+        '客戶過世時急著確認訂單會不會取消——這種冷血會永遠毀掉關係',
+        '把這套變成「凡長者一律送康乃馨」的 SOP——標準化會失去靈魂',
+        '事後在團隊間炫耀「我有個客戶感動到不行」——把客戶最脆弱的時刻變成業務故事,品德上有瑕疵'
+      ]
+    }
   },
   'sales2023_lai': {
     text: '賴怡全幾個月來每天扶起被風吹倒的腳踏車,「從來也沒看過車主是誰」,直到某天奶奶出現指名要買車。文中說「公司主管教育服務理念是——沒有企圖的服務才是全世界最棒的感動服務」。這句話的深義是?',
@@ -3707,7 +4670,40 @@ const QUESTIONS_PER_CASE = {
       '不應該主動扶腳踏車,等被看見再行動'
     ],
     answer: 1,
-    explain: '這個案例的關鍵在「賴怡全幾個月來不知道車主是誰」——這代表他扶腳踏車不是為了「被看見」。後來奶奶出現的這個結果,如果是被預期的,案例就不感人了。Human Touch 的悖論:你必須真心無企圖,才會出現「沒企圖」的結果;一旦你以「無企圖」為策略,就已經有企圖了。賴怡全一個月聯絡不上奶奶時心裡擔心的不是訂單,而是「奶奶有發生什麼事嗎?」——這個反應證明他的關懷是真的。'
+    explain: '這個案例的關鍵在「賴怡全幾個月來不知道車主是誰」——這代表他扶腳踏車不是為了「被看見」。後來奶奶出現的這個結果,如果是被預期的,案例就不感人了。Human Touch 的悖論:你必須真心無企圖,才會出現「沒企圖」的結果;一旦你以「無企圖」為策略,就已經有企圖了。賴怡全一個月聯絡不上奶奶時心裡擔心的不是訂單,而是「奶奶有發生什麼事嗎?」——這個反應證明他的關懷是真的。',
+    playbook: {
+      pillars: [
+        { key: 'human', strength: 'primary', note: '幾個月來每天扶腳踏車卻從未見過車主——這份「無觀眾的善意」才是 HUMAN 的最深層展現。賴怡全在奶奶失聯一個月時擔心的不是訂單,是「奶奶有沒有事」——這個內心反應,是測試一個人「把客戶當人或當業績」的試金石。HUMAN 不是熱絡的話術,是「即使在沒人看的時候,你還是會這樣對待人嗎?」' }
+      ],
+      core: '無企圖的善意——這是 Human Touch 最深的境界,也是最難達成的境界。當服務是策略,客戶感受得出來;當服務是本能,客戶也感受得出來。前者讓你業績好一陣,後者讓你業績好一輩子。',
+      signals: [
+        '不會「變成客戶」的人需要幫助時——路人、老人、學生、看起來經濟不寬裕的人',
+        '日常工作之外的小事——門口的事、隔壁鄰居的事、路過看到的事',
+        '完全沒人看見的場景——下班後、清晨上班前、午休時間',
+        '善意「不會帶來明顯回報」的情境——對方根本不知道是你幫的、對方明顯不會買車'
+      ],
+      steps: [
+        { title: '把「無觀眾的小事」當例行公事去做', desc: '賴怡全是「每天經過、看到車倒了就扶起來」——這個動作幾個月來重複,沒被認出、沒被感謝。練習這種「無觀眾的習慣」:打掃公共走道、撿垃圾、幫人開門——這些都是 Human Touch 的訓練場。' },
+        { title: '當善意意外被認出時,不要立刻轉為業務模式', desc: '奶奶第一次出現時拍他肩膀、給他小番茄——這時很多業務會立刻遞名片「我是 SKODA 業務員...」。賴怡全沒有,他只是「聊了幾句」。讓相遇就是相遇,不要立刻變成業務場合。' },
+        { title: '當客戶失聯時,擔心的順序要對', desc: '奶奶失聯一個月時,賴怡全心裡想的是「奶奶有發生什麼事嗎?」而不是「訂單會不會跑掉?」這個內心順序決定了你是業務員還是真朋友。寫下來提醒自己:「客戶失聯時,我第一個想到的是什麼?」' },
+        { title: '當客戶以特殊方式表達信任時,接住但不要利用', desc: '兒子從英國直接匯款訂金+車款一次入帳——這份信任在業務界極其罕見。賴怡全脫口問的是「奶奶狀況還好吧!要不要等她回到台北我們再來處理」——他選擇先延後業績,先確認人的狀況。這份「業績不急、人比較重要」的態度,才是這個案例的高度。' },
+        { title: '善意進入循環後,讓它持續成為「日常」而非「一次性」', desc: '案例結尾「奶奶直到現在 12 月了還是一樣,每天騎腳踏車鎖門口,微笑揮手」——這份持續才是真正打動人的。一次性的善意叫善行,持續的善意叫關係。' }
+      ],
+      apply: [
+        '公司門口、附近常見的人——警衛、清潔人員、隔壁店家、固定路過的人',
+        '日常通勤路線上看到的需要幫助的人',
+        '在沒人看見的時間做的小事(早到的清潔、晚走的整理、午休的閒事)',
+        '完全跟業務無關的人(學生、路人、長者、行動不便者)',
+        '客戶介紹來的「絕對不會買」的人——某甲的孫子、某乙的鄰居'
+      ],
+      pitfalls: [
+        '把「無企圖」當策略——「我假裝沒企圖,客戶才會被打動」這個心態本身就有企圖,客戶會感受到',
+        '善意被認出後立刻切換業務模式——遞名片、推銷、加 Line,把美好的相遇毀掉',
+        '在公司內把這件事當「業績故事」反覆訴說——案例本身的力量會逐漸消失',
+        '對「明顯不會買車的人」就懶得幫忙,只對「看起來會買」的人客氣——這代表你的「善意」其實是商業計算',
+        '把這套變成新進業務訓練「請每天扶門口的腳踏車」——SOP 化會殺死真誠'
+      ]
+    }
   },
   'sales2023_zhan': {
     text: '詹欣妤在交車儀式中為男客戶安排求婚,從業務一路擔任起「求婚規劃師」。這個案例對「交車」的本質提供什麼新視角?',
@@ -3718,7 +4714,42 @@ const QUESTIONS_PER_CASE = {
       '只有年輕情侶值得這樣的安排'
     ],
     answer: 1,
-    explain: '詹欣妤文中這段話點出本質:「交車大家既定的印象就是,平平凡凡寫個資料就可以牽車回家!錯了!車子雖然可能金額不高,但他跟買一兩千萬房子交屋是一樣的概念,因為他是承載我們的夢想。」當業務願意把交車「重新定義」為人生時刻的容器,而不只是程序,銷售的格局就完全不同了。她說「只要你們開心,我就開心」——這份「為客戶開心而開心」的能力,才是最深的服務素質。'
+    explain: '詹欣妤文中這段話點出本質:「交車大家既定的印象就是,平平凡凡寫個資料就可以牽車回家!錯了!車子雖然可能金額不高,但他跟買一兩千萬房子交屋是一樣的概念,因為他是承載我們的夢想。」當業務願意把交車「重新定義」為人生時刻的容器,而不只是程序,銷售的格局就完全不同了。她說「只要你們開心,我就開心」——這份「為客戶開心而開心」的能力,才是最深的服務素質。',
+    playbook: {
+      pillars: [
+        { key: 'surprising', strength: 'primary', note: '客戶預期的交車是「簽資料、領鑰匙、開回家」——絕對沒料到「會變成精心策劃的求婚儀式」。每位業務從門口遞玫瑰花、白牆上播放五年交往影片、行李箱滿滿氣球、手繪似顏繪、結婚書約——這整套就是「啟發生活、多走一哩路」的巔峰之作。SURPRISING 在這裡不是「送一個禮物」,是「把客戶人生中最重要的時刻設計到極致」。' },
+        { key: 'human', strength: 'secondary', note: '詹欣妤的角色從「業務」一路升級到「求婚規劃師」——她把眼前這對小情侶當「人生重要時刻正在發生的兩個人」,而不是「正在跟我簽合約的客戶」。她記得他們的紀念月份、知道男生想求婚的意圖、知道女生五年來的期待——這些都是 HUMAN「銘記並善用顧客的個人資訊、依顧客需求調整建議」的展現。' }
+      ],
+      core: '把「交車」重新定義為人生時刻的容器——當客戶買的不只是車,而是某個人生階段的開始(結婚、生子、創業、退休、家人重病),業務就有機會升格為「這個時刻的設計師」,而不只是「簽合約的人」。',
+      signals: [
+        '客戶提到即將到來的人生重大事件(結婚、生子、買房、創業、退休、移居)',
+        '客戶男女朋友/夫妻一起來看車,但其中一方明顯有「沒說出口的計畫」',
+        '客戶選車的時機剛好是某個紀念日附近(週年、生日、認識多少年)',
+        '客戶買車的理由跟某個「家庭里程碑」相關(為了帶寶寶、為了爸媽看病、為了搬到新家)',
+        '客戶在閒聊中提到「我們在一起多久了」「下個月是我們紀念日」這類時間線索'
+      ],
+      steps: [
+        { title: '在商談中,把「客戶生命的時間軸」記下來', desc: '詹欣妤是在閒聊中聽出「9 月份要登記結婚、之後要生小孩、常去露營」——這三條資訊讓她後來能升級服務。練習從客戶聊天中挖出「人生時間軸」,而不只是「購車需求清單」。' },
+        { title: '對客戶「沒說出口的人生計畫」保持敏感', desc: '男生特別約女友不在的時間商談——這個訊號很明顯。一般業務會以為「他想自己做決定」,詹欣妤直覺到「他有想單獨講的話」。練習觀察「為什麼客戶選擇這個時間/這個方式跟我聊」。' },
+        { title: '當客戶提出「特殊請求」時,大膽接下並承諾「包在我身上」', desc: '詹欣妤的回應是「別擔心,一切包在我身上」——這份承諾的力量很大。如果她回的是「我可能要問一下主管」「我們公司沒這個服務」,整件事就死了。Human Touch 文化需要前線員工有「我先答應,後面想辦法」的勇氣。' },
+        { title: '把儀式感堆疊到客戶記一輩子的程度', desc: '詹欣妤的設計是「門口玫瑰、影片、車內氣球、手繪、結婚書約」——五個層次依序揭開。客戶以為驚喜結束了,下一個又來。這份「層層堆疊」的設計感,讓這個時刻被放大到無法忘記。' },
+        { title: '結尾不要邀功,把光留給客戶', desc: '詹欣妤說「只要你們開心,我就開心」——她把整件事的功勞還給這對情侶。如果她最後說「你看我多用心、花了多少錢」,整個感動瞬間崩塌。SURPRISING 的最後一哩,是「讓自己消失,讓客戶成為主角」。' }
+      ],
+      apply: [
+        '客戶交車剛好在重要紀念日附近——主動詢問是否要做特別安排',
+        '客戶買車為了某個家庭里程碑——可以把交車跟這個時刻編織在一起',
+        '客戶是長期老客戶換車——把這次當「我們關係的新階段」來慶祝',
+        '客戶有家人即將出生、結婚、畢業、退休——主動把這份喜悅編入交車',
+        '客戶剛走出人生低谷(離婚後、康復後、轉職成功),買車是新開始——讓交車成為「重生時刻」的儀式'
+      ],
+      pitfalls: [
+        '把儀式感強加給每位客戶——有些客戶喜歡簡單俐落,過度儀式反而困擾',
+        '儀式做得太「業務感」——商業感太強會毀掉真誠,客戶會覺得自己在配合表演',
+        '客戶沒提到的計畫不要亂猜——例如自以為兩人「應該要求婚」就擅自安排,可能毀掉感情',
+        '把這套變成「凡情侶交車一律放求婚音樂」的 SOP——失去個別化精神',
+        '事後拍照上傳社群媒體炫耀——客戶感情上的私密時刻不應該變成業務的行銷素材,必須得到客戶明確同意'
+      ]
+    }
   },
   'sales2023_huang': {
     text: '黃鎧霆說:「做這些不是求什麼回報,而是如果我今天有能力去幫助別人,那個人在他也有能量能力的時候也會去幫助下一個人,一直傳達下去。」這個觀念對企業文化的真正意義是?',
@@ -3729,7 +4760,44 @@ const QUESTIONS_PER_CASE = {
       '可以拍成廣告吸引客戶'
     ],
     answer: 1,
-    explain: '單次善行有限,但「傳遞善行」會形成複利。當 Skoda 的員工都這樣思考,品牌不再只是賣車的公司,而是「讓世界多一份溫暖的節點」——這是品牌資產裡最難複製的一部分。同事問他「你幹嘛自費貼錢處理?」反映的是「KPI 思維」陷阱,而黃鎧霆的回應提供了另一種選擇。'
+    explain: '單次善行有限,但「傳遞善行」會形成複利。當 Skoda 的員工都這樣思考,品牌不再只是賣車的公司,而是「讓世界多一份溫暖的節點」——這是品牌資產裡最難複製的一部分。同事問他「你幹嘛自費貼錢處理?」反映的是「KPI 思維」陷阱,而黃鎧霆的回應提供了另一種選擇。',
+    playbook: {
+      pillars: [
+        { key: 'human', strength: 'primary', note: '黃鎧霆故事的起點是「凌晨 2 點在大雨中下車救助一位陌生駕駛」——他根本不知道這個人是誰、會不會變客戶。後來廖醫師過世,他做的是「我希望成為一顆太陽給你溫暖跟希望」這份姿態。把對方當「正在受傷的人」而不是「不是我的客戶」——這就是 HUMAN 最深的展現。他在交車現場「第一次在客人面前眼淚潰堤」——這份真誠,是無法被偽裝的。' },
+        { key: 'surprising', strength: 'primary', note: '林小姐找他重做交車儀式,黃鎧霆做的不是「來一下就好」——他自費貼錢處理隔熱紙重新施工、行車紀錄器安裝、洗車美容、預約交車室、準備交車禮。客戶完全沒料到「一個不是賣車給我的業務,會為我做到這個程度」。最深的 SURPRISING 不是給客戶物質驚喜,是「讓客戶感受到世界比想像的還善良」。' }
+      ],
+      core: '把善意當文化複利——當你今天無條件幫一個人,那個人在他有能量時也會幫下一個人。Human Touch 不是一次性的服務,是「我選擇成為善意循環的節點」。這份選擇對個人沒有立即回報,但對整個社會與品牌生態,是最深刻的投資。',
+      signals: [
+        '看到陌生人發生緊急狀況(車禍、意外、突發疾病)——這時的選擇定義你是誰',
+        '客戶經歷家人過世、重大疾病、重大變故',
+        '客戶想完成「跟逝者有關的儀式」——例如把對方留下的車當紀念、想完成對方未實現的願望',
+        '客戶提出的請求「超出業務職責範圍」——這是測試你「我願意走多遠」的時刻',
+        '同事問你「為什麼要這樣做?不是你客戶啊」——這個質疑本身就是訊號,代表你做的事超越了常規'
+      ],
+      steps: [
+        { title: '緊急狀況下,第一個動作是「下車去看」,不是「想會不會麻煩」', desc: '黃鎧霆凌晨 2 點看到車輛失控撞護欄,他「打方向燈停靠路邊衝過去查看」——這個反射動作背後是「人優先於麻煩」的核心價值。練習這個反射,從小事開始(看到老人跌倒、看到人在路邊不舒服)。' },
+        { title: '緊急現場做的事,要「即時且具體」', desc: '黃鎧霆做的是「打 119、跟救護車去醫院、處理車輛拖吊」——這三件事都是當事人此刻最需要但自己處理不了的。練習在緊急狀況下,問自己:「現在,當事人最需要但自己做不到的事是什麼?」' },
+        { title: '當客戶經歷生命中最大的痛時,不要急著退場', desc: '半年後林小姐打電話來告知廖醫師過世——黃鎧霆的反應是「有什麼我能協助妳的地方嗎林小姐?我會盡力達成」。一般業務會說「請節哀,有需要再聯絡」就掛電話,他選擇繼續陪伴。客戶痛苦時的陪伴,值千金。' },
+        { title: '不是你的客戶,但你可以選擇成為他的支持者', desc: '林小姐請求重做交車儀式——這時的選擇定義一切。黃鎧霆說「對我們來說可能去做這些不屬於我責任的事很白癡,但一個小小的舉動或許能給對方帶來從未感受過得溫暖」。當你願意為「不是你責任的事」付出,你就跨越了業務員的層級。' },
+        { title: '不期待回報,但接受回報', desc: '林小姐送鋼珠筆給他——這份禮物的重量超越任何業績獎金。黃鎧霆接受了,並珍藏。重點是:他做這一切時不期待禮物,所以禮物到來時才有那份感動。如果他做的時候心裡有期待,鋼珠筆只會變成「我應得的回報」。' },
+        { title: '相信善意的複利,不期待立即回收', desc: '黃鎧霆說「那個人在他也有能量能力的時候也會去幫助下一個人,一直傳達下去」——這份信念讓他能持續做「不划算」的事。Human Touch 是長期投資,你今天投入的善意,可能五年後才在某個地方開花,但它一定會開。' }
+      ],
+      apply: [
+        '看到陌生人發生緊急狀況的當下(車禍、意外、急病)',
+        '客戶經歷家人過世、重大疾病、人生重大失落',
+        '客戶想完成「跟逝者連結的儀式」',
+        '客戶提出超出職責範圍但極有意義的請求',
+        '看到「世界少了一份善意」的時刻——例如路上明顯沒人理會的弱勢需求',
+        '同事間需要被支援的時刻(不只是對客戶,對同事的 Human Touch 同樣重要)'
+      ],
+      pitfalls: [
+        '在緊急現場拍照打卡 PO 文「我今天救了一個人」——這把善行變成個人品牌行銷,毀掉所有純粹',
+        '幫了忙之後反覆暗示「你欠我一個人情」——讓客戶心理負擔很重',
+        '把這份善意當業績投資「我幫她,她會介紹一堆客戶來」——心態功利就會在某個瞬間被看穿',
+        '為了複製這個案例的感人程度而「找機會幫人」——刻意的善意比沒有善意更傷品牌',
+        '事後跟同事炫耀「你看,我多用心」——讓善行變成績效素材,文化會死掉'
+      ]
+    }
   },
   'service2023_meiyuan': {
     text: '腳踏車事件發生在「下班打卡之後」,妹妹也不是 Skoda 車主。陳渼媛仍主動伸出援手,事後妹媽特別來致謝並說「我們如果要換車會考慮 Skoda」。從這個案例最深層的領悟是?',
@@ -3740,7 +4808,43 @@ const QUESTIONS_PER_CASE = {
       '應該主動發新聞稿曝光此事'
     ],
     answer: 1,
-    explain: '如果陳渼媛是為了「為品牌加分」而幫助妹妹,妹媽會感受得出來,這份善意就會打折。正因為動機純粹,妹媽才被打動到願意「未來考慮 Skoda」——這就是品牌行銷的悖論:愈想行銷,愈不像;愈不為行銷,愈動人。同時這也展現 Human Touch 真正內化的證據:制服打卡是制度劃分,但「我是誰」不會打卡。'
+    explain: '如果陳渼媛是為了「為品牌加分」而幫助妹妹,妹媽會感受得出來,這份善意就會打折。正因為動機純粹,妹媽才被打動到願意「未來考慮 Skoda」——這就是品牌行銷的悖論:愈想行銷,愈不像;愈不為行銷,愈動人。同時這也展現 Human Touch 真正內化的證據:制服打卡是制度劃分,但「我是誰」不會打卡。',
+    playbook: {
+      pillars: [
+        { key: 'human', strength: 'primary', note: '陳渼媛已經打完卡、要回家了——這個情境的關鍵在於「她沒有義務做這件事」。她聽到腳踏車摔倒聲、看到妹妹跌坐,本能反應是「先擋住摩托車保護妹妹」。這個反射不是 SOP 教的、也不是上班時間規定的——這就是 HUMAN 真正內化成「人格的一部分」的證據。文中她媽媽的教育「隨時隨地都要做好事結善緣」——這份家教變成了她的本能。' },
+        { key: 'surprising', strength: 'secondary', note: '妹妹預期的是「自己跌倒了得趕快想辦法」——絕對沒料到「會有姐姐、技師、整個服務廠一起幫我」。她不是 Skoda 車主,但被當 Skoda 客戶對待——這份反差讓妹媽決定特地帶妹妹來致謝,還拎了一大袋飲料。這份「超出腳踏車女孩預期、超出妹媽預期」的待遇,正是 SURPRISING 的本質。' }
+      ],
+      core: '不為品牌做的事,反而最能為品牌加分——當員工把善意當「我是誰」而不是「我的工作」,品牌的口碑就有了最堅固的根基。打卡是制度,人格不打卡。',
+      signals: [
+        '下班後、午休時、上班前——「不在服務時間」卻有人需要幫助的時刻',
+        '完全不是車主的人發生意外、需要幫助',
+        '看到對方是「弱勢」(學生、長者、行動不便、外籍人士)',
+        '對方明顯急著解決問題但卡住了(時間壓力、不知道找誰、沒有資源)',
+        '對方的問題「在你的能力範圍內」但「不在你的職責範圍內」'
+      ],
+      steps: [
+        { title: '練習「下班後仍是 Skoda 人」的身份感', desc: '陳渼媛已經打卡了,但她身上還是穿著制服。她沒有想「我下班了,跟我無關」——她直接走過去幫忙。練習「制服打卡,但人格不打卡」的內化:你不是「上班是 Skoda 員工」,你是「在 Skoda 工作的某種人」。' },
+        { title: '面對緊急狀況,先「擋住二次傷害」', desc: '陳渼媛第一個動作不是扶妹妹,是「擋住摩托車」——因為路邊摩托車很快,妹妹跌坐地上可能會被撞。先確保現場安全,再處理當事人。這份判斷是關鍵時刻才看得出的素質。' },
+        { title: '把現場團隊調動起來,不要單打獨鬥', desc: '陳渼媛沒有一個人扛——她讓同事過來把腳踏車牽進廠、找技師修腳踏車、自己幫妹妹擦藥。「組織化的善意」效率最高、效果最大。練習在緊急狀況下,快速分工而不是英雄主義。' },
+        { title: '幫忙時體諒對方的「時間壓力」', desc: '妹妹邊哭邊說「我要去買晚餐給阿嬤吃還要趕去補習」——陳渼媛聽懂這份焦急。她邊擦藥邊讓技師同時修腳踏車,平行作業節省時間。理解對方的時間框架,是同理心的具體展現。' },
+        { title: '事後當對方來感謝時,輕描淡寫不要邀功', desc: '妹媽帶飲料來時,陳渼媛感動到眼眶紅、頭抬高搧。她沒說「對啊我們真的很用心」——這份「自己也感動」的真誠,比任何回應都打動妹媽。Human Touch 的最高境界:做善事的人,自己也會被善的循環感動到。' },
+        { title: '看見「妹媽的真實用意」並珍視它', desc: '陳渼媛文末看穿:「妹媽除了要來謝謝我們之外,其實最大的用意是在以身作則給妹妹看」——這份洞察才是案例的高點。妹媽不只是來謝謝,是來教孩子「善意要回報、善行要被看見」。陳渼媛接住了這份教育意圖,讓妹媽的「以身作則」變成可能。' }
+      ],
+      apply: [
+        '下班後在公司附近看到緊急狀況',
+        '非車主到廠求助(對應 service2025_lin_pai 雨中跪地案例)',
+        '路上看到任何品牌車輛或非車輛的緊急狀況',
+        '同事的家人來廠時遇到困難——他們是「半個自己人」',
+        '社區、鄰里、學校的突發狀況——你是 Skoda 人,但也是社區的一份子'
+      ],
+      pitfalls: [
+        '幫了忙之後拼命發名片「我們是 Skoda 喔」——把善意變成置入性行銷',
+        '事後拍照 PO 文「Skoda 員工救助路人」——把善行轉成廣告,毀掉純粹',
+        '只在「對方可能會買車」時才願意幫忙——例如學生就不幫、有錢人就幫,這代表你的「善意」是計算',
+        '把這套變成 KPI「凡員工協助非車主一次加 X 分」——制度化會殺死真誠',
+        '事後在會議上把這個故事「商業化」反覆使用——案例本身的力量會耗損'
+      ]
+    }
   },
   'service2023_hong': {
     text: '洪廠長的三個方案中,最終選擇「大年初一派人開大熊南下換車」這個成本最高的方案。從危機處理的決策邏輯看,他的選擇背後是什麼樣的判斷?',
@@ -3751,7 +4855,43 @@ const QUESTIONS_PER_CASE = {
       '純粹是為了避免客訴擴大'
     ],
     answer: 1,
-    explain: '理性計算下,方案 1(拖車)成本最低;方案 3 是最昂貴、最費工的選擇。但洪廠長算的不是「這次省多少錢」,而是「這個客戶 5 年、10 年後會怎麼跟人說 Skoda」——這是長期主義 vs. 短期主義的差別。後續技師主動「拆公司車的水箱風扇先給客戶用」更證明:當文化從主管真實傳遞到團隊,員工會在主管不在場時,自己延伸做出符合精神的決定。'
+    explain: '理性計算下,方案 1(拖車)成本最低;方案 3 是最昂貴、最費工的選擇。但洪廠長算的不是「這次省多少錢」,而是「這個客戶 5 年、10 年後會怎麼跟人說 Skoda」——這是長期主義 vs. 短期主義的差別。後續技師主動「拆公司車的水箱風扇先給客戶用」更證明:當文化從主管真實傳遞到團隊,員工會在主管不在場時,自己延伸做出符合精神的決定。',
+    playbook: {
+      pillars: [
+        { key: 'simplifying', strength: 'primary', note: '客戶面對的真實處境是「除夕當天 + 屏東 + 鎮上修廠都休 + 連假 + 全家四口」——這是個極端複雜的多重壓力情境。洪廠長的方案 3 把這所有複雜變數一次解決:派人開大熊南下換車、提供代步車、把故障車開回北投。這就是 SIMPLIFYING 的最高展現:「保持專業、主動承擔責任、引導至解決方案」——員工把客戶完全沒辦法處理的爛攤子全部接過來。' },
+        { key: 'surprising', strength: 'secondary', note: '客戶大年初一打電話到原廠,預期的回應是「過年期間沒人接」或「請等開工日再說」——絕對沒料到「會有技師和服務專員從台北開大熊南下屏東來幫我換車」。這份反差完全超出汽車服務業的常規。文中車主寫「小弟我真的服了!」這四個字,是 SURPRISING 最真實的回饋。' }
+      ],
+      core: '長期主義 vs. 短期主義的決策邏輯——當主管面臨「成本最低 vs. 客戶體驗最佳」的選擇時,願不願意算「這個客戶未來 10 年會幫品牌做什麼」,決定了這家服務廠的文化高度。主管的決定,定義了團隊的範圍。',
+      signals: [
+        '客戶在「沒有後援」的時間發生重大故障(連假、深夜、外縣市)',
+        '客戶面臨「行程被毀」的時間壓力(過年、出國前、重要家庭聚會)',
+        '客戶卡在「標準解法不夠用」的情境(在偏遠地區、家人需要照顧、行李太多)',
+        '客戶主動求助但語氣絕望——「我也不知道該怎麼辦」這句話是訊號',
+        '故障的責任「半曖昧」(剛保養完就出問題、剛換零件就壞)——這時客戶會懷疑品牌'
+      ],
+      steps: [
+        { title: '主管接到求助,先在心裡決定:「我要算短期成本還是長期關係」', desc: '洪廠長在除夕圍爐期間接到電話,他第一個決定是「一定妥善處理」——這份心態先決定了後面所有方案的可能性。如果一開始就想著「過年期間哪有人力,跟客戶說等開工」,後面再多方案也只是話術。' },
+        { title: '提出三個方案讓客戶選,而不是一個最便宜的', desc: '洪廠長給的是 3 個方案(拖車、高鐵票、開大熊南下換車)——讓客戶感受到「選擇權在你」,這份尊重比強推一個方案更有效。客戶會因為「有得選」而願意信任。' },
+        { title: '當你決定走「最高成本方案」時,要展現「我們真的願意」', desc: '洪廠長拍板派技師、專員、開大熊、帶簡易工具和料件——這不是嘴上說的承諾,是真的有人會在大年初一從台北開到屏東。員工願意接這個任務的關鍵,是「主管自己也願意這樣對待客戶」的氛圍。' },
+        { title: '把案例傳遞為「文化」而非「特例」', desc: '技師回來後主動「拆公司車的水箱風扇先給客戶用」——這個動作證明文化已經內化。當員工在主管不在場時,還能自己做出符合精神的決定,代表這家服務廠的 Human Touch 是真的。練習當主管離開後,團隊的判斷會不會還是一樣。' },
+        { title: '客戶事後給的口碑,不要把它變成業績指標', desc: '車主寫「(大家回廠可以指名,顏技師手路好做事細心,周專員帥又親切)原廠晉暘服務廠值得推薦」——這份回饋是 Google 評論金礦,但團隊文化的真正成就不是評論本身,是「下次遇到類似狀況,大家會不會還這樣做」。' }
+      ],
+      apply: [
+        '客戶在連假、深夜、外縣市發生緊急故障',
+        '客戶面臨「行程被毀」的高度時間壓力',
+        '客戶在偏遠地區、修廠資源缺乏的地方求助',
+        '客戶的處境同時有「車的問題 + 家庭的問題」雙重壓力',
+        '剛保養/維修後的「短期回廠」——責任歸屬曖昧,但客戶體驗影響極大',
+        '主管要決定「投入額外資源 vs. 走標準流程」的拍板時刻'
+      ],
+      pitfalls: [
+        '主管想做但團隊不買單——「老闆你說的對,但你要員工大年初一南下喔?」這代表平日文化沒建立',
+        '幫了大忙之後反覆暗示「我們公司多用心」——讓客戶心理負擔,失去純粹',
+        '把這套變成「凡連假故障一律南下換車」的 SOP——成本控制會出問題,也失去判斷彈性',
+        '只對「會 PO 文」的客戶提供方案 3——這代表你做的不是 Human Touch,是公關行銷',
+        '事後在主管會議炫耀「我犧牲了除夕」——把善行邀功化,文化會死'
+      ]
+    }
   },
   'service2023_dai': {
     text: '徐小姐進廠保養超過中午,擔心失智母親無法久候。戴禎癸協調公司內勤開副總的車,送徐小姐母女去溫泉公園泡腳。這個處理最巧妙的地方在哪裡?',
@@ -3762,7 +4902,45 @@ const QUESTIONS_PER_CASE = {
       '應該禁止客戶帶長輩進廠'
     ],
     answer: 1,
-    explain: '一般思維會把「保養 3 小時」視為「客戶必須忍受的等待」,然後想辦法用咖啡、零食、舒適座椅減少不舒服。戴禎癸的高度在於:把這 3 小時「重新定義」為一段可以好好利用的時間——讓徐小姐帶失智母親去泡腳,這 3 小時反而成為珍貴的母女時光。當客戶離開時泡腳「意猶未盡」,代表這次保養帶給她的,不只是車子被照顧好,更是她和母親有了一段美好的回憶。'
+    explain: '一般思維會把「保養 3 小時」視為「客戶必須忍受的等待」,然後想辦法用咖啡、零食、舒適座椅減少不舒服。戴禎癸的高度在於:把這 3 小時「重新定義」為一段可以好好利用的時間——讓徐小姐帶失智母親去泡腳,這 3 小時反而成為珍貴的母女時光。當客戶離開時泡腳「意猶未盡」,代表這次保養帶給她的,不只是車子被照顧好,更是她和母親有了一段美好的回憶。',
+    playbook: {
+      pillars: [
+        { key: 'simplifying', strength: 'primary', note: '客戶徐小姐面對的真實困境是「我帶失智的母親來,但保養要 3 小時,媽媽會耐不住」——這是個「不在維修範圍但極度真實」的問題。戴禎癸的解法是「為顧客節省時間心力、主動承擔不屬於自己的責任、把客戶常覺得繁瑣的流程加以簡化」——他直接協調公司內勤、借副總的車、安排接送。客戶等於是「進來保養,出去發現自己被照顧了整個家庭」。' },
+        { key: 'human', strength: 'secondary', note: '戴禎癸聽到「我媽有失智」這四個字時,他的反應不是「那您下次再來吧」,而是「我休假時也帶我媽去那邊泡腳」——這份共情建立在「我也是兒子、我也照顧過長輩」的個人經驗上。HUMAN 的力量,常常來自員工自己曾經當過某種角色的記憶。他特別請同事「上下車要協助、幫忙拍幾張照片給我」——這個細節證明他真的把徐母親當自己媽媽在對待。' }
+      ],
+      core: '把「等待時間」重新定義為「家屬陪伴的優質時光」——當客戶不得不等待時,業務的最高境界不是讓他「等得舒服」,而是讓他「在等待中也活得豐富」。客戶離廠時帶走的,不只是修好的車,還有一段美好的記憶。',
+      signals: [
+        '客戶帶長輩、失智者、行動不便者、幼兒同來——這位陪伴者會比客戶更累',
+        '保養/維修時間超過 2 小時,客戶會明顯坐立難安',
+        '客戶身分本身就是「照顧者」(獨力照顧失智父母、單親育兒、長期看護)——他平日很缺乏「我自己也是人」的時刻',
+        '客戶談話中提到「我媽其實不太能久候」「我等下還要趕去接小孩」這類訊號',
+        '客戶有「不能丟下」的對象在現場'
+      ],
+      steps: [
+        { title: '在接待流程中,觀察客戶「除了車主以外帶誰來」', desc: '戴禎癸在徐小姐還沒下車就注意到她說「等一下先讓我媽媽下車」——這個細節讓他立刻知道「今天的服務對象不只是車主」。練習接待時,看清楚「車主旁邊那些人是誰、處於什麼狀態」。' },
+        { title: '主動關心「等候期間照顧者的需求」,不只車主的需求', desc: '徐小姐問「附近有沒有地方可以帶媽媽走走」——這個問題很多業務會回「您可以坐客休室啊」就算了。戴禎癸聽出來這背後是「我媽會耐不住」——這份解讀力是案例的關鍵。' },
+        { title: '當客戶遇到「客休室不夠用」的困境時,動用組織資源解決', desc: '戴禎癸做的不是「我盡量讓客休室舒服一點」,而是「我去跟朱經理報告」+「協調副總借車」+「指派內勤協助開車」——這是把個人善意進入組織系統的標準範例。一個人能做的有限,組織化的善意威力無窮。' },
+        { title: '提供方案時,要根據自己的「私人經驗」推薦', desc: '戴禎癸推薦溫泉公園的理由是「我在休假的時候也常常帶我的母親去那邊泡腳」——這份「我自己也去」的真實性,讓推薦不是業務話術,是朋友建議。練習用「我自己也...」「我家人也...」這類個人經驗背書。' },
+        { title: '請同事拍照記錄客戶的快樂時光,但不為了行銷', desc: '戴禎癸請同事幫忙「拍幾張照片給我」——這幾張照片不是要 PO 文,是要給徐小姐留念。讓客戶在事後能跟家人朋友分享「我們今天去泡腳了」,延長這份美好的記憶。' },
+        { title: '對自己內心的成長保持覺察', desc: '戴禎癸文末寫「以前只是聽過同事的分享感覺不到其中的快樂,可能是老天爺要讓我親身感受一下,所以給了我機會,我也做到了,so happy!!!」——這份「自己也覺得快樂」的反思很重要。當員工發現「我做善事自己也得到了好東西」,這份動機就會自我延續。' }
+      ],
+      apply: [
+        '客戶帶長輩、失智者、行動不便者來廠',
+        '客戶帶幼兒同來,等候時間長',
+        '客戶本身是「全職照顧者」——平日鮮少有自己的時間',
+        '客戶從外地來廠,沒有交通工具去附近走走',
+        '保養時間超過 2 小時——尋找「等待時間也能變成美好時光」的方案',
+        '客戶有「不能耽誤的下一個行程」——主動提供節省時間的方案'
+      ],
+      pitfalls: [
+        '看到客戶帶長輩來但沒主動詢問需求——標準接待會錯失這個機會',
+        '提供方案前沒先跟主管報備——個人善意要進入組織系統(對應 service2025_ni 案例的精神)',
+        '把這套變成「凡帶長輩一律送去泡腳」的 SOP——失去個別化判斷',
+        '事後在團隊宣傳「我送客戶媽媽去泡腳」邀功——把善意工具化',
+        '只對「看起來會回廠」的客戶這樣做——讓善意有條件,文化就無法擴散',
+        '誤判客戶需求(例如客戶其實只想安靜坐著,你硬要安排活動)——多走一哩路是看見需求後的行動,不是強加方案'
+      ]
+    }
   }
 };
 
@@ -3986,14 +5164,42 @@ function renderQuestion() {
       <div class="question-num">${String(STATE.current + 1).padStart(2, '0')}</div>
       <div class="question-text">${q.text}</div>
       <div class="options">${opts}</div>
+      <div id="feedbackArea"></div>
     </div>
   `;
 
+  // 如果這題已答過,直接顯示 feedback(讓上一題回來看也能看到)
+  const prevAns = STATE.answers[STATE.current];
+  if (prevAns !== null && prevAns !== undefined) {
+    showFeedback(q, prevAns);
+    document.querySelectorAll('.option').forEach(x => x.classList.add('locked'));
+  }
+
   document.querySelectorAll('.option').forEach(o => {
     o.addEventListener('click', () => {
-      STATE.answers[STATE.current] = parseInt(o.dataset.idx);
-      document.querySelectorAll('.option').forEach(x => x.classList.remove('selected'));
+      // 已答過就不能再改(避免看到答案後改答)
+      if (STATE.answers[STATE.current] !== null && STATE.answers[STATE.current] !== undefined) return;
+      const ans = parseInt(o.dataset.idx);
+      STATE.answers[STATE.current] = ans;
+      document.querySelectorAll('.option').forEach(x => {
+        x.classList.remove('selected');
+        x.classList.add('locked');
+      });
       o.classList.add('selected');
+      // 標示對錯
+      const correctIdx = q.answer;
+      document.querySelectorAll('.option').forEach((x, i) => {
+        if (i === correctIdx) x.classList.add('show-correct');
+        else if (i === ans && ans !== correctIdx) x.classList.add('show-wrong');
+      });
+      showFeedback(q, ans);
+      // 啟用「下一題」按鈕
+      document.getElementById('btnNext').disabled = false;
+      // 平滑捲動到 feedback 區
+      setTimeout(() => {
+        const fb = document.getElementById('feedbackArea');
+        if (fb) fb.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
     });
   });
 
@@ -4004,7 +5210,166 @@ function renderQuestion() {
   document.getElementById('btnPrev').disabled = STATE.current === 0;
   document.getElementById('btnNext').textContent =
     STATE.current === total - 1 ? '完成 SUBMIT' : '下一題 →';
+  // 沒答過題目前 btnNext disable
+  document.getElementById('btnNext').disabled = (prevAns === null || prevAns === undefined);
 }
+
+/* 渲染答題回饋(對錯 + 解析 + 方法拆解) */
+function showFeedback(q, userAns) {
+  const ok = userAns === q.answer;
+  const fbArea = document.getElementById('feedbackArea');
+  if (!fbArea) return;
+
+  const playbookHtml = q.playbook ? renderPlaybook(q.playbook) : '';
+
+  fbArea.innerHTML = `
+    <div class="feedback-block ${ok ? 'correct' : 'wrong'}">
+      <div class="feedback-status">${ok ? '✓ CORRECT · 答對了' : '✗ TRY AGAIN · 不是這個'}</div>
+      ${ok ? '' : `<div class="feedback-correct-ans">正確答案是 <strong>${['A','B','C','D'][q.answer]}. ${q.options[q.answer]}</strong></div>`}
+      <div class="feedback-explain">${q.explain}</div>
+    </div>
+    ${playbookHtml}
+  `;
+}
+
+/* 渲染方法拆解 (Playbook) */
+function renderPlaybook(pb) {
+  const sections = [];
+
+  if (pb.core) {
+    sections.push(`
+      <div class="playbook-section">
+        <div class="playbook-section-title">
+          <span class="playbook-section-icon">🔑</span>
+          CORE METHOD · <span class="playbook-section-zh">核心方法</span>
+        </div>
+        <div class="playbook-core">${pb.core}</div>
+      </div>
+    `);
+  }
+
+  if (pb.signals && pb.signals.length) {
+    sections.push(`
+      <div class="playbook-section">
+        <div class="playbook-section-title">
+          <span class="playbook-section-icon">👁️</span>
+          OBSERVATION · <span class="playbook-section-zh">觀察訊號</span>
+        </div>
+        <ul class="playbook-list">
+          ${pb.signals.map(s => `<li>${s}</li>`).join('')}
+        </ul>
+      </div>
+    `);
+  }
+
+  if (pb.steps && pb.steps.length) {
+    sections.push(`
+      <div class="playbook-section">
+        <div class="playbook-section-title">
+          <span class="playbook-section-icon">🎯</span>
+          ACTION TEMPLATE · <span class="playbook-section-zh">行動模板</span>
+        </div>
+        <ol class="playbook-steps">
+          ${pb.steps.map(st => `
+            <li>
+              <div class="playbook-step-title">${st.title}</div>
+              <div class="playbook-step-desc">${st.desc}</div>
+            </li>
+          `).join('')}
+        </ol>
+      </div>
+    `);
+  }
+
+  if (pb.apply && pb.apply.length) {
+    sections.push(`
+      <div class="playbook-section">
+        <div class="playbook-section-title">
+          <span class="playbook-section-icon">💡</span>
+          APPLY TO · <span class="playbook-section-zh">應用情境</span>
+        </div>
+        <ul class="playbook-list">
+          ${pb.apply.map(s => `<li>${s}</li>`).join('')}
+        </ul>
+      </div>
+    `);
+  }
+
+  if (pb.pitfalls && pb.pitfalls.length) {
+    sections.push(`
+      <div class="playbook-section">
+        <div class="playbook-section-title">
+          <span class="playbook-section-icon">⚠️</span>
+          PITFALLS · <span class="playbook-section-zh">常見誤區</span>
+        </div>
+        <ul class="playbook-list warn">
+          ${pb.pitfalls.map(s => `<li>${s}</li>`).join('')}
+        </ul>
+      </div>
+    `);
+  }
+
+  // 三大支柱對應(置頂)
+  let pillarsHtml = '';
+  if (pb.pillars && pb.pillars.length) {
+    const PILLAR_DEFS = {
+      human:       { en: 'HUMAN',       zh: '人性化服務', motto: '視客如友 · 傳遞真實溫度' },
+      simplifying: { en: 'SIMPLIFYING', zh: '簡約體驗',   motto: '化繁為簡 · 讓生活更輕鬆' },
+      surprising:  { en: 'SURPRISING',  zh: '超越期待',   motto: '創造驚喜瞬間 · 多走一哩路' }
+    };
+    // 把 pillars 整理成完整三個 chip(沒提到的標 muted)
+    const pillarMap = {};
+    pb.pillars.forEach(p => { pillarMap[p.key] = p; });
+
+    const chips = ['human', 'simplifying', 'surprising'].map(k => {
+      const def = PILLAR_DEFS[k];
+      const data = pillarMap[k];
+      if (!data) {
+        return `<div class="pillar-chip muted">
+          <div class="pillar-name-en">${def.en}</div>
+          <div class="pillar-name-zh">${def.zh}</div>
+        </div>`;
+      }
+      const tagText = data.strength === 'primary' ? 'PRIMARY · 主軸' : 'SECONDARY · 輔助';
+      return `<div class="pillar-chip ${data.strength}">
+        <span class="pillar-strength-tag">${tagText}</span>
+        <div class="pillar-name-en">${def.en}</div>
+        <div class="pillar-name-zh">${def.zh}</div>
+        <div class="pillar-motto">${def.motto}</div>
+        <div class="pillar-note">${data.note}</div>
+      </div>`;
+    }).join('');
+
+    pillarsHtml = `
+      <div class="pillars-banner">
+        <div class="pillars-title">THREE PILLARS · HUMAN TOUCH</div>
+        <div class="pillars-subtitle">這個案例對應到 SKODA 三大品牌價值的哪一面?</div>
+        <div class="pillars-grid">${chips}</div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="playbook" id="playbookForExport">
+      <div class="playbook-header">
+        PLAYBOOK
+        <span class="playbook-header-zh">方法拆解 · 帶回工作中應用</span>
+      </div>
+      ${pillarsHtml}
+      <div class="playbook-body">
+        ${sections.join('')}
+      </div>
+      <div class="playbook-footer no-print">
+        <button type="button" class="btn-export-pdf" onclick="exportCasePDF()">
+          <span class="export-icon">⬇</span>
+          <span class="export-label">下載完整案例 PDF</span>
+          <span class="export-hint">儲存這份方法拆解,帶回工作中參考</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+window.renderQuestion = renderQuestion;
 
 document.getElementById('btnPrev').addEventListener('click', () => {
   if (STATE.current > 0) { STATE.current--; renderQuestion(); }
@@ -4284,6 +5649,26 @@ function exportCSV() {
   URL.revokeObjectURL(url);
 }
 window.exportCSV = exportCSV;
+
+/* ============ 匯出案例 PDF ============ */
+function exportCasePDF() {
+  const c = STATE.selectedCases[STATE.current];
+  const q = STATE.questions[STATE.current];
+  if (!c || !q) return;
+
+  // 暫存原本的 title
+  const origTitle = document.title;
+  document.title = `HumanTouch_${c.year}_${c.branch}_${c.hero}_${c.title}`;
+
+  // 等照片載入完成(對 base64 內嵌的圖,通常已載入)
+  // 直接呼叫列印
+  setTimeout(() => {
+    window.print();
+    // 列印後恢復 title
+    setTimeout(() => { document.title = origTitle; }, 500);
+  }, 100);
+}
+window.exportCasePDF = exportCasePDF;
 
 /* ============ LIGHTBOX (照片點擊放大) ============ */
 function ensureLightbox() {
