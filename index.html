@@ -1416,6 +1416,7 @@
           <button class="btn-mini" onclick="showScreen('screen-landing')">← 返回首頁</button>
           <button class="btn-mini" onclick="refreshRecords()">重新整理</button>
           <button class="btn-mini" onclick="exportCSV()">匯出 CSV</button>
+          <button class="btn-mini" id="btnDedup" onclick="toggleDedupe()">隱藏重複紀錄</button>
           <button class="btn-mini primary" onclick="window.print()">列印報告</button>
         </div>
       </div>
@@ -3785,7 +3786,8 @@ var qrcode = function() {
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import {
-  getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp
+  getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp,
+  doc, deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -3810,11 +3812,38 @@ try {
 }
 
 window.__fb = {
-  // save record to firestore
+  // save record to firestore (含雲端去重保險)
   saveRecord: async (record) => {
     if (!db) throw new Error('No DB · Firebase 未初始化');
     const recForCloud = { ...record };
     delete recForCloud.id; // let firestore assign
+
+    // 雲端去重:同 fingerprint 在 5 分鐘內視為重複,不再寫入
+    // fingerprint = name + dealer + score + elapsed (大於 99% 機率不會重複碰撞)
+    if (record.fingerprint) {
+      try {
+        const cutoffMs = Date.now() - 5 * 60 * 1000;
+        const recent = query(
+          collection(db, 'records'),
+          orderBy('completedAt', 'desc')
+        );
+        const snap = await getDocs(recent);
+        for (const doc of snap.docs) {
+          const d = doc.data();
+          if (d.fingerprint === record.fingerprint) {
+            const t = d.completedAt ? new Date(d.completedAt).getTime() : 0;
+            if (t > cutoffMs) {
+              console.warn('[saveRecord] 偵測到 5 分鐘內的重複提交,略過寫入。fp=' + record.fingerprint);
+              return doc.id; // 回傳既有 doc id,流程繼續
+            }
+          }
+        }
+      } catch (e) {
+        // 去重檢查失敗就直接寫入,不阻擋流程
+        console.warn('[saveRecord] 去重檢查失敗,直接寫入:', e);
+      }
+    }
+
     recForCloud.createdAt = serverTimestamp();
     const ref = await addDoc(collection(db, 'records'), recForCloud);
     return ref.id;
@@ -3825,11 +3854,16 @@ window.__fb = {
     const q = query(collection(db, 'records'), orderBy('completedAt', 'desc'));
     const snap = await getDocs(q);
     const out = [];
-    snap.forEach(doc => {
-      const data = doc.data();
-      out.push({ id: doc.id, ...data });
+    snap.forEach(d => {
+      const data = d.data();
+      out.push({ id: d.id, ...data });
     });
     return out;
+  },
+  // delete a record by doc id
+  deleteRecord: async (docId) => {
+    if (!db) throw new Error('No DB · Firebase 未初始化');
+    await deleteDoc(doc(db, 'records', docId));
   }
 };
 
@@ -5387,14 +5421,30 @@ document.getElementById('btnNext').addEventListener('click', () => {
     STATE.current++;
     renderQuestion();
   } else {
+    // 最後一題的「完成 SUBMIT」按鈕:立即鎖定避免連點/雙擊
+    const btn = document.getElementById('btnNext');
+    if (btn.disabled || btn.dataset.submitting === '1') return;
+    btn.disabled = true;
+    btn.dataset.submitting = '1';
+    btn.textContent = '上傳中… UPLOADING';
+    btn.style.opacity = '0.6';
+    btn.style.cursor = 'wait';
     submitQuiz();
   }
 });
 
 /* ============ SUBMIT ============ */
 async function submitQuiz() {
+  // 防止重複提交 (連點、雙擊、重試) - 同一次測驗只能成功提交一次
+  if (STATE.submitting || STATE.submitted) {
+    console.log('[submitQuiz] 已在進行中或已提交,忽略此次呼叫');
+    return;
+  }
+  STATE.submitting = true;
+
   if (STATE.answers.some(a => a === null)) {
     alert('還有未作答的題目，請完成所有題目後再提交');
+    STATE.submitting = false;
     return;
   }
   clearInterval(STATE.timer);
@@ -5426,7 +5476,10 @@ async function submitQuiz() {
     pass, elapsed: elapsedSec,
     answers: STATE.answers.slice(),
     detailedAnswers,
-    completedAt: finishedAt.toISOString()
+    completedAt: finishedAt.toISOString(),
+    // 防重複指紋:name + dealer + score + elapsed(用時秒數)
+    // 同一人同時間提交完全一樣的分數+用時的機率極低,可用來偵測重複
+    fingerprint: `${STATE.user.name}|${STATE.user.dealer}|${score}|${elapsedSec}`
   };
 
   // save to firebase + local fallback
@@ -5500,6 +5553,8 @@ async function submitQuiz() {
   }).join('');
 
   showScreen('screen-result');
+  STATE.submitted = true;
+  STATE.submitting = false;
 }
 
 function restart() {
@@ -5508,6 +5563,8 @@ function restart() {
   STATE.questions = [];
   STATE.selectedCases = [];
   STATE.current = 0;
+  STATE.submitted = false;
+  STATE.submitting = false;
   document.getElementById('registerForm').reset();
   showScreen('screen-landing');
 }
@@ -5555,14 +5612,83 @@ async function refreshRecords() {
   if (!CACHED_RECORDS.length) {
     CACHED_RECORDS = loadLocalRecords();
   }
-  // stats
-  document.getElementById('adTotal').textContent = CACHED_RECORDS.length;
-  const passCount = CACHED_RECORDS.filter(r => r.pass).length;
+  updateAdminStats();
+  renderTable();
+}
+window.refreshRecords = refreshRecords;
+
+/* 切換「隱藏重複紀錄」狀態 */
+let HIDE_DUPLICATES = false;
+function toggleDedupe() {
+  HIDE_DUPLICATES = !HIDE_DUPLICATES;
+  const btn = document.getElementById('btnDedup');
+  if (btn) {
+    btn.textContent = HIDE_DUPLICATES ? '顯示全部紀錄' : '隱藏重複紀錄';
+    btn.classList.toggle('primary', HIDE_DUPLICATES);
+  }
+  updateAdminStats();
+  renderTable();
+}
+window.toggleDedupe = toggleDedupe;
+
+/* 取得目前要顯示的紀錄(視「隱藏重複」狀態而定) */
+function getDisplayRecords() {
+  if (!HIDE_DUPLICATES) return CACHED_RECORDS;
+
+  // 重複判定標準(保守設計,寧可漏抓也不誤殺):
+  //   1. 同人 (name + dealer)
+  //   2. 同分數 (score)
+  //   3. 用時 (elapsed) 差 ≤ 2 秒
+  //   4. 完成時間 (completedAt) 差 ≤ 10 秒
+  // 滿足上述「全部」條件,才視為連點造成的重複,合併保留最早一筆
+
+  const groups = new Map();
+  for (const r of CACHED_RECORDS) {
+    const key = `${r.name||''}|${r.dealer||''}|${r.score}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(r);
+  }
+
+  const kept = [];
+  for (const [, rows] of groups) {
+    rows.sort((a, b) => {
+      const ta = a.completedAt ? new Date(a.completedAt).getTime() : 0;
+      const tb = b.completedAt ? new Date(b.completedAt).getTime() : 0;
+      return ta - tb;
+    });
+    let last = null;
+    for (const r of rows) {
+      const t = r.completedAt ? new Date(r.completedAt).getTime() : 0;
+      const isDup = last &&
+        Math.abs((r.elapsed||0) - (last.elapsed||0)) <= 2 &&
+        Math.abs(t - last.lastTime) <= 10 * 1000;
+      if (!isDup) {
+        kept.push(r);
+        last = r;
+        last.lastTime = t;
+      }
+    }
+  }
+
+  // 維持 CACHED_RECORDS 原本的排序(通常是 completedAt desc)
+  const keptSet = new Set(kept);
+  return CACHED_RECORDS.filter(r => keptSet.has(r));
+}
+window.getDisplayRecords = getDisplayRecords;
+
+/* 更新後台統計卡片 */
+function updateAdminStats() {
+  const records = getDisplayRecords();
+  document.getElementById('adTotal').textContent = records.length +
+    (HIDE_DUPLICATES && CACHED_RECORDS.length > records.length
+      ? ` (已隱藏 ${CACHED_RECORDS.length - records.length} 筆重複)`
+      : '');
+  const passCount = records.filter(r => r.pass).length;
   document.getElementById('adPass').textContent = passCount;
-  const avg = CACHED_RECORDS.length ?
-    Math.round(CACHED_RECORDS.reduce((s, r) => s + r.score, 0) / CACHED_RECORDS.length) : 0;
+  const avg = records.length ?
+    Math.round(records.reduce((s, r) => s + r.score, 0) / records.length) : 0;
   document.getElementById('adAvg').textContent = avg;
-  const dealers = new Set(CACHED_RECORDS.map(r => r.dealer));
+  const dealers = new Set(records.map(r => r.dealer));
   document.getElementById('adDealers').textContent = dealers.size;
 
   const filterDealer = document.getElementById('filterDealer');
@@ -5570,17 +5696,14 @@ async function refreshRecords() {
   filterDealer.innerHTML = '<option value="">所有據點</option>' +
     [...dealers].sort().map(d => `<option value="${d}">${d}</option>`).join('');
   filterDealer.value = cur;
-
-  renderTable();
 }
-window.refreshRecords = refreshRecords;
 
 function renderTable() {
   const ft = document.getElementById('filterText').value.trim().toLowerCase();
   const fd = document.getElementById('filterDealer').value;
   const fs = document.getElementById('filterStatus').value;
 
-  const filtered = CACHED_RECORDS.filter(r => {
+  const filtered = getDisplayRecords().filter(r => {
     if (ft && !(r.name||'').toLowerCase().includes(ft) && !(r.dealer||'').toLowerCase().includes(ft)) return false;
     if (fd && r.dealer !== fd) return false;
     if (fs === 'pass' && !r.pass) return false;
@@ -5623,9 +5746,10 @@ function escapeHtml(s) {
 }
 
 function exportCSV() {
-  if (!CACHED_RECORDS.length) { alert('目前沒有可匯出的記錄'); return; }
+  const records = (typeof getDisplayRecords === 'function') ? getDisplayRecords() : CACHED_RECORDS;
+  if (!records.length) { alert('目前沒有可匯出的記錄'); return; }
   const headers = ['編號', '姓名', '據點', '職務', '分數', '答對', '總題數', '狀態', '用時(秒)', '完成時間'];
-  const rows = CACHED_RECORDS.map((r, i) => [
+  const rows = records.map((r, i) => [
     i + 1, r.name, r.dealer, r.role || '',
     r.score, r.correct, r.total,
     r.pass ? '通過' : '未通過',
