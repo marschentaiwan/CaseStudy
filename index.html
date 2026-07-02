@@ -49,8 +49,8 @@
   .landing { min-height: 100vh; display: grid; grid-template-columns: 1.1fr 1fr; }
   .landing-left {
     background: var(--skoda-deep); color: var(--skoda-green);
-    padding: 56px 64px;
-    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 48px 64px 40px;
+    display: flex; flex-direction: column; justify-content: flex-start; gap: 8px;
     position: relative; overflow: hidden;
   }
   .landing-left::before {
@@ -68,31 +68,32 @@
   }
   .hero-title {
     font-family: 'Noto Serif TC', serif; font-weight: 900;
-    font-size: clamp(64px, 9.5vw, 140px); line-height: 0.92;
-    margin: 24px 0 28px; position: relative;
+    font-size: clamp(42px, 5.2vw, 78px); line-height: 1.02;
+    margin: clamp(170px, 18vw, 260px) 0 24px; position: relative;
     color: white;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.005em;
   }
   .hero-title .line2 {
     display: block;
     color: var(--skoda-green);
   }
   .hero-sub {
-    font-size: 16px; line-height: 1.8;
-    color: rgba(244, 248, 245, 0.75);
-    max-width: 480px; font-weight: 300; margin-bottom: 40px;
+    font-size: 18px; line-height: 1.75;
+    color: rgba(244, 248, 245, 0.82);
+    max-width: 520px; font-weight: 300; margin-bottom: 44px;
   }
   .hero-meta {
-    display: flex; gap: 32px; padding-top: 32px;
+    display: flex; gap: 40px; padding-top: 34px;
     border-top: 1px solid rgba(120, 250, 174, 0.2); position: relative;
+    margin-top: auto;
   }
   .meta-item .num {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 36px; color: var(--skoda-green); line-height: 1;
+    font-size: 56px; color: var(--skoda-green); line-height: 1;
   }
   .meta-item .lbl {
-    font-size: 11px; letter-spacing: 0.2em;
-    color: rgba(244, 248, 245, 0.5); margin-top: 4px; text-transform: uppercase;
+    font-size: 13px; letter-spacing: 0.22em;
+    color: rgba(244, 248, 245, 0.55); margin-top: 6px; text-transform: uppercase;
   }
   .landing-right {
     background: var(--paper); padding: 56px 64px;
